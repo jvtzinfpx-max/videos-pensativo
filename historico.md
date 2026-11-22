@@ -39,3 +39,16 @@
 - 13h18: usuário: o rótulo 'LÁ' em cima de Vênus era desnecessário — só mostrar o objeto. Regra: rótulo só quando acrescenta informação.
 - 13h20: usuário aprovou o estilo (Vênus final). Daqui pra frente: cenas de acordo com tema, narrativa e TOM DA VOZ (mapa tom→animação no README).
 - 14h58: restavam 3.853 créditos no ElevenLabs (~2 vídeos; renova 18/12). Usuário vai recarregar; manter tudo igual. Tarefas checam créditos antes e avisam se faltar (regra no README).
+
+## 22/11/2026 (20h) — Voyager 1 a um dia-luz da Terra
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-22 | Voyager 1 cruzou 1 dia-luz (18/11/2026) — 24 h de sinal, computador < foto de celular, rádio de 22 W, disco de ouro | voyager.mp4 | 22/11 20:00 | 1º vídeo de ESPAÇO/ciência no estilo ícones 3D; 24 planos sincronizados palavra por palavra; ondas de rádio viajando entre Terra e sonda; caminho pontilhado Terra→sonda; luzes da cena apagando em "escuro"; painel de instrumentos apagando um por um |
+- Padrão de gancho usado: "objeto antigo + feito inédito AGORA" ("Uma nave lançada em 1977 acabou de fazer algo que nenhum objeto humano jamais fez") + data concreta ("Na última quarta-feira") nos 10 primeiros segundos; viradas a cada ~10 s: "E aí vem o problema", "E o mais absurdo é o que tem lá dentro", "Mas a energia está acabando", pergunta final que provoca opinião ("será que vai entender quem nós somos?").
+- Kit novo em template/icones/icons.js: voyager (sonda 3D com antena parabólica, corpo dourado de 10 lados, RTGs, magnetômetro), groundDish, waveArc, trophy, speedometer (I.needle), chip, phonePhoto, fridge, battery (I.levels), nuclear, camera3 (I.x), lampPanel (I.on/I.off), goldDisc, note, picture.
+- Template page.html: helpers dots() e waves(); shot aceita mx, t0 (objeto principal entra depois), lead (1º quadro já montado), sw, push; L(x) converte tempo absoluto da fala em tempo do plano — atenção: renderAt precisa fazer CUR = si (senão L() dentro de post/extra usa o plano errado e as ondas somem).
+
+### LIÇÕES (22/11 noite)
+1. Nossos 10 últimos vídeos ficaram em 60–130 views (o do Louvre com ~1 view em 8 h); os de "roubo/golpe" não destravaram. Os outliers BR do mês em ciência/espaço com animação 3D + narração (ex.: Voyager 1 "49 anos no espaço" ~674 mil; chuva de meteoros "Olha o que vai acontecer na madrugada do dia 17" ~2,5 mi) usam EVENTO DATADO e ATUAL + número concreto já na 1ª frase. Aplicado: tema de notícia da semana (18/11) + "1977" + "Na última quarta-feira".
+2. Comparação com objeto do dia a dia faz o número grande "caber na cabeça" (computador < foto do celular; rádio < lâmpada da geladeira). Aplicado: 2 comparações seguidas no meio do vídeo (ponto onde a retenção costuma cair).
+3. Pergunta final de OPINIÃO (sim/não fácil de responder) rende mais comentário do que pergunta de conhecimento. Aplicado: "será que vai entender quem nós somos?".

@@ -195,3 +195,90 @@ export function side(parent, ic, x, y, s = 0.45, t0 = 0.4, dt = 0.08) { s *= 1.3
 // rótulo de texto (palavra/número) que aparece no tempo t0
 export function label(parent, text, x, y, h = 0.38, color = '#ffffff', t0 = 0.5) { h *= 1.35; y *= 1.2; const w = text3d(text, h * 0.72, new THREE.MeshStandardMaterial({ color: new THREE.Color(color), roughness: .45 }), h * 0.28); w.geometry.computeBoundingBox(); const bb = w.geometry.boundingBox; w.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); w.position.set(x, y, 0.35); parent.add(w);
   return { w, upd(t) { const k = back(seg(t, t0, t0 + 0.35)); w.visible = t >= t0; w.scale.setScalar(Math.max(1e-4, k)); } }; }
+
+// ================= KIT ESPAÇO / VOYAGER (22/11 noite) =================
+const std = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: o.r ?? 0.45, metalness: o.m ?? 0.1, side: o.side ?? THREE.FrontSide, emissive: o.e ?? 0x000000, emissiveIntensity: o.ei ?? 1 });
+const mcyl = (rt, rb, h, m, s = 28) => { const o = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, s), m); o.castShadow = true; return o; };
+// barra cilíndrica entre dois pontos 3D
+function rod(a, b, r, m) { const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b); const L = A.distanceTo(B); const o = mcyl(r, r, L, m, 12); o.position.copy(A).add(B).multiplyScalar(0.5); o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); return o; }
+// antena parabólica (côncava virada para a câmera)
+function dishMesh(R = 0.9, depth = 0.32, col = 0xeeeeee) { const pts = []; for (let i = 0; i <= 24; i++) { const r = R * i / 24; pts.push(new THREE.Vector2(r, depth * (r / R) ** 2)); }
+  const g = new THREE.Group(); const front = new THREE.Mesh(new THREE.LatheGeometry(pts, 64), std(col, { r: .35, side: THREE.DoubleSide })); front.rotation.x = Math.PI / 2; g.add(front);
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 0.035, 10, 64), std(0xbfc3c7, { m: .5, r: .3 })); rim.position.z = depth; g.add(rim);
+  const feed = mcyl(0.06, 0.09, 0.5, std(0x9a9a9a, { m: .5 })); feed.rotation.x = Math.PI / 2; feed.position.z = 0.25; g.add(feed);
+  const sub = mcyl(0.16, 0.16, 0.04, std(0xbfc3c7, { m: .5, r: .3 }), 32); sub.rotation.x = Math.PI / 2; sub.position.z = 0.52; g.add(sub);
+  return g; }
+// sonda Voyager: antena grande branca, corpo de 10 lados dourado, haste dos RTGs, haste de ciência com câmera, magnetômetro
+export function voyager() { const I = new Icon();
+  const bus = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.42, 10), std(0xd9b04a, { m: .55, r: .35 })); bus.rotation.x = Math.PI / 2; bus.position.set(0, 0, -0.75); const busG = new THREE.Group(); busG.add(bus); busG.position.y = -0.1;
+  I.addObj(busG, { step: 0 });
+  const d = dishMesh(1.0, 0.34); d.position.set(0, -0.1, -0.15); I.dish = I.addObj(d, { step: 1, from: 'grow' });
+  const rt = new THREE.Group(); const gray = std(0x6a6a6a, { m: .4, r: .5 }); rt.add(rod([-0.4, -0.35, -0.75], [-1.9, -1.3, -0.75], 0.045, std(0xbfc3c7, { m: .5 })));
+  [0, 1, 2].forEach(i => { const k = 0.55 + i * 0.17; const c = mcyl(0.13, 0.13, 0.22, gray, 16); c.position.set(-0.4 - 1.5 * k, -0.35 - 0.95 * k, -0.75); c.rotation.z = Math.atan2(-0.95, -1.5) + Math.PI / 2; rt.add(c);
+    for (let f = 0; f < 4; f++) { const fin = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.18, 0.34), gray); fin.position.copy(c.position); fin.rotation.z = c.rotation.z; fin.rotateX(f * Math.PI / 4); rt.add(fin); } });
+  I.addObj(rt, { step: 2 });
+  const sc = new THREE.Group(); sc.add(rod([0.4, -0.35, -0.75], [1.3, -0.95, -0.75], 0.045, std(0xbfc3c7, { m: .5 })));
+  const plat = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.26, 0.26), std(0x2a2a2a)); plat.position.set(1.35, -1.0, -0.75); sc.add(plat);
+  const lens = mcyl(0.07, 0.07, 0.16, std(0x111111, { m: .6, r: .2 }), 16); lens.rotation.x = Math.PI / 2; lens.position.set(1.32, -1.0, -0.55); sc.add(lens);
+  const lens2 = mcyl(0.045, 0.045, 0.12, std(0x111111, { m: .6, r: .2 }), 16); lens2.rotation.x = Math.PI / 2; lens2.position.set(1.46, -0.92, -0.57); sc.add(lens2);
+  I.addObj(sc, { step: 2.5 });
+  const mg = new THREE.Group(); mg.add(rod([-0.3, 0.2, -0.8], [-1.1, 1.75, -0.8], 0.02, std(0x9a9a9a, { m: .4 }))); const tip = mcyl(0.05, 0.05, 0.14, std(0xbfc3c7), 10); tip.position.set(-1.1, 1.75, -0.8); mg.add(tip); I.addObj(mg, { step: 3 });
+  // vista 3/4: gira o conjunto para mostrar o corpo dourado atrás da antena
+  const tilt = new THREE.Group(); [...I.g.children].forEach(c => tilt.add(c)); tilt.rotation.y = 0.75; tilt.rotation.x = 0.12; tilt.position.x = 0.35; I.g.add(tilt); return I; }
+// antena de estação terrena (prato inclinado sobre base)
+export function groundDish() { const I = new Icon(); I.add(rrect(1.3, 0.22, 0.06, 0, -1.0), 'stone', { step: 0, from: 'growx' });
+  const st = new THREE.Group(); st.add(rod([0, -0.9, 0], [0, -0.2, 0], 0.1, std(0xbfc3c7, { m: .4 }))); I.addObj(st, { step: 0.5, from: 'grow' });
+  const d = dishMesh(0.85, 0.3); d.rotation.x = -0.55; d.rotation.y = 0.2; d.position.y = 0.15; I.dish = I.addObj(d, { step: 1 }); return I; }
+// ondas de sinal (arcos) — devolve meshes para mover
+export function waveArc(col = 'sky', r = 0.35) { return part(ring(r, 0.09, 0, 0, Math.PI * 0.2, Math.PI * 0.8), col, 0, 0.03); }
+// troféu dourado
+export function trophy() { const I = new Icon(); I.add(rrect(1.2, 0.25, 0.06, 0, -1.05), 'brown', { step: 0, from: 'growx' }); I.add(rrect(0.8, 0.22, 0.06, 0, -0.82), 'brown', { step: 0.3, from: 'growx' });
+  I.add(rrect(0.2, 0.5, 0.05, 0, -0.5), 'gold', { step: 0.6, from: 'grow', pivot: [0, -0.72] });
+  const cup = new THREE.Shape(); cup.moveTo(-0.75, 0.95); cup.lineTo(0.75, 0.95); cup.quadraticCurveTo(0.72, -0.2, 0.0, -0.3); cup.quadraticCurveTo(-0.72, -0.2, -0.75, 0.95); I.add(cup, 'gold', { step: 1 });
+  I.add(ring(0.32, 0.1, -0.78, 0.5, Math.PI * 0.5, Math.PI * 1.5), 'gold', { step: 1.5 }); I.add(ring(0.32, 0.1, 0.78, 0.5, -Math.PI * 0.5, Math.PI * 0.5), 'gold', { step: 1.5 });
+  I.add(star4(0.3), 'yellow', { z: .09, step: 2, at: [0, 0.4], depth: .03 }); return I; }
+// velocímetro
+export function speedometer() { const I = new Icon(); const R = 1.05;
+  const face = new THREE.Shape(); face.absarc(0, -0.2, R, 0, Math.PI, false); face.closePath(); I.add(face, 'dark', { step: 0 });
+  [['green', 0.62, 1.0], ['yellow', 0.38, 0.62], ['red', 0.0, 0.38]].forEach(([c, a0, a1], i) => I.add(ring(R * 0.82, 0.14, 0, -0.2, Math.PI * a0, Math.PI * a1), c, { z: .085, step: 1 + i * .3, depth: .02 }));
+  for (let i = 0; i <= 8; i++) { const a = Math.PI * i / 8; I.add(rrect(0.04, 0.14, 0.02), 'paper', { z: .085, step: 2, at: [Math.cos(a) * R * 0.62, -0.2 + Math.sin(a) * R * 0.62], rot: a - Math.PI / 2, depth: .02 }); }
+  I.needle = I.add(rrect(0.08, 0.85, 0.04, 0, 0.42 - 0.2), 'red', { z: .12, step: 2.5, pivot: [0, -0.2], depth: .03 }); I.add(circ(0.1, 0, -0.2), 'silver', { z: .15, step: 2.6, depth: .03 });
+  I.add(rrect(2.3, 0.14, 0.05, 0, -0.27), 'silver', { step: 0.2, from: 'growx' }); return I; }
+// chip de computador
+export function chip() { const I = new Icon(); I.add(rrect(1.5, 1.5, 0.12), 'dark', { step: 0 }); I.add(rrect(0.8, 0.8, 0.06), 'gold', { z: .085, step: 1, depth: .03 });
+  for (let i = 0; i < 5; i++) { const p = -0.56 + i * 0.28; [[p, 0.88, 0], [p, -0.88, 0], [0.88, p, Math.PI / 2], [-0.88, p, Math.PI / 2]].forEach(([x, y, r]) => I.add(rrect(0.1, 0.3, 0.03), 'silver', { step: 1.5 + i * .1, at: [x, y], rot: r, depth: .03 })); }
+  I.add(circ(0.07, -0.55, 0.55), 'gray', { z: .085, step: 2, depth: .01 }); return I; }
+// celular com uma foto na tela (céu, montanha, sol)
+export function phonePhoto() { const I = new Icon(); I.add(rrect(1.2, 2.2, 0.18), 'dark', { step: 0 }); I.add(rrect(1.0, 1.85, 0.08), 'sky', { z: .081, step: 1, depth: .01 });
+  I.add(poly([[-0.5, -0.92], [-0.1, -0.1], [0.15, -0.45], [0.5, 0.05], [0.5, -0.92]]), 'green', { z: .09, step: 1.5, depth: .01 }); I.add(circ(0.16, 0.25, 0.5), 'yellow', { z: .09, step: 1.7, depth: .01 });
+  I.add(rrect(0.3, 0.05, 0.025, 0, 1.0), 'black', { z: .081, step: 1, depth: .01 }); return I; }
+// geladeira
+export function fridge() { const I = new Icon(); I.add(rrect(1.3, 2.3, 0.16), 'paper', { step: 0 }); I.add(rrect(1.3, 0.05, 0.01, 0, 0.35), 'gray', { z: .081, step: 1, depth: .01, from: 'growx' });
+  I.add(rrect(0.08, 0.45, 0.04, -0.45, 0.75), 'silver', { z: .09, step: 1.4 }); I.add(rrect(0.08, 0.7, 0.04, -0.45, -0.2), 'silver', { z: .09, step: 1.6 });
+  I.add(rrect(1.0, 0.1, 0.03, 0, -1.2), 'dark', { step: 0.5, from: 'growx' }); return I; }
+// bateria com nível (I.levels[] para apagar)
+export function battery() { const I = new Icon(); I.add(rrect(1.2, 2.2, 0.16), 'silver', { step: 0 }); I.add(rrect(0.45, 0.2, 0.06, 0, 1.18), 'silver', { step: 0.3 }); I.add(rrect(0.95, 1.95, 0.1), 'black', { z: .081, step: 0.5, depth: .01 });
+  I.levels = []; for (let i = 0; i < 4; i++) I.levels.push(I.add(rrect(0.8, 0.38, 0.06, 0, -0.73 + i * 0.47), i === 0 ? 'red' : 'green', { z: .09, step: 1 + i * .25, depth: .03 })); return I; }
+// símbolo nuclear (trifólio) amarelo e preto
+export function nuclear() { const I = new Icon(); I.add(circ(1.05), 'yellow', { step: 0 });
+  [0, 1, 2].forEach(i => { const a = Math.PI / 2 + i * Math.PI * 2 / 3; const s = new THREE.Shape(); s.moveTo(Math.cos(a - .52) * 0.24, Math.sin(a - .52) * 0.24); s.absarc(0, 0, 0.85, a - 0.52, a + 0.52, false); s.absarc(0, 0, 0.24, a + 0.52, a - 0.52, true); I.add(s, 'dark', { z: .085, step: 1 + i * .25, depth: .02 }); });
+  I.add(circ(0.15), 'dark', { z: .085, step: 2, depth: .02 }); return I; }
+// câmera fotográfica + X vermelho (I.x)
+export function camera3() { const I = new Icon(); I.add(rrect(2.0, 1.3, 0.16), 'dark', { step: 0 }); I.add(rrect(0.6, 0.3, 0.08, -0.45, 0.72), 'dark', { step: 0.3 });
+  I.add(circ(0.48, 0.05, -0.05), 'silver', { z: .085, step: 1, depth: .03 }); I.add(circ(0.34, 0.05, -0.05), 'black', { z: .12, step: 1.3, depth: .02 }); I.add(circ(0.12, 0.15, 0.05), 'sky', { z: .14, step: 1.5, depth: .01 });
+  I.add(circ(0.09, 0.7, 0.4), 'red', { z: .085, step: 1.6, depth: .02 });
+  I.x = [I.add(rrect(2.3, 0.2, 0.1), 'red', { z: .2, step: 9, rot: 0.6, from: 'growx' }), I.add(rrect(2.3, 0.2, 0.1), 'red', { z: .2, step: 9.5, rot: -0.6, from: 'growx' })]; return I; }
+// painel com luzes (instrumentos) que apagam uma a uma: I.on[i], I.off[i]
+export function lampPanel(n = 5) { const I = new Icon(); I.add(rrect(2.5, 1.0, 0.14), 'silver', { step: 0 }); I.add(rrect(2.3, 0.8, 0.1), 'dark', { z: .081, step: 0.3, depth: .01 }); I.on = []; I.off = [];
+  for (let i = 0; i < n; i++) { const x = -0.9 + i * 0.45; I.off.push(I.add(circ(0.15, x, 0), 'black', { z: .09, step: 0.5, depth: .02 })); I.on.push(I.add(circ(0.15, x, 0), 'green', { z: .095, step: 0.8 + i * .15, depth: .03 })); }
+  I.add(rrect(1.0, 0.1, 0.03, 0, -0.75), 'silver', { step: 0.4, from: 'growx' }); return I; }
+// disco de ouro (Golden Record)
+export function goldDisc() { const I = new Icon(); I.add(circ(1.1), 'gold', { step: 0 });
+  [0.95, 0.82, 0.69, 0.56].forEach((r, i) => I.add(ring(r, 0.03), 'venusband', { z: .085, step: 0.6 + i * .12, depth: .01 }));
+  I.add(circ(0.38), 'brown', { z: .085, step: 1.2, depth: .02 }); I.add(circ(0.07), 'black', { z: .11, step: 1.4, depth: .01 }); return I; }
+// nota musical
+export function note() { const I = new Icon(); I.add(circ(0.3, -0.35, -0.65), 'sky', { step: 0 }); I.add(rrect(0.12, 1.4, 0.05, -0.1, 0.0), 'sky', { step: 0.4, from: 'grow', pivot: [-0.1, -0.65] });
+  I.add(poly([[-0.16, 0.7], [0.55, 0.35], [0.55, 0.12], [-0.16, 0.45]]), 'sky', { step: 0.8 }); return I; }
+// quadro com imagem (paisagem)
+export function picture() { const I = new Icon(); I.add(rrect(1.8, 1.4, 0.08), 'brown', { step: 0 }); I.add(rrect(1.5, 1.1, 0.03), 'sky', { z: .081, step: 0.4, depth: .01 });
+  I.add(poly([[-0.75, -0.55], [-0.25, 0.15], [0.1, -0.2], [0.4, 0.2], [0.75, -0.2], [0.75, -0.55]]), 'green', { z: .09, step: 0.8, depth: .01 }); I.add(circ(0.14, -0.4, 0.3), 'yellow', { z: .09, step: 1.0, depth: .01 }); return I; }

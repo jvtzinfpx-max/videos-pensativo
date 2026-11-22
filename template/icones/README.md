@@ -47,3 +47,10 @@
 
 - Legenda: os grupos de até 3 palavras quebram no fim de frase/pausa (não misturar frases de cenas diferentes).
 - Exemplo completo com narração: teste_venus.mp4 (21,6 s, 7 planos).
+
+## Exemplo mais recente (22/11 noite): page_voyager.html (Voyager 1, 71,7 s, 24 planos)
+- Use `L(tempo_da_fala)` para escrever os cues em tempo ABSOLUTO da transcrição; renderAt faz `CUR = si`.
+- `shot` aceita: mx/my (posição do principal), t0 (principal entra depois), lead (padrão 0.25: 1º quadro já mostra o objeto montado), sw (balanço), push (aproximação), dist.
+- Helpers: `dots(s, a, b, n, t0, t1, cor)` caminho pontilhado; `waves(s, a, b, t0, t1, n, cor)` ondas de rádio/luz viajando.
+- Ícones novos (gallery_espaco.html): voyager, groundDish, waveArc, trophy, speedometer, chip, phonePhoto, fridge, battery, nuclear, camera3, lampPanel, goldDisc, note, picture.
+- Áudio: depois do loudnorm, passe `alimiter=limit=0.78` antes do AAC (sem isso o true peak ficou -0.9 dB).
