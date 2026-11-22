@@ -7,7 +7,7 @@ import { clamp, seg, back, eio, lerp, hash, camera, text3d } from './engine.js';
 export const MINT = 0x3DF5A6, MINT_CSS = '#3DF5A6';
 const MB = {};
 const basic = (c) => MB[c] || (MB[c] = new THREE.MeshBasicMaterial({ color: c, toneMapped: false }));
-export const COL = { white: [0xf4f4f4, 0x8d8d8d], mint: [MINT, 0x1b8f5f], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xffd257, 0xa8862c] };
+export const COL = { white: [0xebebeb, 0x7d7d7d], mint: [MINT, 0x1b8f5f], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xffd257, 0xa8862c] };
 
 // ---------- formas 2D ----------
 export function rrect(w, h, r = 0.1, x = 0, y = 0) { const s = new THREE.Shape(), X = x - w / 2, Y = y - h / 2; r = Math.min(r, w / 2, h / 2);
@@ -61,14 +61,18 @@ export function windowsStack(n = 3) { const I = new Icon();
       [0.25, 0.0, -0.25, -0.5].forEach((y, j) => I.add(rrect(1.25 - (j === 3 ? .4 : 0), 0.11, 0.05, j === 3 ? -.2 : 0, y), 'mint', { z: 0.09, step: n + 1 + j * .5, from: 'growx', depth: .02 })); } }
   return I; }
 export function school() { const I = new Icon();
-  I.add(rrect(2.2, 1.25, 0.06, 0, -0.1), 'white', { step: 0 });
+  // corpo + telhado + frontão + bandeira + janelas + porta + escada (tudo encostado, sem peças soltas)
+  I.add(rrect(2.2, 1.3, 0.06, 0, -0.1), 'white', { step: 0 });
   I.add(poly([[-1.3, 0.5], [1.3, 0.5], [0.95, 0.85], [-0.95, 0.85]]), 'mint', { z: .02, step: 1, from: 'down' });
-  I.add(poly([[-0.48, 0.5], [0.48, 0.5], [0.48, 0.85], [0, 1.2], [-0.48, 0.85]]), 'white', { z: .05, step: 2, from: 'up' });
-  I.add(circ(0.13, 0, 0.78), 'black', { z: 0.14, step: 3, depth: .01 });
-  I.addStroke([[0, 1.18], [0, 1.6]], 0.05, 'mint', { z: .05, step: 4, from: 'grow', pivot: [0, -0.2] }); I.add(poly([[0.02, 1.6], [0.34, 1.5], [0.02, 1.4]]), 'mint', { z: .05, step: 4.5 });
-  [[-0.78], [-0.52], [0.52], [0.78]].forEach(([x], j) => [0.15, -0.25].forEach((y, k) => I.add(rrect(0.17, 0.26, 0.03, x, y), 'black', { z: .081, step: 5 + j * .25 + k * .15, depth: .01 })));
-  I.add(withHoles(rrect(0.42, 0.62, 0.2, 0, -0.42)), 'black', { z: .081, step: 6, depth: .01, from: 'grow' });
-  I.add(rrect(0.7, 0.08, 0.04, 0, -0.86), 'white', { step: 7, from: 'growx' }); I.add(rrect(0.5, 0.08, 0.04, 0, -1.0), 'white', { step: 7.4, from: 'growx' }); return I; }
+  I.add(poly([[-0.5, 0.45], [0.5, 0.45], [0.5, 0.88], [0, 1.25], [-0.5, 0.88]]), 'white', { z: .05, step: 2, from: 'up' });
+  I.add(circ(0.14, 0, 0.8), 'black', { z: 0.14, step: 3, depth: .02 });
+  I.add(rrect(0.06, 0.45, 0.03, 0, 1.45), 'white', { z: .05, step: 4, from: 'grow', pivot: [0, 1.23] }); I.add(poly([[0.03, 1.66], [0.36, 1.56], [0.03, 1.46]]), 'mint', { z: .05, step: 4.5 });
+  [-0.8, -0.52, 0.52, 0.8].forEach((x, j) => [0.18, -0.22].forEach((y, k) => I.add(rrect(0.18, 0.26, 0.03, x, y), 'black', { z: .085, step: 5 + j * .25 + k * .15, depth: .02 })));
+  // porta em arco (preta) com contorno menta
+  const door = new THREE.Shape(); door.moveTo(-0.22, -0.75); door.lineTo(-0.22, -0.2); door.absarc(0, -0.2, 0.22, Math.PI, 0, true); door.lineTo(0.22, -0.75); door.closePath();
+  const frame = new THREE.Shape(); frame.moveTo(-0.3, -0.75); frame.lineTo(-0.3, -0.2); frame.absarc(0, -0.2, 0.3, Math.PI, 0, true); frame.lineTo(0.3, -0.75); frame.closePath();
+  I.add(frame, 'mint', { z: .085, step: 6, depth: .02, from: 'grow', pivot: [0, -0.75] }); I.add(door, 'black', { z: .11, step: 6.3, depth: .02, from: 'grow', pivot: [0, -0.75] });
+  I.add(rrect(0.85, 0.12, 0.03, 0, -0.81), 'white', { step: 7, from: 'growx' }); I.add(rrect(1.05, 0.12, 0.03, 0, -0.93), 'white', { step: 7.3, from: 'growx' }); return I; }
 export function barChart(vals = [0.5, 0.8, 0.65, 1.2, 1.6]) { const I = new Icon(); const n = vals.length, w = 0.32, gap = 0.14, x0 = -((n - 1) * (w + gap)) / 2;
   I.add(rrect(2.6, 0.07, 0.03, 0, -0.95), 'white', { step: 0, from: 'growx' });
   vals.forEach((v, i) => I.add(rrect(w, v, 0.06, x0 + i * (w + gap), -0.9 + v / 2), i === n - 1 ? 'mint' : 'white', { step: 1 + i * .5, from: 'grow', pivot: [x0 + i * (w + gap), -0.9] }));

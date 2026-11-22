@@ -27,3 +27,4 @@
 - O usuário achou o teste "3D neon" (glossy, boneco no pedestal, muitos objetos) horrível e mandou 5 referências: ícones brancos com verde-menta, brilho suave, fundo preto, um ícone por vez montando por partes; ícone de app 3D com notificações empilhando.
 - Novo padrão: template/icones/. Sem personagens; preferir temas que se contam só com ícones/objetos (notícias, descobertas, dinheiro, tecnologia, ciência, curiosidades).
 - Lições: bloom forte estoura tudo (usar s .45 / th .8); ícone grande demais cobre o gancho; lookAt mais baixo sobe o conteúdo na tela.
+- Revisão pedida pelo usuário (12h28): o teste tinha BRILHO ESTOURADO e a escola com partes faltando/borradas (porta e janelas cinza por causa do bloom). Correção: bloom "crisp" (glow só em volta, ícone nítido por cima), porta em arco com moldura menta, escada encostada no prédio, build começando em -0.15 s. Checklist de revisão de imagem adicionado ao template/icones/README.md — SEMPRE seguir antes de postar.

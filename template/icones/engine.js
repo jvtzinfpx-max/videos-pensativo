@@ -53,6 +53,8 @@ export function setupComposer(scene) {
 export function draw(scene) {
   if (!composer || composer.passes[0].scene !== scene) setupComposer(scene);
   composer.render();
+  // BLOOM.crisp: desenha a cena nítida por cima do brilho -> o glow fica só em volta dos objetos e não "acinzenta" detalhes pretos
+  if (BLOOM.crisp) { const bg = scene.background; scene.background = null; renderer.autoClear = false; renderer.clearDepth(); renderer.render(scene, camera); renderer.autoClear = true; scene.background = bg; }
 }
 export function setBloom(s) { if (bloom) bloom.strength = s; }
 export function setBloomP(s, r, th) { if (bloom) { bloom.strength = s; bloom.radius = r; bloom.threshold = th; } }

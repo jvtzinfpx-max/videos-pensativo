@@ -1,6 +1,6 @@
 # Estilo "ícones brilhantes 3D" (PADRÃO desde 22/11/2026 — aprovado pelo usuário a partir das referências dele)
 
-- Fundo PRETO puro. Ícones BRANCOS chapados + detalhes VERDE-MENTA #3DF5A6, brilho branco suave (bloom s .45 r .22 th .8),
+- Fundo PRETO puro. Ícones BRANCOS chapados + detalhes VERDE-MENTA #3DF5A6, brilho branco suave (E.BLOOM = { s: .6, r: .12, th: .5, crisp: true }: o glow fica só EM VOLTA e o ícone é redesenhado nítido por cima, então janelas/portas/telas pretas ficam pretas de verdade),
   levemente extrudados e balançando em 3D (I.sway). UM ícone grande por plano, centralizado, montando PEÇA POR PEÇA (Icon.build).
 - SEM PERSONAGENS. A história é contada só com ícones, objetos, telas, cards e gráficos. Temas que não dependem de pessoas.
 - Também: ícone de app 3D menta (I.app3d) com cards de notificação de vidro empilhando (I.notifCard).
@@ -12,3 +12,10 @@
   Crie novos ícones para cada tema (planeta, satélite, DNA, casa, carro, avião, petróleo, ouro, cofre, relógio, calendário, mapa, raio, etc.) e confira em close.
 - Câmera: I.camFront(t, y, dist≈9.2, k, push≈1) (aproxima devagar). Troca de plano a cada ~2-4 s.
 - Render: `python3 render3d.py . <cenas>` (2 processos), áudio audio3d.py (voz em aud/voz.mp3).
+
+## Checklist de revisão de imagem (obrigatório antes de postar)
+- Tira de frames do MP4 final (fps=1.5, tile) + close de CADA ícone montado em resolução cheia.
+- Brilho: nenhum ícone "lavado"/estourado; detalhes pretos (janelas, porta, tela, furos) PRETOS de verdade, sem névoa cinza; glow curto em volta.
+- Peças: todas as partes do ícone presentes e encostadas (nada solto ou faltando: telhado, porta, escada, bandeira, rodas...).
+- Primeiro frame de cada plano já mostra algo (build começa em t0 = -0.15), sem quadro vazio.
+- Nada atrás do gancho ou da legenda; nada cortado nas bordas.
