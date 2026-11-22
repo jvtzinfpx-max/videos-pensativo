@@ -5,7 +5,7 @@
 html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;font-family:Poppins,Inter,Arial,sans-serif}
 #stage{position:absolute;inset:0}
 #title{display:none}
-#hook{position:absolute;top:330px;left:46%;width:860px;transform:translate(-50%,-50%);color:#fff;font-weight:900;font-size:92px;line-height:1.05;text-align:center;display:none}
+#hook{display:none !important;position:absolute;top:330px;left:46%;width:860px;transform:translate(-50%,-50%);color:#fff;font-weight:900;font-size:92px;line-height:1.05;text-align:center;display:none}
 #hook em{font-style:normal;color:#33d690}
 #type{position:absolute;top:300px;left:60px;right:160px;text-align:center;color:#fff;font-weight:800;font-size:64px;font-family:'Courier New',monospace;opacity:0}
 #type b{color:#3DF5A6}
@@ -81,7 +81,7 @@ const built = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
 window.renderAt = (si, t) => {
   const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
-  S.at(s, t); E.hook(S.hook, t, 2.4); // sem legenda (pedido do usuário 22/11)
+  S.at(s, t); // sem texto de gancho na tela (pedido do usuário) // sem legenda (pedido do usuário 22/11)
   document.getElementById('flash').style.opacity = 0;
   E.draw(s); return true;
 };
