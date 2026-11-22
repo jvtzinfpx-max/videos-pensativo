@@ -7,7 +7,7 @@ time.sleep(0.8)
 try:
     with sync_playwright() as p:
         b = p.chromium.launch(args=['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'])
-        pg = b.new_page(viewport={'width': 1440, 'height': 1080})
+        pg = b.new_page(viewport={'width': 1080, 'height': 1920})
         errs = []; pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' else None); pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.goto(f'http://127.0.0.1:{port}/page.html')
         try: pg.wait_for_function('window.READY===true', timeout=60000)

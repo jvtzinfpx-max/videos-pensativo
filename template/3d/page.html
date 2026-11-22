@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8">
 <style>
-html,body{margin:0;width:1440px;height:1080px;overflow:hidden;background:#0a0a0a;font-family:Inter,Arial,Helvetica,sans-serif}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0a0a0a;font-family:Inter,Arial,Helvetica,sans-serif}
 #stage{position:absolute;inset:0}
 #vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
-#title{position:absolute;top:44px;left:0;right:0;text-align:center;color:#BDBDBD;font-weight:900;font-size:72px;letter-spacing:-1px;text-shadow:0 4px 18px rgba(0,0,0,.8)}
+#title{position:absolute;top:150px;left:60px;right:160px;text-align:center;color:#BDBDBD;font-weight:900;font-size:76px;letter-spacing:-1px;text-shadow:0 4px 18px rgba(0,0,0,.8)}
 #title em{font-style:normal;color:#fff;text-shadow:0 0 18px rgba(255,255,255,.55),0 4px 18px rgba(0,0,0,.8)}
-#hook{position:absolute;top:40px;left:50%;transform:translate(-50%,0);background:#fff;color:#000;font-weight:900;font-size:64px;padding:10px 30px;border-radius:18px;box-shadow:0 0 40px rgba(255,255,255,.45);opacity:0;white-space:nowrap}
-#cards{position:absolute;left:0;right:0;bottom:70px;display:flex;justify-content:center}
-.card{background:rgba(28,28,28,.92);border:3px solid #3A3A3A;color:#fff;font-weight:800;font-size:44px;padding:18px 34px;border-radius:26px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+#hook{position:absolute;top:560px;left:46%;width:860px;transform:translate(-50%,-50%);background:#fff;color:#000;font-weight:900;font-size:92px;line-height:1.02;text-align:center;padding:26px 34px;border-radius:28px;box-shadow:0 0 60px rgba(255,255,255,.5);display:none}
+#caps{position:absolute;top:1150px;left:50px;right:150px;text-align:center;font-weight:900;font-size:84px;line-height:1.1;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.9)}
+#caps span{display:inline-block;transition:none}
+#caps span.on{color:#FFE34D}
+#cards{position:absolute;left:50px;right:150px;top:1380px;display:flex;justify-content:center}
+.card{background:rgba(28,28,28,.92);border:3px solid #3A3A3A;color:#fff;font-weight:800;font-size:44px;padding:16px 30px;border-radius:26px;display:flex;align-items:center;gap:16px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 .card.hl{border-color:#fff;box-shadow:0 0 26px rgba(255,255,255,.35)}
 .card.bad{border-style:dashed;border-color:#fff}
 .ic{font-size:52px}
 </style></head>
-<body><div id="stage"></div><div id="vig"></div><div id="title"></div><div id="hook"></div><div id="cards"></div>
+<body><div id="stage"></div><div id="vig"></div><div id="title"></div><div id="hook"></div><div id="caps"></div><div id="cards"></div>
 <script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
 <script type="module">
 import * as E from './engine.js';
 const { THREE } = E;
 await E.loadFont();
 window.T = window.T || { DUR: [6, 6], CUE: {} };
+window.WORDS = window.WORDS || 'Ele saiu de casa sem saber que naquela noite a vida dele ia mudar pra sempre e o dinheiro apareceu bem na frente dele mas o cofre guardava um segredo que ninguém esperava'.split(' ').map((w, i) => ({ w, s: 0.3 + i * 0.36, e: 0.3 + i * 0.36 + 0.3 }));
 const C_ = (k, d) => (window.T.CUE && window.T.CUE[k] !== undefined) ? window.T.CUE[k] : d;
 
 // ====== CENAS ======
 const SC = [];
 // --- Cena 1: rua à noite, homem de terno anda até a câmera e aponta para o dinheiro
 SC.push({
-  title: 'A <em>Rua</em>', cards: [{ at: .4, ic: '🌃', h: 'Uma rua qualquer, à noite' }, { at: 3.4, ic: '💰', h: 'E o dinheiro aparece', cls: 'hl' }],
+  title: '', hook: 'ELE ACHOU<br>R$ 1 MILHÃO', cards: [{ at: .4, ic: '🌃', h: 'Uma rua qualquer, à noite' }, { at: 3.4, ic: '💰', h: 'E o dinheiro aparece', cls: 'hl' }],
   build() {
     const s = E.makeWorld(); E.floor(s, 80, 80, 0x161616);
     const road = E.box(8, 0.02, 80, E.mat(0x202020, { r: .95 }), 0); road.position.set(0, 0.01, -10); s.add(road);
@@ -53,7 +57,7 @@ SC.push({
     this.bag.position.set(1.9, 0.18 + 0.1 * Math.sin(t * 3), 3.2); this.bag.scale.setScalar(Math.max(0.001, k)); this.bag.rotation.y = Math.sin(t * 1.5) * 0.4;
     this.coins.forEach((c, i) => { const q = E.seg(t, 3.5 + i * 0.12, 4.4 + i * 0.12); const a = i / 7 * Math.PI * 2 + t * 1.2; c.position.set(1.9 + Math.cos(a) * 0.65, 1.3 + q * 0.3 + 0.15 * Math.sin(t * 4 + i), 3.2 + Math.sin(a) * 0.9); c.scale.setScalar(Math.max(0.001, E.back(q))); c.rotation.y = t * 4 + i; });
     E.updDust(this.dust, t);
-    E.cam(t, [3, 2.4, 11], [1.4, 1.7, 8], [0, 1.4, 0], [0.8, 1.3, 2.6], t / 6, t > 3.2 && t < 3.6 ? 0.06 : 0);
+    E.cam(t, [2.2, 2.6, 12.5], [1.2, 1.9, 9.5], [0, 0.9, -1], [0.9, 0.8, 2.4], t / 6, t > 3.2 && t < 3.6 ? 0.06 : 0);
   }
 });
 // --- Cena 2: cofre/escritório, cadeado abre, notas chovendo, personagem comemora, ? brilhante
@@ -87,7 +91,7 @@ SC.push({
     this.bills.forEach((b, i) => { const st = 3.6 + E.hash(i) * 1.2, q = t - st; if (q < 0) { b.visible = false; return; } b.visible = true; b.position.set((E.hash(i + 3) - .5) * 6, 6 - q * (1.6 + E.hash(i) * .8) + Math.sin(q * 3 + i) * 0.2, (E.hash(i + 7) - .5) * 3); b.rotation.set(q * 2 + i, q * 3 * (E.hash(i) - .5), Math.sin(q * 4 + i)); });
     const qk = E.back(E.seg(t, 2.5, 3.0)); this.q.position.set(-1.2, 1.4 + 0.1 * Math.sin(t * 3), -1); this.q.scale.setScalar(Math.max(.001, qk * (1 + .05 * Math.sin(t * 6)))); this.q.rotation.y = Math.sin(t * 2) * 0.5; this.q.visible = t < 3.6;
     E.updDust(this.dust, t);
-    E.cam(t, [6, 3.2, 8], [3.2, 2.2, 6.2], [0, 1.4, -1], [-0.6, 1.3, -1], t / 6, t > 2.3 && t < 2.7 ? 0.08 : 0);
+    E.cam(t, [4.5, 3.4, 10], [2.4, 2.4, 8], [0, 0.9, -1], [-0.6, 0.8, -1], t / 6, t > 2.3 && t < 2.7 ? 0.08 : 0);
   }
 });
 
@@ -96,7 +100,7 @@ const built = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
 window.renderAt = (si, t) => {
   const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
-  S.at(s, t); E.ui(S.title, S.cards, t); E.hook(S.hook, t);
+  S.at(s, t); E.ui(S.title, S.cards, t); E.hook(S.hook, t); E.captions(window.META().START[si] + t);
   E.draw(s); return true;
 };
 window.READY = true;

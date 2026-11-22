@@ -8,7 +8,7 @@ time.sleep(0.8); FPS = 30
 try:
     with sync_playwright() as p:
         b = p.chromium.launch(args=['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'])
-        pg = b.new_page(viewport={'width': 1440, 'height': 1080})
+        pg = b.new_page(viewport={'width': 1080, 'height': 1920})
         pg.goto(f'http://127.0.0.1:{port}/page.html'); pg.wait_for_function('window.READY===true', timeout=90000)
         DUR = pg.evaluate('META().DUR')
         for si in map(int, sys.argv[2:]):

@@ -1,5 +1,12 @@
 # Template 3D (Three.js) — USAR ESTE em todos os vídeos novos
 
+## FORMATO (atualizado 22/11 — o que está em alta no TikTok BR)
+- **VERTICAL 9:16, 1080x1920, 30 fps** (os vídeos que viralizam ocupam a tela inteira; nada de 4:3).
+- **Legenda dinâmica palavra por palavra** (`#caps`): preencha `window.WORDS = [{w, s, e}, ...]` com as palavras da transcrição do ElevenLabs em tempo GLOBAL (sem as tags [..]). Grupos de 3 palavras, palavra falada em amarelo com pop.
+- **Gancho em texto GRANDE nos primeiros ~2 s** (`hook` da cena 1, pode usar `<br>`), com corte/troca de plano rápido logo depois.
+- **Zona segura do TikTok**: nada importante à direita de x≈930 (botões) nem abaixo de y≈1600 (legenda/descrição do app) nem acima de y≈130. Título em y≈150, legenda em y≈1150, card em y≈1380. Enquadre os personagens/objetos no meio da tela (câmera olhando ~0,8–1 m de altura).
+- Sem música de fundo (preferência do usuário), só voz + efeitos.
+
 Pedido do usuário: TUDO em 3D de verdade (cenários, ambientes, personagens, objetos e ícones) e movimentos certos.
 
 ## Preparar

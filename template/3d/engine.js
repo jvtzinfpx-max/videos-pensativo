@@ -10,7 +10,7 @@ import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 export { THREE };
 
-export const W = 1440, H = 1080;
+export const W = 1080, H = 1920;  // vertical 9:16 (padrão TikTok)
 export const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 export const lerp = (a, b, k) => a + (b - a) * k;
 export const seg = (t, a, b) => clamp((t - a) / (b - a));
@@ -26,7 +26,7 @@ renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadow
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
 document.getElementById('stage').appendChild(renderer.domElement);
 
-export const camera = new THREE.PerspectiveCamera(38, W / H, 0.1, 400);
+export const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 400);
 let composer, bloom;
 export function makeWorld() {
   const scene = new THREE.Scene();
@@ -279,4 +279,13 @@ export function ui(title, cards, lt, tone = 'normal') {
   const box = document.getElementById('cards'); let shown = cards.filter(c => lt >= c.at).slice(-1);
   box.innerHTML = shown.map(c => { const k = clamp((lt - c.at) / 0.35); const y = (1 - back(k)) * 40; const sh = c.shake && lt - c.at < .5 ? Math.sin(lt * 80) * 6 : 0; return `<div class="card ${c.cls || ''}" style="opacity:${k};transform:translate(${sh}px,${y}px)"><span class="ic">${c.ic || ''}</span>${c.h}</div>`; }).join('');
 }
-export function hook(text, lt, until = 3.2) { const h = document.getElementById('hook'); const k = text ? clamp(lt / 0.3) * (1 - clamp((lt - until) / 0.3)) : 0; h.style.display = text ? 'block' : 'none'; h.style.opacity = k; h.style.transform = `translate(-50%,0) scale(${0.9 + 0.1 * back(clamp(lt / 0.4))})`; h.textContent = text || ''; }
+// gancho em texto GRANDE nos primeiros ~2 s (padrão dos vídeos que viralizam)
+export function hook(text, lt, until = 2.2) { const h = document.getElementById('hook'); if (!text) { h.style.display = 'none'; return; } h.style.display = 'block'; const k = clamp(lt / 0.15) * (1 - clamp((lt - until) / 0.25)); h.style.opacity = k; h.style.transform = `translate(-50%,-50%) scale(${0.85 + 0.15 * back(clamp(lt / 0.3))}) rotate(${-2 + Math.sin(lt * 3)}deg)`; h.innerHTML = text; }
+// legenda dinâmica palavra por palavra (window.WORDS = [{w, s, e}] em tempo GLOBAL, vindo da transcrição)
+export function captions(gt) {
+  const el = document.getElementById('caps'); const Wd = window.WORDS || []; if (!Wd.length) { el.innerHTML = ''; return; }
+  let i = Wd.findIndex(w => gt < w.e + 0.05); if (i < 0) { el.innerHTML = ''; return; }
+  if (gt < Wd[i].s - 0.6) { el.innerHTML = ''; return; }
+  const g0 = Math.floor(i / 3) * 3, grp = Wd.slice(g0, g0 + 3);
+  el.innerHTML = grp.map((w, j) => { const on = g0 + j === i && gt >= w.s; const pop = on ? 1 + 0.12 * (1 - clamp((gt - w.s) / 0.15)) : 1; return `<span class="${on ? 'on' : ''}" style="transform:scale(${pop})">${w.w}</span>`; }).join(' ');
+}
