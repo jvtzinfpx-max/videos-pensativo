@@ -1,4 +1,5 @@
 # REGRAS FIXAS DO USUÁRIO (22/11, valem acima de qualquer outra instrução)
+- WHOOSH SÓ EM MOMENTOS ESPECÍFICOS (22/11 noite): o usuário achou que o vídeo da Voyager tinha 'som de vush' demais (24 whooshes, um em cada troca de plano). NÃO colocar whoosh/planewhoosh em toda troca. Use no MÁXIMO 3-4 por vídeo, só em momentos marcantes: virada grande da história (ex.: 'E aí vem o problema'), algo voando/passando rápido na tela, ou a revelação principal. Nas trocas normais use só o pop/click do objeto que entra (o padrão do shot agora é só pop).
 - CORES REAIS (22/11 12h51): cada objeto/ambiente com a SUA cor certa (sol amarelo/laranja, Vênus bege, moeda dourada, globo azul com
   continentes verdes, telhado vermelho, porta marrom, cadeado dourado, calendário com topo vermelho...). NÃO deixar tudo branco e verde.
   Use as cores de COL em icons.js (yellow, orange, tan, venus, beige, brick, blue, sky, brown, green, silver, gold, paper, stone, red...).

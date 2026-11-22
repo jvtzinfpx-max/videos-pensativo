@@ -38,7 +38,7 @@ function dots(s, a, b, n, t0, t1, col = 'paper') { const g = new THREE.Group(); 
 // ondas de rádio viajando de a até b (arcos azuis)
 function waves(s, a, b, t0, t1, n = 3, col = 'sky') { const list = []; const ang = Math.atan2((b[1] - a[1]), (b[0] - a[0])) - Math.PI / 2; for (let i = 0; i < n; i++) { const m = I.waveArc(col, 0.3 + i * 0.0); m.rotation.z = ang; s.add(m); list.push(m); }
   return { upd(t) { list.forEach((m, i) => { const st = t0 + i * 0.28, k = E.seg(t, st, st + (t1 - t0) - (n - 1) * 0.28); m.visible = t >= st && k < 1; m.position.set(E.lerp(a[0], b[0], k), E.lerp(a[1], b[1], k) * 1.2, 0.4); m.scale.setScalar(0.7 + 0.5 * Math.sin(Math.PI * k)); }); } }; }
-const shot = (mk, o = {}) => { const idx = SC.length; return { sfx: () => o.sfx || [[0.0, 'whoosh', .5], [0.05, 'pop', .8]],
+const shot = (mk, o = {}) => { const idx = SC.length; return { sfx: () => o.sfx || [[0.05, 'pop', .8]],
   build() { const s = world(); this.ic = mk(); s.add(this.ic.g); this.ic.g.userData.y0 = o.my ?? 0; this.ic.g.position.set(o.mx ?? 0, o.my ?? 0, 0); this.items = [];
     if (o.stars) this.sf = I.starfield(s, 55, 7, 11);
     (o.side || []).forEach(([f, x, y, sc, t0]) => this.items.push(I.side(s, f(), x, y, sc, t0)));
@@ -53,72 +53,72 @@ const shake = (g, t, a, b, amp = 0.06) => { if (t > a && t < b) { g.position.x +
 CUR = 0; SC.push(shot(() => I.voyager(), { scale: 1.05, my: 0.45, stars: true, dt: 0.1, lead: 0.45,
   side: [[() => I.rocket(), -1.45, -1.75, 0.42, L(0.55)]],
   labels: [['1977', 0.9, -1.85, 0.42, GOLD, L(1.3)]],
-  sfx: [[0.0, 'riser2', .4], [0.05, 'pop', .8], [0.3, 'pop', .5], [L(0.55), 'whoosh', .6], [L(1.3), 'hit', .5]] }));
+  sfx: [[0.0, 'riser2', .4], [0.05, 'pop', .8], [0.3, 'pop', .5], [L(1.3), 'hit', .5]] }));
 // 1 — fez algo que nenhum objeto humano jamais fez (troféu)
 CUR = 1; SC.push(shot(() => I.trophy(), { scale: 0.95, my: 0.3, stars: true,
   side: [[() => I.voyager(), -1.4, 1.85, 0.36, 0.15], [() => I.earth(), 1.45, 1.85, 0.36, L(5.4)]],
   labels: [['INÉDITO', 0, -1.75, 0.4, GOLD, L(5.9)]],
   post(t) { shake(this.ic.g, t, L(5.9), L(6.25), 0.04); },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .8], [0.15, 'pop', .5], [L(5.4), 'pop', .6], [L(5.9), 'ding', .7]] }));
+  sfx: [[0.05, 'pop', .8], [0.15, 'pop', .5], [L(5.4), 'pop', .6], [L(5.9), 'ding', .7]] }));
 // 2 — Na última quarta-feira (18 de novembro)
 CUR = 2; SC.push(shot(() => I.calendar('18', 'NOV'), { scale: 0.95, my: 0.25, stars: true,
   labels: [['QUARTA-FEIRA', 0, -1.7, 0.36, WHITE, L(7.9)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'paper', .6], [L(7.9), 'pop', .6]] }));
+  sfx: [[0.05, 'paper', .6], [L(7.9), 'pop', .6]] }));
 // 3 — a Voyager 1 ficou a 1 dia-luz da Terra
 CUR = 3; SC.push(shot(() => I.voyager(), { scale: 0.62, mx: 0.95, my: 1.45, stars: true,
   side: [[() => I.earth(), -1.3, -1.55, 0.5, 0.05]],
   extra(s) { this.items.push(dots(s, [-0.75, -1.05], [0.6, 0.8], 11, L(9.8), L(10.9), 'yellow')); },
   labels: [['1 DIA-LUZ', -0.75, 0.25, 0.42, YEL, L(10.5)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.1, 'pop', .5], [L(9.8), 'scan', .5], [L(10.5), 'ding', .7]] }));
+  sfx: [[0.05, 'pop', .7], [0.1, 'pop', .5], [L(9.8), 'scan', .5], [L(10.5), 'ding', .7]] }));
 // 4 — distância que a luz percorre em 24 horas
 CUR = 4; SC.push(shot(() => I.clock(), { scale: 0.95, my: 0.3, stars: true,
   side: [[() => I.sun(), -1.4, 1.85, 0.4, L(13.7)]],
   labels: [['24 H', 0, -1.75, 0.5, YEL, L(14.72)]],
   extra(s) { this.items.push(waves(s, [-0.85, 1.55], [2.2, 1.55], L(13.9), L(15.6), 3, 'yellow')); },
   post(t) { this.ic.hand.rotation.z = -Math.max(0, t - L(14.6)) * 9; },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [L(13.7), 'pop', .6], [L(14.6), 'clockfast', .5], [L(14.72), 'ding', .5]] }));
+  sfx: [[0.05, 'pop', .7], [L(13.7), 'pop', .6], [L(14.6), 'clockfast', .5], [L(14.72), 'ding', .5]] }));
 // 5 — quase 26 bilhões de km
 CUR = 5; SC.push(shot(() => I.earth(), { scale: 0.42, mx: -1.3, my: -1.7, stars: true,
   side: [[() => I.voyager(), -1.05, 1.65, 0.32, 0.1]],
   extra(s) { this.items.push(dots(s, [-1.28, -0.95], [-1.15, 1.2], 12, 0.1, 0.9, 'paper')); },
   labels: [['26 BILHÕES', 0.45, 0.25, 0.44, YEL, L(16.4)], ['DE KM', 0.45, -0.35, 0.34, WHITE, L(17.84)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [0.1, 'scan', .4], [L(16.4), 'hit', .5], [L(17.84), 'pop', .6]] }));
+  sfx: [[0.05, 'pop', .6], [0.1, 'scan', .4], [L(16.4), 'hit', .5], [L(17.84), 'pop', .6]] }));
 // 6 — mais de 60 mil km/h
 CUR = 6; SC.push(shot(() => I.speedometer(), { scale: 1.0, my: 0.35, stars: true,
   side: [[() => I.voyager(), -1.2, 2.0, 0.34, 0.1]],
   labels: [['60.000 KM/H', 0, -1.55, 0.44, ORANGE, L(20.12)]],
   pre(t) { },
   post(t) { const k = E.eio(E.seg(t, L(19.6), L(21.2))); this.ic.needle.rotation.z = E.lerp(1.45, -1.05, k) + (k > 0.98 ? Math.sin(t * 40) * 0.03 : 0); const v = this.items[0].ic.g; v.position.x = -1.2 + t * 0.45; },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [L(19.6), 'riser2', .5], [L(20.12), 'planewhoosh', .7], [L(21.2), 'hit', .4]] }));
+  sfx: [[0.05, 'pop', .7], [L(19.6), 'riser2', .5], [L(21.2), 'hit', .4]] }));
 // 7 — há 49 anos
 CUR = 7; SC.push(shot(() => I.calendar('49', 'ANOS'), { scale: 0.95, my: 0.3, stars: true,
   labels: [['1977', -1.25, -1.7, 0.4, GOLD, 0.15], ['2026', 1.25, -1.7, 0.4, WHITE, L(23.0)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'paper', .6], [0.15, 'pop', .5], [L(22.4), 'timelapse', .5], [L(23.0), 'ding', .6]] }));
+  sfx: [[0.05, 'paper', .6], [0.15, 'pop', .5], [L(22.4), 'timelapse', .5], [L(23.0), 'ding', .6]] }));
 // 8 — E aí vem o problema (tenso)
 CUR = 8; SC.push(shot(() => I.warning(), { scale: 0.95, my: 0.3, stars: true, dt: 0.08,
   side: [[() => I.voyager(), -1.4, 1.9, 0.32, 0.1], [() => I.earth(), 1.45, 1.9, 0.32, 0.2]],
   post(t) { shake(this.ic.g, t, L(25.0), L(25.5), 0.07); },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [L(25.04), 'error', .7]] }));
+  sfx: [[0.05, 'pop', .6], [L(25.04), 'error', .7]] }));
 // 9 — a NASA manda uma ordem -> leva 1 dia para chegar
 CUR = 9; SC.push(shot(() => I.groundDish(), { scale: 0.75, my: -1.45, stars: true,
   side: [[() => I.voyager(), 0.2, 1.85, 0.42, 0.1], [() => I.clock(), 1.5, -0.1, 0.32, L(27.84)]],
   extra(s) { this.items.push(waves(s, [-0.1, -0.75], [0.15, 1.55], L(26.6), L(29.4), 3)); },
   labels: [['NASA', -1.35, -1.65, 0.32, WHITE, L(26.16)], ['24 H', 1.5, -0.85, 0.38, YEL, L(28.0)]],
   post(t) { const c = this.items[1].ic; c.hand.rotation.z = -Math.max(0, t - L(28.0)) * 6; },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [0.1, 'pop', .5], [L(26.16), 'pop', .5], [L(26.6), 'beep', .5], [L(27.0), 'beep', .4], [L(27.84), 'pop', .5], [L(28.0), 'clock', .4]] }));
+  sfx: [[0.05, 'pop', .6], [0.1, 'pop', .5], [L(26.16), 'pop', .5], [L(26.6), 'beep', .5], [L(27.0), 'beep', .4], [L(27.84), 'pop', .5], [L(28.0), 'clock', .4]] }));
 // 10 — e a resposta? mais um dia pra voltar
 CUR = 10; SC.push(shot(() => I.voyager(), { scale: 0.62, mx: 0.2, my: 1.45, stars: true,
   side: [[() => I.groundDish(), -0.1, -1.4, 0.48, 0.05], [() => I.clock(), 1.5, -0.1, 0.32, L(30.88)]],
   extra(s) { this.items.push(waves(s, [0.15, 1.0], [-0.1, -0.85], L(30.0), L(32.4), 3, 'green')); },
   labels: [['+24 H', 1.5, -0.85, 0.38, YEL, L(31.2)]],
   post(t) { const c = this.items[1].ic; c.hand.rotation.z = -Math.max(0, t - L(31.0)) * 6; },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [L(30.0), 'beep', .5], [L(30.4), 'beep', .4], [L(30.88), 'pop', .5], [L(31.2), 'clock', .4]] }));
+  sfx: [[0.05, 'pop', .6], [L(30.0), 'beep', .5], [L(30.4), 'beep', .4], [L(30.88), 'pop', .5], [L(31.2), 'clock', .4]] }));
 // 11 — se algo der errado: 2 dias no escuro
 CUR = 11; SC.push(shot(() => I.warning(), { scale: 0.8, my: 0.75, stars: true, dt: 0.08,
   side: [[() => I.calendar('2', 'DIAS'), -0.2, -1.3, 0.55, L(34.0)], [() => I.voyager(), 1.4, 2.0, 0.3, 0.2]],
   labels: [['48 H', 1.3, -1.3, 0.42, RED, L(34.4)]],
   post(t) { const k = 1 - 0.55 * E.eio(E.seg(t, L(34.8), L(35.6))); const [a, b, c] = this.s.userData.L; a.intensity = 1.9 * k; b.intensity = 0.6 * k; c.intensity = 1.1 * k; shake(this.ic.g, t, 0.1, 0.6, 0.06); },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'error', .5], [0.2, 'pop', .5], [L(34.0), 'pop', .7], [L(34.4), 'hit', .5], [L(34.8), 'fadeout', .5]] }));
+  sfx: [[0.05, 'error', .5], [0.2, 'pop', .5], [L(34.0), 'pop', .7], [L(34.4), 'hit', .5], [L(34.8), 'fadeout', .5]] }));
 // 12 — o mais absurdo é o que tem lá dentro (misterioso)
 CUR = 12; SC.push(shot(() => I.voyager(), { scale: 1.0, my: 0.35, stars: true, dt: 0.2, push: 1.6,
   side: [[() => I.magnifier(), 0.75, -1.55, 0.5, L(37.3)]],
@@ -127,55 +127,55 @@ CUR = 12; SC.push(shot(() => I.voyager(), { scale: 1.0, my: 0.35, stars: true, d
 CUR = 13; SC.push(shot(() => I.chip(), { scale: 0.7, mx: -1.05, my: 0.35, stars: true,
   side: [[() => I.phonePhoto(), 1.3, 0.28, 0.62, L(40.8)]],
   labels: [['<', 0.1, 0.25, 0.7, ORANGE, L(39.76)], ['COMPUTADOR', -0.95, -1.0, 0.22, WHITE, L(38.64)], ['1 FOTO', 1.3, -1.0, 0.26, SKY, L(40.8)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [L(38.64), 'beep', .4], [L(39.76), 'hit', .5], [L(40.8), 'pop', .7], [L(41.4), 'snap', .4]] }));
+  sfx: [[0.05, 'pop', .7], [L(38.64), 'beep', .4], [L(39.76), 'hit', .5], [L(40.8), 'pop', .7], [L(41.4), 'snap', .4]] }));
 // 14 — rádio transmite com 22 watts
 CUR = 14; SC.push(shot(() => I.voyager(), { scale: 0.8, my: 0.75, stars: true,
   extra(s) { this.items.push(waves(s, [-0.35, 0.2], [-0.6, -1.6], L(42.5), L(44.9), 3)); },
   labels: [['22 W', 0.6, -1.55, 0.6, YEL, L(43.6)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [L(42.5), 'beep', .4], [L(42.9), 'beep', .3], [L(43.6), 'ding', .5]] }));
+  sfx: [[0.05, 'pop', .6], [L(42.5), 'beep', .4], [L(42.9), 'beep', .3], [L(43.6), 'ding', .5]] }));
 // 15 — menos que a lâmpada da geladeira
 CUR = 15; SC.push(shot(() => I.fridge(), { t0: L(46.3), scale: 0.78, mx: 0.95, my: 0.25, stars: false,
   side: [[() => I.bulb(), 0.95, 2.05, 0.4, L(45.6)]],
   labels: [['22 W', -1.4, 0.3, 0.42, YEL, 0.05], ['<', -0.3, 0.3, 0.6, ORANGE, L(45.08)]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [L(45.08), 'hit', .4], [L(45.6), 'pop', .6], [L(46.3), 'fridge', .6]] }));
+  sfx: [[0.05, 'pop', .6], [L(45.08), 'hit', .4], [L(45.6), 'pop', .6], [L(46.3), 'fridge', .6]] }));
 // 16 — a energia está acabando (triste): bateria esvaziando
 CUR = 16; SC.push(shot(() => I.battery(), { scale: 0.85, my: 0.1, stars: true, dt: 0.15, sw: 0.08,
   side: [[() => I.voyager(), 0, 2.05, 0.36, 0.1]],
   post(t) { const lv = this.ic.levels; [3, 2, 1].forEach((i, j) => { if (t > L(48.4) + j * 0.35) lv[i].visible = false; }); const k = E.eio(E.seg(t, L(48.3), L(49.3))); this.ic.g.position.y -= 0.15 * k; },
-  sfx: [[0.0, 'whoosh', .4], [0.05, 'pop', .5], [L(48.4), 'switch', .4], [L(48.75), 'switch', .4], [L(49.1), 'sad', .4]] }));
+  sfx: [[0.05, 'pop', .5], [L(48.4), 'switch', .4], [L(48.75), 'switch', .4], [L(49.1), 'sad', .4]] }));
 // 17 — bateria nuclear enfraquece todo ano
 CUR = 17; SC.push(shot(() => I.nuclear(), { scale: 0.85, my: 0.4, stars: true, sw: 0.1,
   side: [[() => I.battery(), -1.4, -1.6, 0.42, L(50.32)], [() => I.calendar('1', 'ANO'), 1.4, -1.6, 0.42, L(51.04)]],
   post(t) { const lv = this.items[0].ic.levels; [3, 2].forEach((i, j) => { lv[i].visible = t < L(50.6) + j * 0.4; }); },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [L(49.52), 'riser2', .3], [L(50.32), 'pop', .6], [L(50.6), 'switch', .3], [L(51.0), 'switch', .3], [L(51.04), 'paper', .5]] }));
+  sfx: [[0.05, 'pop', .7], [L(49.52), 'riser2', .3], [L(50.32), 'pop', .6], [L(50.6), 'switch', .3], [L(51.0), 'switch', .3], [L(51.04), 'paper', .5]] }));
 // 18 — a NASA desligou as câmeras e quase todos os instrumentos
 CUR = 18; SC.push(shot(() => I.voyager(), { scale: 0.72, my: 1.15, stars: true,
   side: [[() => I.camera3(), -1.25, -1.45, 0.45, L(53.32)], [() => I.lampPanel(), 1.25, -1.45, 0.42, L(55.08)]],
   post(t) { const c = this.items[0].ic; c.x.forEach((m, i) => { const k = E.eio(E.seg(t, L(53.7) + i * 0.15, L(53.95) + i * 0.15)); m.visible = k > 0; m.scale.set(Math.max(1e-4, k), 1, 1); }); },
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [L(52.72), 'switch', .5], [L(53.32), 'pop', .6], [L(53.75), 'error', .5], [L(55.08), 'pop', .6]] }));
+  sfx: [[0.05, 'pop', .6], [L(52.72), 'switch', .5], [L(53.32), 'pop', .6], [L(53.75), 'error', .5], [L(55.08), 'pop', .6]] }));
 // 19 — um por um, pra ela não se calar: luzes apagando
 CUR = 19; SC.push(shot(() => I.lampPanel(), { scale: 0.95, my: 0.35, stars: true, sw: 0.1,
   side: [[() => I.voyager(), 0, 2.05, 0.34, 0.1]],
   post(t) { const on = this.ic.on; [L(55.76), L(55.95), L(56.16), L(56.4)].forEach((tt, i) => { if (t > tt) on[i].visible = false; }); if (t > L(56.9)) on[4].scale.setScalar(1 + 0.12 * Math.sin((t - L(56.9)) * 9)); },
-  sfx: [[0.0, 'whoosh', .4], [0.05, 'pop', .5], [L(55.76), 'switch', .45], [L(55.95), 'switch', .45], [L(56.16), 'switch', .45], [L(56.4), 'switch', .45], [L(57.0), 'beep', .4]] }));
+  sfx: [[0.05, 'pop', .5], [L(55.76), 'switch', .45], [L(55.95), 'switch', .45], [L(56.16), 'switch', .45], [L(56.4), 'switch', .45], [L(57.0), 'beep', .4]] }));
 // 20 — mesmo quando ela se calar, vai seguir viajando (estrelas passando)
 CUR = 20; SC.push(shot(() => I.voyager(), { scale: 0.9, my: 0.4, stars: true, dt: 0.15,
   post(t) { if (this.sf) this.sf.position.x = -t * 0.55; this.ic.g.position.x = 0.4 - t * 0.12; },
-  sfx: [[0.0, 'whoosh', .4], [0.05, 'pop', .5], [L(59.9), 'planewhoosh', .5]] }));
+  sfx: [[0.05, 'pop', .5], ] }));
 // 21 — disco de ouro com sons e imagens da Terra
 CUR = 21; SC.push(shot(() => I.goldDisc(), { t0: L(61.0), scale: 0.95, my: 0.45, stars: true,
   side: [[() => I.note(), -1.45, -1.55, 0.4, L(62.48)], [() => I.picture(), 0.05, -1.62, 0.4, L(62.96)], [() => I.earth(), 1.45, -1.55, 0.36, L(63.4)]],
   post(t) { this.ic.g.rotation.z = -t * 0.8; },
-  sfx: [[0.0, 'whoosh', .5], [L(61.0), 'pop', .7], [L(61.52), 'sparkle', .5], [L(62.48), 'pop', .6], [L(62.96), 'pop', .6], [L(63.4), 'pop', .6]] }));
+  sfx: [[L(61.0), 'pop', .7], [L(61.52), 'sparkle', .5], [L(62.48), 'pop', .6], [L(62.96), 'pop', .6], [L(63.4), 'pop', .6]] }));
 // 22 — se alguém achar esse disco... será que vai entender quem somos?
 CUR = 22; SC.push(shot(() => I.goldDisc(), { scale: 0.85, my: 0.45, stars: true, dt: 0.15,
   side: [[() => I.magnifier(), 1.3, 1.95, 0.42, L(64.96)], [() => I.question(), 0, -1.6, 0.5, L(66.96)], [() => I.earth(), -1.35, 1.95, 0.34, L(68.16)]],
   post(t) { this.ic.g.rotation.z = -t * 0.5; },
-  sfx: [[0.0, 'whoosh', .4], [0.05, 'pop', .5], [L(64.96), 'scan', .5], [L(66.96), 'pop', .7], [L(67.4), 'riser2', .3], [L(68.16), 'pop', .5]] }));
+  sfx: [[0.05, 'pop', .5], [L(64.96), 'scan', .5], [L(66.96), 'pop', .7], [L(67.4), 'riser2', .3], [L(68.16), 'pop', .5]] }));
 // 23 — Comenta aqui e me segue: resumo visual
 CUR = 23; SC.push(shot(() => I.voyager(), { scale: 0.8, my: 0.35, stars: true,
   side: [[() => I.earth(), -1.45, 1.95, 0.32, 0.1], [() => I.goldDisc(), 1.45, 1.95, 0.32, 0.25], [() => I.clock(), -1.45, -1.5, 0.32, 0.4], [() => I.chip(), 1.45, -1.5, 0.3, 0.55], [() => I.speedometer(), 0, -1.85, 0.3, 0.7]],
-  sfx: [[0.0, 'whoosh', .4], [0.05, 'pop', .7], [0.1, 'pop', .4], [0.25, 'pop', .4], [0.4, 'pop', .4], [0.55, 'pop', .4], [0.7, 'pop', .4], [1.0, 'ding', .5]] }));
+  sfx: [[0.05, 'pop', .7], [0.1, 'pop', .4], [0.25, 'pop', .4], [0.4, 'pop', .4], [0.55, 'pop', .4], [0.7, 'pop', .4], [1.0, 'ding', .5]] }));
 
 const built = window.BUILT = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };

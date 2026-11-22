@@ -32,7 +32,7 @@ const enter = (g, t, base = 1) => { const k = E.back(E.seg(t, 0, 0.35)); g.scale
 
 const SC = [];
 // plano = ícone principal no centro + ícones de apoio, rótulos e fundo que representam a narrativa
-const shot = (mk, o = {}) => ({ hook: o.hook, sfx: () => o.sfx || [[0.0, 'whoosh', .5], [0.05, 'pop', .8]],
+const shot = (mk, o = {}) => ({ hook: o.hook, sfx: () => o.sfx || [[0.05, 'pop', .8]],
   build() { const s = world(); this.ic = mk(); s.add(this.ic.g); this.ic.g.userData.y0 = o.my ?? 0; this.ic.g.position.y = o.my ?? 0; this.items = [];
     if (o.stars) this.sf = I.starfield(s, 45, 7, 11);
     (o.side || []).forEach(([f, x, y, sc, t0]) => this.items.push(I.side(s, f(), x, y, sc, t0)));
