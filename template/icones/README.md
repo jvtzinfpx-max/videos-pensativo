@@ -14,10 +14,10 @@
 - SEM PERSONAGENS. A história é contada só com ícones, objetos, telas, cards e gráficos. Temas que não dependem de pessoas.
 - Também: ícone de app 3D menta (I.app3d) com cards de notificação de vidro empilhando (I.notifCard).
 - Vertical 1080x1920; gancho em texto grande branco com palavra-chave menta (#hook, ~2,4 s); legenda palavra a palavra (#caps top 1330, palavra ativa menta);
-  flash branco leve (25%) na troca de plano. Ícone ocupa ~35-45% da largura, entre y ~400 e ~1250 px; nada atrás da legenda.
+  sem flash na troca de plano (deixava o 1º quadro cinza). Ícone ocupa ~35-45% da largura, entre y ~400 e ~1250 px; nada atrás da legenda.
 - Nada de logos/marcas reais: desenhe ícones próprios com rrect/circ/ring/poly/stroke + Icon.add(shape, 'white'|'mint'|'black'|'red'|'gold', {step, from, z, pivot}).
   Detalhes "furados" (janelas, tela) = peças 'black' por cima (z .081). Vermelho só para alerta/perda.
-- Biblioteca (icons.js): phoneCart, windowsStack, school, barChart, coin, bank, lock, globe, bulb, magnifier, warning, rocket, app3d, notifCard, word.
+- Biblioteca (icons.js): planet, sun, orbit (.setOrbit(k)), calendar(num, sub), spinArrow, question, sunrise, phoneCart, windowsStack, school, barChart, coin, bank, lock, globe, bulb, magnifier, warning, rocket, app3d, notifCard, word.
   Crie novos ícones para cada tema (planeta, satélite, DNA, casa, carro, avião, petróleo, ouro, cofre, relógio, calendário, mapa, raio, etc.) e confira em close.
 - Câmera: I.camFront(t, y, dist≈9.2, k, push≈1) (aproxima devagar). Troca de plano a cada ~2-4 s.
 - Render: `python3 render3d.py . <cenas>` (2 processos), áudio audio3d.py (voz em aud/voz.mp3).
@@ -28,3 +28,6 @@
 - Peças: todas as partes do ícone presentes e encostadas (nada solto ou faltando: telhado, porta, escada, bandeira, rodas...).
 - Primeiro frame de cada plano já mostra algo (build começa em t0 = -0.15), sem quadro vazio.
 - Nada atrás do gancho ou da legenda; nada cortado nas bordas.
+
+- Legenda: os grupos de até 3 palavras quebram no fim de frase/pausa (não misturar frases de cenas diferentes).
+- Exemplo completo com narração: teste_venus.mp4 (21,6 s, 7 planos).

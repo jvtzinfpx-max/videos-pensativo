@@ -305,8 +305,13 @@ export function hook(text, lt, until = 2.2) { const h = document.getElementById(
 // legenda dinâmica palavra por palavra (window.WORDS = [{w, s, e}] em tempo GLOBAL, vindo da transcrição)
 export function captions(gt) {
   const el = document.getElementById('caps'); const Wd = window.WORDS || []; if (!Wd.length) { el.innerHTML = ''; return; }
+  // grupos de até 3 palavras que NUNCA atravessam fim de frase (. ? ! :) nem pausas longas
+  if (!window.__G || window.__G.src !== Wd) { const G = []; let cur = [];
+    Wd.forEach((w, i) => { cur.push(i); const end = /[.?!:]$/.test(w.w) || (Wd[i + 1] && Wd[i + 1].s - w.e > 0.45); if (cur.length === 3 || end || i === Wd.length - 1) { G.push(cur); cur = []; } });
+    window.__G = { src: Wd, G, of: Wd.map((_, i) => G.findIndex(g => g.includes(i))) }; }
   let i = Wd.findIndex(w => gt < w.e + 0.05); if (i < 0) { el.innerHTML = ''; return; }
   if (gt < Wd[i].s - 0.6) { el.innerHTML = ''; return; }
-  const g0 = Math.floor(i / 3) * 3, grp = Wd.slice(g0, g0 + 3);
-  el.innerHTML = grp.map((w, j) => { const on = g0 + j === i && gt >= w.s; const pop = on ? 1 + 0.12 * (1 - clamp((gt - w.s) / 0.15)) : 1; return `<span class="${on ? 'on' : ''}" style="transform:scale(${pop})">${w.w}</span>`; }).join(' ');
+  const grp = window.__G.G[window.__G.of[i]];
+  el.innerHTML = grp.map(j => { const w = Wd[j]; const on = j === i && gt >= w.s; const pop = on ? 1 + 0.12 * (1 - clamp((gt - w.s) / 0.15)) : 1; return `<span class="${on ? 'on' : ''}" style="transform:scale(${pop})">${w.w}</span>`; }).join(' ');
 }
+

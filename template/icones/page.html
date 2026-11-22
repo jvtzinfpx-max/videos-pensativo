@@ -61,7 +61,7 @@ window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d =>
 window.renderAt = (si, t) => {
   const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
   S.at(s, t); E.hook(S.hook, t, 2.4); E.captions(window.META().START[si] + t);
-  document.getElementById('flash').style.opacity = si > 0 ? 0.25 * (1 - E.clamp(t / 0.12)) : 0;
+  document.getElementById('flash').style.opacity = 0;
   E.draw(s); return true;
 };
 window.READY = true;

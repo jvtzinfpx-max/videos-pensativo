@@ -124,3 +124,28 @@ export function gridBackdrop(s) { const c = document.createElement('canvas'); c.
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(16, 28.4), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.position.z = -6; s.add(m); return m; }
 // reflexo no chão (cópia invertida e apagada)
 export function reflect(mesh, op = 0.18) { const r = mesh.clone(); r.material = mesh.material.clone(); r.material.transparent = true; r.material.opacity = op; r.scale.y = -1; return r; }
+
+// ---------- ícones extras (espaço / tempo) ----------
+export function planet() { const I = new Icon(); const R = 0.95; I.add(circ(R), 'white', { step: 0 });
+  [[0.42, 0.2], [0.02, 0.14], [-0.4, 0.17]].forEach(([y, h], i) => { const hw = Math.sqrt(R * R - (Math.abs(y) + h / 2) ** 2) - 0.12; I.add(rrect(hw * 2, h, h / 2, (i - 1) * 0.06, y), 'mint', { z: .085, step: 1 + i * .3, from: 'growx', depth: .02 }); });
+  I.add(circ(0.08, 0.45, 0.205), 'gray', { z: .09, step: 2.2, depth: .02 }); I.add(circ(0.08, -0.3, -0.18), 'gray', { z: .09, step: 2.4, depth: .02 }); return I; }
+export function sun() { const I = new Icon(); I.add(circ(0.62), 'mint', { step: 0 });
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.16, 0.42, 0.08), 'white', { step: 1 + i * .12, at: [Math.cos(a) * 0.95, Math.sin(a) * 0.95], rot: a - Math.PI / 2 }); } return I; }
+// órbita: sol no centro + anel + planeta pequeno (posição do planeta via .orbitK)
+export function orbit() { const I = new Icon(); I.add(ring(1.15, 0.05), 'gray', { step: 0, depth: .02 }); I.add(circ(0.42), 'mint', { step: 1 });
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.08, 0.2, 0.04), 'mint', { step: 1.3, at: [Math.cos(a) * 0.6, Math.sin(a) * 0.6], rot: a - Math.PI / 2 }); }
+  I.pl = I.add(circ(0.2, 0, 0), 'white', { step: 2, z: .05 }); I.setOrbit = k => { const a = Math.PI / 2 - k * Math.PI * 2; I.pl.position.set(Math.cos(a) * 1.15, Math.sin(a) * 1.15, .05); I.parts.find(p => p.o === I.pl).base.copy(I.pl.position); }; I.setOrbit(0); return I; }
+// calendário com número grande (textura) — num é string
+export function calendar(num = '243', sub = 'DIAS') { const I = new Icon(); I.add(rrect(1.9, 1.9, 0.18, 0, -0.1), 'white', { step: 0 }); I.add(rrect(1.9, 0.45, 0.18, 0, 0.62), 'mint', { z: .02, step: 1, depth: .08 });
+  [-0.5, 0.5].forEach(x => I.add(rrect(0.14, 0.4, 0.07, x, 0.9), 'gray', { z: .1, step: 1.5 }));
+  const c = document.createElement('canvas'); c.width = 512; c.height = 400; const x = c.getContext('2d'); x.fillStyle = '#111'; x.textAlign = 'center'; x.font = '900 230px Poppins, Arial'; x.fillText(num, 256, 250); x.font = '900 80px Poppins, Arial'; x.fillStyle = '#1b8f5f'; x.fillText(sub, 256, 360);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.25), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); m.position.set(0, -0.35, 0.09);
+  const piv = new THREE.Group(); piv.add(m); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m }); return I; }
+// seta curva de rotação (giro lento)
+export function spinArrow(col = 'mint') { const I = new Icon(); I.add(ring(1.15, 0.16, 0, 0, Math.PI * 0.15, Math.PI * 1.75), col, { step: 0, from: 'fade' }); const a = Math.PI * 1.75, x = Math.cos(a) * 1.15, y = Math.sin(a) * 1.15;
+  I.add(poly([[x - 0.25, y - 0.1], [x + 0.25, y - 0.1], [x + 0.05, y + 0.32]].map(([px, py]) => [px, py])), col, { step: 0.6, rot: 0 }); return I; }
+export function question() { const I = new Icon(); I.add(ring(0.5, 0.26, 0, 0.45, -Math.PI * 0.5, Math.PI * 1.0), 'white', { step: 0, from: 'fade' }); I.add(rrect(0.26, 0.45, 0.1, 0, -0.25), 'white', { step: 0.5, from: 'grow', pivot: [0, 0.0] }); I.add(circ(0.17, 0, -0.85), 'mint', { step: 1 }); return I; }
+// horizonte com sol nascendo + rótulo
+export function sunrise() { const I = new Icon(); I.add(rrect(2.6, 0.12, 0.06, 0, -0.4), 'white', { step: 0, from: 'growx' });
+  const half = new THREE.Shape(); half.absarc(0, -0.34, 0.75, 0, Math.PI, false); half.closePath(); I.sunHalf = I.add(half, 'mint', { step: 1, from: 'up', z: -.05 });
+  [0, 1, 2, 3, 4].forEach(i => { const a = Math.PI * (0.1 + i * 0.2); I.add(rrect(0.12, 0.32, 0.06), 'white', { step: 1.5 + i * .12, at: [Math.cos(a) * 1.05, -0.34 + Math.sin(a) * 1.05], rot: a - Math.PI / 2 }); }); return I; }
