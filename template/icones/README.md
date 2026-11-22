@@ -10,6 +10,7 @@
 - SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
 - FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
+- CRÉDITOS DO ELEVENLABS (22/11): antes de gerar a voz, chame account_get_usage (restante = character_limit - character_count) e creative_generate_speech com estimate_only: true. Se não houver créditos para a narração inteira, NÃO gere voz cortada nem troque de voz/modelo: não produza o vídeo, mande UMA PushNotification + SendUserMessage curta avisando que os créditos do ElevenLabs acabaram (quanto resta, quanto precisa, que renovam em 18/12 ou com recarga) e encerre. O usuário decidiu manter tudo igual e recarregar quando puder.
 - CENAS DE ACORDO COM TEMA, NARRATIVA E TOM DA VOZ (22/11 13h20): use as tags de tom do roteiro + a transcrição para mudar a animação no momento exato:
   [excited]/[upbeat] → objetos entram rápido com pop elástico, balanço maior, mais apoios aparecendo, sons pop/ding/chaching;
   [mysterious]/[hushed]/[quietly] → entradas lentas (dt maior), câmera aproximando devagar, menos elementos, fundo mais escuro, som grave/riser baixo;
