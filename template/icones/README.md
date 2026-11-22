@@ -1,6 +1,14 @@
+# REGRAS FIXAS DO USUÁRIO (22/11, valem acima de qualquer outra instrução)
+- Ícones, objetos e ambientes IGUAIS ao modelo dos vídeos de referência dele: ícone branco chapado + detalhes verde-menta, um por vez, frontal,
+  balanço 3D bem leve, montando peça por peça; fundo preto; cena "app 3D verde + notificações de vidro empilhando" com fundo azul-marinho
+  escuro com grade fina (I.gridBackdrop) e reflexo no chão (I.reflect). Use SEMPRE os padrões deste template (icons.js) em vez de inventar estilos novos.
+  Só troque o símbolo de cada ícone conforme o tema (nada de logos/marcas reais).
+- BRILHO BAIXO em tudo: E.BLOOM = { s: .32, r: .08, th: .55, crisp: true }; branco 0xd6d6d6, menta 0x33d690. Não aumentar.
+- Sem personagens.
+
 # Estilo "ícones brilhantes 3D" (PADRÃO desde 22/11/2026 — aprovado pelo usuário a partir das referências dele)
 
-- Fundo PRETO puro. Ícones BRANCOS chapados + detalhes VERDE-MENTA #3DF5A6, brilho branco suave (E.BLOOM = { s: .6, r: .12, th: .5, crisp: true }: o glow fica só EM VOLTA e o ícone é redesenhado nítido por cima, então janelas/portas/telas pretas ficam pretas de verdade),
+- Fundo PRETO puro. Ícones BRANCOS chapados + detalhes VERDE-MENTA #3DF5A6, brilho branco suave (E.BLOOM = { s: .32, r: .08, th: .55, crisp: true }: o glow fica só EM VOLTA e o ícone é redesenhado nítido por cima, então janelas/portas/telas pretas ficam pretas de verdade),
   levemente extrudados e balançando em 3D (I.sway). UM ícone grande por plano, centralizado, montando PEÇA POR PEÇA (Icon.build).
 - SEM PERSONAGENS. A história é contada só com ícones, objetos, telas, cards e gráficos. Temas que não dependem de pessoas.
 - Também: ícone de app 3D menta (I.app3d) com cards de notificação de vidro empilhando (I.notifCard).

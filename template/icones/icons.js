@@ -7,7 +7,7 @@ import { clamp, seg, back, eio, lerp, hash, camera, text3d } from './engine.js';
 export const MINT = 0x3DF5A6, MINT_CSS = '#3DF5A6';
 const MB = {};
 const basic = (c) => MB[c] || (MB[c] = new THREE.MeshBasicMaterial({ color: c, toneMapped: false }));
-export const COL = { white: [0xebebeb, 0x7d7d7d], mint: [MINT, 0x1b8f5f], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xffd257, 0xa8862c] };
+export const COL = { white: [0xd6d6d6, 0x6e6e6e], mint: [0x33d690, 0x197a52], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xffd257, 0xa8862c] };
 
 // ---------- formas 2D ----------
 export function rrect(w, h, r = 0.1, x = 0, y = 0) { const s = new THREE.Shape(), X = x - w / 2, Y = y - h / 2; r = Math.min(r, w / 2, h / 2);
@@ -105,7 +105,7 @@ export function notifCard(title, body, w = 3.2, h = 0.72) { const c = document.c
   x.fillStyle = MINT_CSS; x.beginPath(); x.roundRect(22, H / 2 - 44, 88, 88, 22); x.fill(); x.fillStyle = '#fff'; x.font = 'bold 42px Arial'; x.fillText(title, 132, H / 2 - 6); x.fillStyle = '#d0d0d0'; x.font = '34px Arial'; x.fillText(body, 132, H / 2 + 38);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false, color: 0xbdbdbd })); return m; }
 // ícone de app 3D de verdade (bloco menta arredondado) com ícone branco na frente
-export function app3d(inner, size = 1.6) { const g = new THREE.Group(); const b = new THREE.Mesh(new RoundedBoxGeometry(size, size, size * 0.35, 6, size * 0.22), new THREE.MeshStandardMaterial({ color: 0x22e07f, emissive: 0x18c46c, emissiveIntensity: 0.22, roughness: .3 }));
+export function app3d(inner, size = 1.6) { const g = new THREE.Group(); const b = new THREE.Mesh(new RoundedBoxGeometry(size, size, size * 0.35, 6, size * 0.22), new THREE.MeshStandardMaterial({ color: 0x1fc472, emissive: 0x0f7a45, emissiveIntensity: 0.15, roughness: .3 }));
   g.add(b); if (inner) { inner.g.scale.setScalar(size * 0.36); inner.g.position.z = size * 0.18; g.add(inner.g); } g.userData.inner = inner; return g; }
 
 // texto 2D grande (palavra-chave) feito com CanvasTexture num plano
@@ -113,6 +113,14 @@ export function word(text, h = 0.6, color = '#ffffff') { const c = document.crea
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.Mesh(new THREE.PlaneGeometry(h * w / 220, h), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); }
 
 // câmera frontal com leve balanço 3D (gira o ícone um pouco para mostrar a espessura)
-export function camFront(t, y = 0, dist = 7, k = 0, push = 0.8) { const d = dist - push * eio(clamp(k)); camera.position.set(Math.sin(t * 0.6) * 0.35, y + Math.sin(t * 0.45) * 0.12, d); camera.lookAt(0, y, 0); }
+export function camFront(t, y = 0, dist = 7, k = 0, push = 0.8) { const d = dist - push * eio(clamp(k)); camera.position.set(Math.sin(t * 0.6) * 0.15, y + Math.sin(t * 0.45) * 0.06, d); camera.lookAt(0, y, 0); }
 // balanço do ícone (pequena rotação 3D contínua)
-export function sway(o, t, a = 0.22, ph = 0) { o.rotation.y = Math.sin(t * 0.9 + ph) * a; o.rotation.x = Math.sin(t * 0.7 + ph) * a * 0.35; o.position.y = (o.userData.y0 ?? o.position.y) + Math.sin(t * 1.3 + ph) * 0.05; }
+export function sway(o, t, a = 0.12, ph = 0) { o.rotation.y = Math.sin(t * 0.9 + ph) * a; o.rotation.x = Math.sin(t * 0.7 + ph) * a * 0.35; o.position.y = (o.userData.y0 ?? o.position.y) + Math.sin(t * 1.3 + ph) * 0.05; }
+
+// fundo do modelo "app + notificações": azul-marinho escuro com grade fina e vinheta
+export function gridBackdrop(s) { const c = document.createElement('canvas'); c.width = 540; c.height = 960; const x = c.getContext('2d');
+  const g = x.createRadialGradient(270, 420, 40, 270, 480, 620); g.addColorStop(0, '#0a0d30'); g.addColorStop(1, '#02030c'); x.fillStyle = g; x.fillRect(0, 0, 540, 960);
+  x.strokeStyle = 'rgba(90,110,255,0.07)'; x.lineWidth = 1; for (let i = 0; i <= 540; i += 30) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 960); x.stroke(); } for (let j = 0; j <= 960; j += 30) { x.beginPath(); x.moveTo(0, j); x.lineTo(540, j); x.stroke(); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(16, 28.4), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.position.z = -6; s.add(m); return m; }
+// reflexo no chão (cópia invertida e apagada)
+export function reflect(mesh, op = 0.18) { const r = mesh.clone(); r.material = mesh.material.clone(); r.material.transparent = true; r.material.opacity = op; r.scale.y = -1; return r; }
