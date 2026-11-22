@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+html,body{margin:0;width:1440px;height:1080px;overflow:hidden;background:#0a0a0a;font-family:Inter,Arial,Helvetica,sans-serif}
+#stage{position:absolute;inset:0}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+#title{position:absolute;top:44px;left:0;right:0;text-align:center;color:#BDBDBD;font-weight:900;font-size:72px;letter-spacing:-1px;text-shadow:0 4px 18px rgba(0,0,0,.8)}
+#title em{font-style:normal;color:#fff;text-shadow:0 0 18px rgba(255,255,255,.55),0 4px 18px rgba(0,0,0,.8)}
+#hook{position:absolute;top:40px;left:50%;transform:translate(-50%,0);background:#fff;color:#000;font-weight:900;font-size:64px;padding:10px 30px;border-radius:18px;box-shadow:0 0 40px rgba(255,255,255,.45);opacity:0;white-space:nowrap}
+#cards{position:absolute;left:0;right:0;bottom:70px;display:flex;justify-content:center}
+.card{background:rgba(28,28,28,.92);border:3px solid #3A3A3A;color:#fff;font-weight:800;font-size:44px;padding:18px 34px;border-radius:26px;display:flex;align-items:center;gap:18px;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.card.hl{border-color:#fff;box-shadow:0 0 26px rgba(255,255,255,.35)}
+.card.bad{border-style:dashed;border-color:#fff}
+.ic{font-size:52px}
+</style></head>
+<body><div id="stage"></div><div id="vig"></div><div id="title"></div><div id="hook"></div><div id="cards"></div>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as E from './engine.js';
+const { THREE } = E;
+await E.loadFont();
+window.T = window.T || { DUR: [6, 6], CUE: {} };
+const C_ = (k, d) => (window.T.CUE && window.T.CUE[k] !== undefined) ? window.T.CUE[k] : d;
+
+// ====== CENAS ======
+const SC = [];
+// --- Cena 1: rua à noite, homem de terno anda até a câmera e aponta para o dinheiro
+SC.push({
+  title: 'A <em>Rua</em>', cards: [{ at: .4, ic: '🌃', h: 'Uma rua qualquer, à noite' }, { at: 3.4, ic: '💰', h: 'E o dinheiro aparece', cls: 'hl' }],
+  build() {
+    const s = E.makeWorld(); E.floor(s, 80, 80, 0x161616);
+    const road = E.box(8, 0.02, 80, E.mat(0x202020, { r: .95 }), 0); road.position.set(0, 0.01, -10); s.add(road);
+    for (let i = 0; i < 14; i++) { const st = E.box(0.25, 0.03, 1.6, E.mat(0xd8d8d8), 0); st.position.set(0, 0.03, 10 - i * 4); s.add(st); }
+    [-1, 1].forEach(sd => { const walk = E.box(4, 0.18, 80, E.mat(0x2a2a2a, { r: .9 }), 0.02); walk.position.set(sd * 6, 0.09, -10); s.add(walk);
+      for (let i = 0; i < 7; i++) { const h = 6 + E.hash(i * 3 + sd) * 9; const b = E.building(4.5, h, 5, i * 2 + (sd > 0 ? 50 : 0), 0.3); E.at(b, sd * 10.5, 0, 6 - i * 7, sd > 0 ? -Math.PI / 2 : Math.PI / 2); s.add(b); }
+      for (let i = 0; i < 4; i++) { const l = E.lampPost(); E.at(l, sd * 4.3, 0.18, 4 - i * 9); s.add(l); }
+      const tr = E.tree(sd * 5); E.at(tr, sd * 6.5, 0.18, -3); s.add(tr); });
+    this.car = E.car(E.C.red); s.add(this.car);
+    this.man = new E.Person({ acc: ['suit', 'tie', 'briefcase'] }).addTo(s);
+    this.woman = new E.Person({ h: 0.9, w: 0.95, acc: ['longhair', 'skirt'] }).addTo(s);
+    this.kid = new E.Person({ h: 0.62, w: 0.9, acc: ['cap', 'backpack'] }).addTo(s);
+    this.bag = E.moneyBag('$'); s.add(this.bag);
+    this.coins = Array.from({ length: 7 }, () => { const c = E.coin(0.16); s.add(c); return c; });
+    this.dust = E.dust(s, 150, 24);
+    return s;
+  },
+  at(s, t) {
+    E.animate(this.man, t, [{ t: 0, pose: 'walk', to: [-0.6, 3.2], dur: 2.6, after: 'idle' }, { t: 2.7, face: 0.9 }, { t: 3.2, pose: 'point' }], [-1.4, -6], 0);
+    E.animate(this.woman, t, [{ t: 0, pose: 'walk', to: [6.2, -4], dur: 6 }], [-6.2, -4], Math.PI / 2);
+    E.animate(this.kid, t, [{ t: 0.5, pose: 'run', to: [5.5, -9], dur: 4 }], [-5.5, -9], Math.PI / 2);
+    const cx = E.lerp(-30, 30, t / 6); this.car.position.set(cx, 0, -1.8); this.car.rotation.y = 0; this.car.userData.wheels.forEach(w => w.rotation.y = 0); this.car.userData.wheels.forEach(w => { w.rotation.z = 0; w.rotation.x = Math.PI / 2; w.rotateY(-cx * 2.8); });
+    const k = E.back(E.seg(t, 3.2, 3.8));
+    this.bag.position.set(1.9, 0.18 + 0.1 * Math.sin(t * 3), 3.2); this.bag.scale.setScalar(Math.max(0.001, k)); this.bag.rotation.y = Math.sin(t * 1.5) * 0.4;
+    this.coins.forEach((c, i) => { const q = E.seg(t, 3.5 + i * 0.12, 4.4 + i * 0.12); const a = i / 7 * Math.PI * 2 + t * 1.2; c.position.set(1.9 + Math.cos(a) * 0.65, 1.3 + q * 0.3 + 0.15 * Math.sin(t * 4 + i), 3.2 + Math.sin(a) * 0.9); c.scale.setScalar(Math.max(0.001, E.back(q))); c.rotation.y = t * 4 + i; });
+    E.updDust(this.dust, t);
+    E.cam(t, [3, 2.4, 11], [1.4, 1.7, 8], [0, 1.4, 0], [0.8, 1.3, 2.6], t / 6, t > 3.2 && t < 3.6 ? 0.06 : 0);
+  }
+});
+// --- Cena 2: cofre/escritório, cadeado abre, notas chovendo, personagem comemora, ? brilhante
+SC.push({
+  title: 'O <em>Cofre</em>', cards: [{ at: .4, ic: '🔒', h: 'O cadeado parecia seguro…' }, { at: 2.4, ic: '🔓', h: 'Até abrir sozinho', cls: 'bad', shake: true }],
+  build() {
+    const s = E.makeWorld(); E.floor(s, 40, 40, 0x1b1b1b);
+    E.wall(s, 20, 7, 0, 0, -5, 0, 0x1f1f1f); E.wall(s, 14, 7, -8, 0, 1, Math.PI / 2, 0x1c1c1c);
+    const shelf = E.box(4, 0.1, 0.6, E.mat(E.C.wood), .02); shelf.position.set(-4, 2.6, -4.6); s.add(shelf);
+    for (let i = 0; i < 5; i++) { const g = E.goldBar(); g.position.set(-5.4 + i * 0.7, 2.76, -4.6); s.add(g); }
+    const frame = E.box(1.6, 1.1, 0.08, E.mat(0x3a3a3a), .03); frame.position.set(3.5, 3.4, -4.8); s.add(frame);
+    this.door = E.door(0); E.at(this.door, 1.8, 0, -4.8); s.add(this.door);
+    const tb = E.table(2.2, 1.1); E.at(tb, -1.2, 0, -1); s.add(tb);
+    this.lock = E.padlock(); this.lock.position.set(-1.2, 0.82, -1); s.add(this.lock);
+    this.lamp = new THREE.SpotLight(0xffffff, 40, 14, 0.5, 0.5, 1.2); this.lamp.position.set(-1.2, 5.5, -0.5); this.lamp.castShadow = true; this.lamp.target.position.set(-1.2, 0.8, -1); s.add(this.lamp, this.lamp.target);
+    const lampM = E.cyl(0.05, 0.4, 0.35, E.mat(0x333333, { m: .5 })); lampM.position.set(-1.2, 5.6, -0.5); s.add(lampM); this.lampM = lampM;
+    this.p1 = new E.Person({ h: 1.06, acc: ['glasses', 'vest'] }).addTo(s);
+    this.p2 = new E.Person({ h: 0.88, w: 1.15, acc: ['bun', 'skirt'] }).addTo(s);
+    this.bills = Array.from({ length: 22 }, (_, i) => { const b = E.bill('$100'); s.add(b); return b; });
+    this.q = E.qmark(1.1); s.add(this.q);
+    this.dust = E.dust(s, 100, 14);
+    return s;
+  },
+  at(s, t) {
+    E.animate(this.p1, t, [{ t: 0, pose: 'walk', to: [1.2, 0.4], dur: 1.8, after: 'think' }, { t: 1.9, face: -0.9 }, { t: 2.4, pose: 'scared' }, { t: 3.4, pose: 'anticip' }, { t: 3.7, pose: 'cheer' }], [4.5, 2.5], -1.6);
+    E.animate(this.p2, t, [{ t: 0, pose: 'idle', face: 0.6 }, { t: 2.5, pose: 'shrug' }, { t: 3.9, pose: 'wave' }], [-3.4, 0.6], 0.6);
+    const op = E.ease(E.seg(t, 2.3, 2.7)); this.lock.userData.shackle.position.y = 0.5 + 0.22 * op; this.lock.userData.shackle.rotation.y = op * 1.4;
+    this.lock.rotation.y = t * 0.6 + (t > 2.3 && t < 2.6 ? Math.sin(t * 60) * 0.1 : 0);
+    this.door.userData.piv.rotation.y = -E.ease(E.seg(t, 0.4, 1.6)) * 1.2;
+    const sw = Math.sin(t * 1.3) * 0.25; this.lamp.position.x = -1.2 + sw; this.lampM.position.x = -1.2 + sw;
+    this.bills.forEach((b, i) => { const st = 3.6 + E.hash(i) * 1.2, q = t - st; if (q < 0) { b.visible = false; return; } b.visible = true; b.position.set((E.hash(i + 3) - .5) * 6, 6 - q * (1.6 + E.hash(i) * .8) + Math.sin(q * 3 + i) * 0.2, (E.hash(i + 7) - .5) * 3); b.rotation.set(q * 2 + i, q * 3 * (E.hash(i) - .5), Math.sin(q * 4 + i)); });
+    const qk = E.back(E.seg(t, 2.5, 3.0)); this.q.position.set(-1.2, 1.4 + 0.1 * Math.sin(t * 3), -1); this.q.scale.setScalar(Math.max(.001, qk * (1 + .05 * Math.sin(t * 6)))); this.q.rotation.y = Math.sin(t * 2) * 0.5; this.q.visible = t < 3.6;
+    E.updDust(this.dust, t);
+    E.cam(t, [6, 3.2, 8], [3.2, 2.2, 6.2], [0, 1.4, -1], [-0.6, 1.3, -1], t / 6, t > 2.3 && t < 2.7 ? 0.08 : 0);
+  }
+});
+
+// ====== motor de render ======
+const built = {};
+window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
+window.renderAt = (si, t) => {
+  const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
+  S.at(s, t); E.ui(S.title, S.cards, t); E.hook(S.hook, t);
+  E.draw(s); return true;
+};
+window.READY = true;
+</script></body></html>
