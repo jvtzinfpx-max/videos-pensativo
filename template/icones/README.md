@@ -10,6 +10,7 @@
 - SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
 - FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
+- SEM LEGENDA na tela (pedido do usuário 22/11 12h55): #caps escondido e E.captions não é chamado. Só o gancho grande no início.
 
 # Estilo "ícones brilhantes 3D" (PADRÃO desde 22/11/2026 — aprovado pelo usuário a partir das referências dele)
 

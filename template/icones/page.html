@@ -9,7 +9,7 @@ html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000;fo
 #hook em{font-style:normal;color:#33d690}
 #type{position:absolute;top:300px;left:60px;right:160px;text-align:center;color:#fff;font-weight:800;font-size:64px;font-family:'Courier New',monospace;opacity:0}
 #type b{color:#3DF5A6}
-#caps{position:absolute;top:1330px;left:50px;right:150px;text-align:center;font-weight:900;font-size:82px;line-height:1.1;color:#fff;-webkit-text-stroke:9px #000;paint-order:stroke fill}
+#caps{display:none !important;position:absolute;top:1330px;left:50px;right:150px;text-align:center;font-weight:900;font-size:82px;line-height:1.1;color:#fff;-webkit-text-stroke:9px #000;paint-order:stroke fill}
 #caps span{display:inline-block}
 #caps span.on{color:#33d690}
 #cards{display:none}
@@ -60,7 +60,7 @@ const built = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
 window.renderAt = (si, t) => {
   const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
-  S.at(s, t); E.hook(S.hook, t, 2.4); E.captions(window.META().START[si] + t);
+  S.at(s, t); E.hook(S.hook, t, 2.4); // sem legenda (pedido do usuário 22/11)
   document.getElementById('flash').style.opacity = 0;
   E.draw(s); return true;
 };
