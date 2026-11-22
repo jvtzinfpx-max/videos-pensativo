@@ -155,3 +155,29 @@ export function question() { const I = new Icon(); I.add(ring(0.5, 0.26, 0, 0.45
 export function sunrise() { const I = new Icon(); I.add(rrect(2.6, 0.12, 0.06, 0, -0.4), 'brown', { step: 0, from: 'growx' });
   const half = new THREE.Shape(); half.absarc(0, -0.34, 0.75, 0, Math.PI, false); half.closePath(); I.sunHalf = I.add(half, 'orange', { step: 1, from: 'up', z: -.05 });
   [0, 1, 2, 3, 4].forEach(i => { const a = Math.PI * (0.1 + i * 0.2); I.add(rrect(0.12, 0.32, 0.06), 'yellow', { step: 1.5 + i * .12, at: [Math.cos(a) * 1.05, -0.34 + Math.sin(a) * 1.05], rot: a - Math.PI / 2 }); }); return I; }
+
+// ---------- elementos de apoio (mais coisas na cena) ----------
+export function star4(r = 0.12) { const p = []; for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2 + Math.PI / 2, rr = i % 2 ? r * 0.35 : r; p.push([Math.cos(a) * rr, Math.sin(a) * rr]); } return poly(p); }
+// campo de estrelas fixo no fundo (espaço) — piscando de leve
+export function starfield(s, n = 40, w = 6, h = 10, z = -2) { const g = new THREE.Group(); const list = [];
+  for (let i = 0; i < n; i++) { const big = hash(i * 3.1) > 0.8; const m = part(big ? star4(0.11) : circ(0.025), big ? 'yellow' : 'white', 0, 0.01); m.position.set((hash(i) - .5) * w, (hash(i + 40) - .5) * h, z); g.add(m); list.push(m); }
+  g.userData.upd = t => list.forEach((m, i) => m.scale.setScalar(0.7 + 0.3 * Math.sin(t * 2 + i))); s.add(g); return g; }
+export function earth() { const I = new Icon(); I.add(circ(1.0), 'blue', { step: 0 });
+  [[[-0.6, 0.5], [-0.1, 0.65], [0.05, 0.3], [-0.3, 0.05], [-0.65, 0.15]], [[0.2, 0.0], [0.65, 0.2], [0.7, -0.3], [0.35, -0.65], [0.15, -0.3]]].forEach((pts, i) => I.add(poly(pts), 'green', { z: .085, step: 1 + i * .3, depth: .02 }));
+  I.add(rrect(0.9, 0.14, 0.07, -0.2, 0.82), 'white', { z: .09, step: 2, depth: .02 }); return I; }
+export function snail() { const I = new Icon(); I.add(rrect(2.0, 0.42, 0.21, 0.1, -0.55), 'tan', { step: 0, from: 'growx' }); I.add(circ(0.62, -0.15, 0.1), 'orange', { step: 1 });
+  I.add(ring(0.34, 0.12, -0.15, 0.1), 'brown', { z: .085, step: 1.5, depth: .02 }); I.add(circ(0.1, -0.15, 0.1), 'brown', { z: .085, step: 1.6, depth: .02 });
+  I.addStroke([[0.85, -0.4], [0.95, 0.15]], 0.08, 'tan', { step: 2 }); I.addStroke([[1.0, -0.4], [1.2, 0.1]], 0.08, 'tan', { step: 2 }); I.add(circ(0.09, 0.95, 0.2), 'dark', { step: 2.2 }); I.add(circ(0.09, 1.22, 0.15), 'dark', { step: 2.2 }); return I; }
+export function clock() { const I = new Icon(); I.add(circ(1.0), 'paper', { step: 0 }); I.add(ring(0.95, 0.12), 'brick', { z: .085, step: 1, depth: .02 });
+  for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; I.add(rrect(0.05, i % 3 ? 0.08 : 0.16, 0.02), 'dark', { z: .085, step: 1.2, at: [Math.cos(a) * 0.72, Math.sin(a) * 0.72], rot: a - Math.PI / 2, depth: .01 }); }
+  I.hand = I.add(rrect(0.07, 0.6, 0.035, 0, 0.26), 'dark', { z: .1, step: 2, pivot: [0, 0], depth: .02 }); I.add(rrect(0.08, 0.42, 0.04, 0.17, 0.08), 'dark', { z: .1, step: 2, rot: -1.1, depth: .02 }); I.add(circ(0.07), 'brick', { z: .12, step: 2.2, depth: .02 }); return I; }
+export function compass() { const I = new Icon(); I.add(circ(1.0), 'silver', { step: 0 }); I.add(circ(0.85), 'paper', { z: .02, step: 0.5 });
+  I.needle = new THREE.Group(); I.needle.position.z = 0.12; const n1 = part(poly([[0, 0.7], [0.13, 0], [-0.13, 0]]), 'red', 0, .03), n2 = part(poly([[0, -0.7], [0.13, 0], [-0.13, 0]]), 'dark', 0, .03); I.needle.add(n1, n2); I.g.add(I.needle); I.parts.push({ o: I.needle, step: 1.5, from: 'pop', base: I.needle.position.clone(), m: n1 });
+  I.add(circ(0.07), 'gold', { z: .16, step: 1.8, depth: .02 }); return I; }
+
+// coloca um ícone de apoio (menor) na cena; retorna {ic, upd(t)} que faz o pop no tempo t0 e flutua
+export function side(parent, ic, x, y, s = 0.45, t0 = 0.4, dt = 0.08) { s *= 1.3; y *= 1.2; ic.g.position.set(x, y, 0.3); parent.add(ic.g);
+  return { ic, upd(t) { ic.build(t, t0, dt); const k = back(seg(t, t0, t0 + 0.4)); ic.g.scale.setScalar(Math.max(1e-4, s * k)); ic.g.visible = t >= t0; ic.g.position.y = y + Math.sin(t * 1.6 + x * 3) * 0.05; ic.g.rotation.y = Math.sin(t * 0.9 + x) * 0.15; } }; }
+// rótulo de texto (palavra/número) que aparece no tempo t0
+export function label(parent, text, x, y, h = 0.38, color = '#ffffff', t0 = 0.5) { h *= 1.35; y *= 1.2; const w = word(text, h, color); w.position.set(x, y, 0.35); parent.add(w);
+  return { w, upd(t) { const k = back(seg(t, t0, t0 + 0.35)); w.visible = t >= t0; w.scale.setScalar(Math.max(1e-4, k)); } }; }

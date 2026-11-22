@@ -10,12 +10,13 @@
 - SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
 - FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
+- CENA CHEIA (22/11 12h59): cada plano = ícone PRINCIPAL no centro + 2-4 ícones de APOIO menores (I.side) + RÓTULOS curtos (I.label: números, comparações '>' '<', nomes) + fundo do ambiente quando fizer sentido (I.starfield no espaço). Tudo representando a narrativa daquele trecho e entrando no momento da fala. Ver page.html (helper shot) e teste_venus.mp4.
 - SEM LEGENDA na tela (pedido do usuário 22/11 12h55): #caps escondido e E.captions não é chamado. Só o gancho grande no início.
 
 # Estilo "ícones brilhantes 3D" (PADRÃO desde 22/11/2026 — aprovado pelo usuário a partir das referências dele)
 
 - Fundo PRETO puro. Ícones BRANCOS chapados + detalhes VERDE-MENTA #3DF5A6, brilho branco suave (E.BLOOM = { s: .32, r: .08, th: .55, crisp: true }: o glow fica só EM VOLTA e o ícone é redesenhado nítido por cima, então janelas/portas/telas pretas ficam pretas de verdade),
-  levemente extrudados e balançando em 3D (I.sway). UM ícone grande por plano, centralizado, montando PEÇA POR PEÇA (Icon.build).
+  levemente extrudados e balançando em 3D (I.sway). ícone principal centralizado + ícones de apoio, montando PEÇA POR PEÇA (Icon.build).
 - SEM PERSONAGENS. A história é contada só com ícones, objetos, telas, cards e gráficos. Temas que não dependem de pessoas.
 - Também: ícone de app 3D menta (I.app3d) com cards de notificação de vidro empilhando (I.notifCard).
 - Vertical 1080x1920; gancho em texto grande branco com palavra-chave menta (#hook, ~2,4 s); legenda palavra a palavra (#caps top 1330, palavra ativa menta);
