@@ -23,38 +23,34 @@ import * as I from './icons.js';
 const { THREE } = E;
 Object.assign(E.BLOOM, { off: true }); // usuário: SEM brilho
 await E.loadFont(); await document.fonts.load('900 100px Poppins');
-window.T = window.T || { DUR: [3.4, 3.0, 3.8, 3.0, 3.2], CUE: {} };
-window.WORDS = window.WORDS || 'O celular virou a maior loja do país hoje são milhões de sites e apps vendendo a cada segundo uma nova venda aprovada e o faturamento não para de crescer tanto que até as escolas já ensinam isso'.split(' ').map((w, i) => ({ w, s: 0.2 + i * 0.4, e: 0.2 + i * 0.4 + 0.34 }));
+window.T = window.T || { DUR: [4.3, 3.8, 3.0, 2.7, 56/30, 112/30, 2.2], CUE: {} };
+window.WORDS = window.WORDS || [{"w": "Em", "s": 0.08, "e": 0.24}, {"w": "Vênus,", "s": 0.32, "e": 1.2}, {"w": "um", "s": 1.28, "e": 1.36}, {"w": "dia", "s": 1.44, "e": 1.6}, {"w": "dura", "s": 1.68, "e": 1.92}, {"w": "mais", "s": 2.0, "e": 2.32}, {"w": "do", "s": 2.36, "e": 2.4}, {"w": "que", "s": 2.44, "e": 2.48}, {"w": "um", "s": 2.56, "e": 2.64}, {"w": "ano", "s": 2.72, "e": 2.8}, {"w": "inteiro.", "s": 2.88, "e": 3.52}, {"w": "O", "s": 4.304, "e": 4.32}, {"w": "planeta", "s": 4.4, "e": 4.8}, {"w": "gira", "s": 4.84, "e": 5.12}, {"w": "tão", "s": 5.28, "e": 5.44}, {"w": "devagar", "s": 5.52, "e": 6.08}, {"w": "que", "s": 6.24, "e": 6.32}, {"w": "uma", "s": 6.4, "e": 6.48}, {"w": "volta", "s": 6.56, "e": 6.8}, {"w": "em", "s": 6.88, "e": 6.96}, {"w": "torno", "s": 7.0, "e": 7.2}, {"w": "de", "s": 7.28, "e": 7.36}, {"w": "si", "s": 7.44, "e": 7.52}, {"w": "mesmo", "s": 7.6, "e": 8.0}, {"w": "leva", "s": 8.16, "e": 8.36}, {"w": "243", "s": 8.4, "e": 9.84}, {"w": "dias", "s": 10.0, "e": 10.24}, {"w": "da", "s": 10.28, "e": 10.32}, {"w": "Terra.", "s": 10.48, "e": 10.96}, {"w": "Mas", "s": 11.2, "e": 11.36}, {"w": "a", "s": 11.4, "e": 11.44}, {"w": "volta", "s": 11.52, "e": 11.76}, {"w": "completa", "s": 11.84, "e": 12.24}, {"w": "ao", "s": 12.28, "e": 12.32}, {"w": "redor", "s": 12.44, "e": 12.64}, {"w": "do", "s": 12.72, "e": 12.8}, {"w": "Sol", "s": 12.88, "e": 13.12}, {"w": "leva", "s": 13.2, "e": 13.44}, {"w": "só", "s": 13.6, "e": 13.68}, {"w": "225.", "s": 13.84, "e": 15.6}, {"w": "E", "s": 15.667, "e": 15.68}, {"w": "tem", "s": 15.76, "e": 15.92}, {"w": "mais:", "s": 16.0, "e": 16.8}, {"w": "lá,", "s": 16.88, "e": 17.36}, {"w": "o", "s": 17.44, "e": 17.52}, {"w": "Sol", "s": 17.68, "e": 17.92}, {"w": "nasce", "s": 18.0, "e": 18.32}, {"w": "no", "s": 18.4, "e": 18.48}, {"w": "oeste.", "s": 18.56, "e": 19.28}, {"w": "Você", "s": 19.52, "e": 19.68}, {"w": "sabia", "s": 19.76, "e": 20.0}, {"w": "disso?", "s": 20.08, "e": 20.64}];
 function world() { const s = new THREE.Scene(); s.background = new THREE.Color(0x000000); const l = new THREE.DirectionalLight(0xffffff, 2); l.position.set(2, 3, 6); s.add(l, new THREE.AmbientLight(0xffffff, .6)); return s; }
 // entrada de cada plano: ícone nasce menor e cresce (zoom)
 const enter = (g, t, base = 1) => { const k = E.back(E.seg(t, 0, 0.35)); g.scale.setScalar(Math.max(1e-4, base * (0.6 + 0.4 * k))); };
 
 const SC = [];
-SC.push({ hook: 'O CELULAR VIROU<br>A MAIOR <em>LOJA</em><br>DO PAÍS',
-  build() { const s = world(); this.ic = I.phoneCart(); s.add(this.ic.g); this.ic.g.userData.y0 = 0; return s; },
-  at(s, t) { this.ic.build(t, -0.15, 0.16); enter(this.ic.g, t, 0.95); I.sway(this.ic.g, t, 0.28); I.camFront(t, -0.35, 9.2, t / 3.4, 1.0); },
-  sfx: () => [[0.05, 'pop'], [0.35, 'click', .6], [0.6, 'pop', .8], [0.9, 'ding', .6]] });
-SC.push({
-  build() { const s = world(); this.ic = I.windowsStack(3); s.add(this.ic.g); this.ic.g.userData.y0 = 0; return s; },
-  at(s, t) { this.ic.build(t, -0.15, 0.17); enter(this.ic.g, t, 0.95); this.ic.g.position.x = -0.15; I.sway(this.ic.g, t, 0.3, 1); I.camFront(t, -0.3, 9.2, t / 3, 1.0); },
-  sfx: () => [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.22, 'pop', .7], [0.39, 'pop', .7], [0.6, 'ticks', .4]] });
-SC.push({
-  build() { const s = world(); this.app = I.app3d(I.coin(), 1.5); s.add(this.app);
-    this.cards = Array.from({ length: 4 }, (_, i) => { const c = I.notifCard('Nova venda aprovada!', `+ R$ ${[49, 129, 89, 230][i]},90 no Pix`, 3.0, 0.62); s.add(c); return c; }); this.refl = this.cards.map(c => { const r = I.reflect(c, 0.14); s.add(r); return r; }); return s; },
-  at(s, t) { const k = E.back(E.seg(t, 0, 0.4)); this.app.scale.setScalar(Math.max(1e-4, k)); this.app.userData.inner.build(t, 0.25, 0.12);
-    const up = this.cards.filter((_, i) => t > 0.7 + i * 0.5).length; this.app.position.set(0, 1.2 + up * 0.3, 0); this.app.rotation.set(0.12, Math.sin(t * .9) * .2, 0);
-    this.cards.forEach((c, i) => { const t0 = 0.7 + i * 0.5, kk = E.back(E.seg(t, t0, t0 + 0.35)); c.visible = t > t0; c.scale.setScalar(Math.max(1e-4, kk)); c.position.set(0, this.app.position.y - 1.35 - i * 0.72, 0.2); c.rotation.set(-0.1, Math.sin(t * .9) * .15, 0); });
-    const low = this.app.position.y - 1.35 - (up - 1) * 0.72; this.refl.forEach((r, i) => { const c = this.cards[i]; r.visible = c.visible && i >= up - 2; r.scale.set(c.scale.x, -c.scale.y, 1); r.position.set(0, 2 * (low - 0.36) - c.position.y, 0.2); r.rotation.copy(c.rotation); r.material.opacity = 0.12 * (i === up - 1 ? 1 : 0.4); });
-    E.camera.position.set(Math.sin(t * .5) * .4, 0.2, 9.0 - t * 0.2); E.camera.lookAt(0, -0.35, 0); },
-  sfx: () => [[0.0, 'pop'], [0.7, 'notif', .8], [1.2, 'notif', .8], [1.7, 'notif', .8], [2.2, 'notif', .8], [2.7, 'chaching', .7]] });
-SC.push({
-  build() { const s = world(); this.ic = I.barChart(); s.add(this.ic.g); this.ic.g.userData.y0 = 0; return s; },
-  at(s, t) { this.ic.build(t, -0.15, 0.14); enter(this.ic.g, t, 0.95); I.sway(this.ic.g, t, 0.3, 2); I.camFront(t, -0.25, 9.2, t / 3, 1.0); },
-  sfx: () => [[0.0, 'whoosh', .5], [0.2, 'riser2', .5], [0.9, 'sparkle', .6]] });
-SC.push({
-  build() { const s = world(); this.ic = I.school(); s.add(this.ic.g); this.ic.g.userData.y0 = 0; return s; },
-  at(s, t) { this.ic.build(t, -0.15, 0.12); enter(this.ic.g, t, 0.9); I.sway(this.ic.g, t, 0.28, 3); I.camFront(t, -0.15, 9.2, t / 3.2, 1.0); },
-  sfx: () => [[0.0, 'whoosh', .5], [0.05, 'pop'], [0.2, 'pop', .7], [0.6, 'ding', .6], [1.0, 'ticks', .4]] });
+const icShot = (mk, o = {}) => ({ hook: o.hook, sfx: () => o.sfx || [[0.0, 'whoosh', .5], [0.05, 'pop', .8], [0.35, 'pop', .6]],
+  build() { const s = world(); this.ic = mk(); s.add(this.ic.g); this.ic.g.userData.y0 = 0; if (o.extra) o.extra.call(this, s); return s; },
+  at(s, t) { if (o.pre) o.pre.call(this, t); this.ic.build(t, -0.15, o.dt || 0.14); enter(this.ic.g, t, o.scale || 1.0); I.sway(this.ic.g, t, 0.12, o.ph || 0); if (o.post) o.post.call(this, t); I.camFront(t, o.y ?? 0.15, 9.2, t / 3, 0.9); } });
+// 0 — gancho: planeta Vênus
+SC.push(icShot(() => I.planet(), { hook: 'EM VÊNUS, UM DIA<br>DURA MAIS QUE<br>UM <em>ANO</em>', scale: 1.15, sfx: [[0.05, 'pop'], [0.3, 'pop', .6], [0.6, 'ding', .5]] }));
+// 1 — gira devagar: planeta dentro da seta de rotação
+SC.push(icShot(() => I.spinArrow(), { scale: 1.1, extra(s) { this.p = I.planet(); this.p.g.scale.setScalar(0.62); this.ic.g.add(this.p.g); },
+  post(t) { this.p.build(t, -0.15, 0.1); this.p.g.rotation.z = -t * 0.25; this.ic.g.children.forEach(c => { if (c !== this.p.g) c.rotation.z = (c.userData.r0 ?? (c.userData.r0 = c.rotation.z)) + t * 0.35; }); },
+  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.4, 'swirl', .5]] }));
+// 2 — 243 dias
+SC.push(icShot(() => I.calendar('243', 'DIAS'), { scale: 1.1, sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'paper', .6], [0.5, 'ding', .6]] }));
+// 3 — volta ao redor do Sol (órbita)
+SC.push(icShot(() => I.orbit(), { scale: 1.15, pre(t) { this.ic.setOrbit(t / 2.7 * 0.85); }, sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'pop', .6], [0.6, 'riser2', .4]] }));
+// 4 — só 225
+SC.push(icShot(() => I.calendar('225', 'DIAS'), { scale: 1.1, sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.4, 'chaching', .5]] }));
+// 5 — o Sol nasce no oeste
+SC.push(icShot(() => I.sunrise(), { scale: 1.1, y: 0.35, extra(s) { this.w = I.word('OESTE', 0.55, '#f28c28'); this.w.position.set(0, 1.35, 0.1); this.ic.g.add(this.w); },
+  post(t) { const k = E.back(E.seg(t, 2.85, 3.2)); this.w.visible = t > 2.85; this.w.scale.setScalar(Math.max(1e-4, k)); },
+  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [0.5, 'riser2', .4], [2.85, 'hit', .6]] }));
+// 6 — você sabia?
+SC.push(icShot(() => I.question(), { scale: 1.1, sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .8], [0.4, 'ding', .5]] }));
 
 const built = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };

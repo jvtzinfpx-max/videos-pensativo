@@ -19,7 +19,7 @@
 - SEM PERSONAGENS. A história é contada só com ícones, objetos, telas, cards e gráficos. Temas que não dependem de pessoas.
 - Também: ícone de app 3D menta (I.app3d) com cards de notificação de vidro empilhando (I.notifCard).
 - Vertical 1080x1920; gancho em texto grande branco com palavra-chave menta (#hook, ~2,4 s); legenda palavra a palavra (#caps top 1330, palavra ativa menta);
-  sem flash na troca de plano (deixava o 1º quadro cinza). Ícone ocupa ~35-45% da largura, entre y ~400 e ~1250 px; nada atrás da legenda.
+  sem flash na troca de plano (deixava o 1º quadro cinza). Ícone ocupa ~35-45% da largura, centralizado na tela (sem legenda, o centro fica livre).
 - Nada de logos/marcas reais: desenhe ícones próprios com rrect/circ/ring/poly/stroke + Icon.add(shape, 'white'|'mint'|'black'|'red'|'gold', {step, from, z, pivot}).
   Detalhes "furados" (janelas, tela) = peças 'black' por cima (z .081). Vermelho só para alerta/perda.
 - Biblioteca (icons.js): planet, sun, orbit (.setOrbit(k)), calendar(num, sub), spinArrow, question, sunrise, phoneCart, windowsStack, school, barChart, coin, bank, lock, globe, bulb, magnifier, warning, rocket, app3d, notifCard, word.
