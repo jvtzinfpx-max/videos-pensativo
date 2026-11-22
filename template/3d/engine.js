@@ -255,7 +255,21 @@ export function coin(r = 0.35) { const g = new THREE.Group(); const c = cyl(r, r
 export function bill(label = '$', color = C.dollar) { const tex = labelTex(label, 256, 128, '#' + new THREE.Color(color).getHexString(), '#1d2b1c', 'bold 70px Arial'); const m = new THREE.MeshStandardMaterial({ map: tex, roughness: .7, side: THREE.DoubleSide }); const o = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.3), m); o.castShadow = true; return o; }
 export function goldBar() { return box(0.7, 0.22, 0.32, mat(C.gold, { m: .9, r: .25 }), 0.04); }
 export function moneyBag(label = '$') { const g = new THREE.Group(); const b = sph(0.45, mat(0xB49A6A, { r: .9 })); b.scale.set(1, 1.1, 1); b.position.y = 0.45; g.add(b); const n = cyl(0.1, 0.18, 0.2, mat(0xA08858, { r: .9 })); n.position.y = 0.98; g.add(n); const t = text3d(label, 0.38, mat(0x2d4a2a), 0.06); t.position.set(0, 0.3, 0.44); g.add(t); return g; }
-export function padlock(color = C.gold) { const g = new THREE.Group(); const b = box(0.6, 0.5, 0.25, mat(color, { m: .8, r: .3 }), 0.06); b.position.y = 0.25; g.add(b); const sh = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.05, 12, 30, Math.PI), mat(C.steel, { m: .9, r: .2 })); sh.position.y = 0.5; g.add(sh); g.userData.shackle = sh; return g; }
+export function padlock(color = C.gold) {
+  // cadeado reconhecível: corpo de latão com buraco de fechadura + alça em U de aço (2 pernas + arco). open(k) levanta e gira a alça.
+  const g = new THREE.Group();
+  const body = box(0.62, 0.52, 0.26, mat(color, { m: .85, r: .3 }), 0.07); body.position.y = 0.26; g.add(body);
+  const kh = cyl(0.055, 0.055, 0.02, mat(0x111111), 20); kh.rotation.x = Math.PI / 2; kh.position.set(0, 0.3, 0.135); g.add(kh);
+  const ks = box(0.04, 0.12, 0.02, mat(0x111111), 0.005); ks.position.set(0, 0.22, 0.135); g.add(ks);
+  const sm = mat(C.steel, { m: .95, r: .18 });
+  const piv = new THREE.Group(); piv.position.set(-0.19, 0.52, 0); g.add(piv); // gira em torno da perna esquerda
+  const legL = cyl(0.045, 0.045, 0.28, sm, 16); legL.position.set(0, 0.14, 0); piv.add(legL);
+  const legR = cyl(0.045, 0.045, 0.28, sm, 16); legR.position.set(0.38, 0.14, 0); piv.add(legR);
+  const arc = new THREE.Mesh(new THREE.TorusGeometry(0.19, 0.045, 14, 32, Math.PI), sm); arc.position.set(0.19, 0.28, 0); arc.castShadow = true; piv.add(arc);
+  g.userData.shackle = piv;
+  g.userData.open = (k) => { piv.position.y = 0.52 + 0.16 * clamp(k * 2); piv.rotation.y = -1.9 * clamp(k * 2 - 1); };
+  return g;
+}
 export function phone3d(tex) { const g = new THREE.Group(); const b = box(0.7, 1.4, 0.08, mat(0x111111, { r: .2, m: .5 }), 0.08); g.add(b); if (tex) { const sc = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 1.28), new THREE.MeshStandardMaterial({ map: tex, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: .8 })); sc.position.z = 0.045; g.add(sc); } return g; }
 export function qmark(size = 1, m = mat(0xffffff, { e: 0xffffff, ei: 0.6 })) { return text3d('?', size, m, size * 0.3); }
 export function diamond(color = 0xffffff) { const o = new THREE.Mesh(new THREE.OctahedronGeometry(0.3, 0), new THREE.MeshStandardMaterial({ color, metalness: .2, roughness: .05, emissive: color, emissiveIntensity: .25, flatShading: true })); o.scale.y = 1.3; o.castShadow = true; return o; }

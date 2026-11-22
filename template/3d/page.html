@@ -84,8 +84,8 @@ SC.push({
   at(s, t) {
     E.animate(this.p1, t, [{ t: 0, pose: 'walk', to: [1.2, 0.4], dur: 1.8, after: 'think' }, { t: 1.9, face: -0.9 }, { t: 2.4, pose: 'scared' }, { t: 3.4, pose: 'anticip' }, { t: 3.7, pose: 'cheer' }], [4.5, 2.5], -1.6);
     E.animate(this.p2, t, [{ t: 0, pose: 'idle', face: 0.6 }, { t: 2.5, pose: 'shrug' }, { t: 3.9, pose: 'wave' }], [-3.4, 0.6], 0.6);
-    const op = E.ease(E.seg(t, 2.3, 2.7)); this.lock.userData.shackle.position.y = 0.5 + 0.22 * op; this.lock.userData.shackle.rotation.y = op * 1.4;
-    this.lock.rotation.y = t * 0.6 + (t > 2.3 && t < 2.6 ? Math.sin(t * 60) * 0.1 : 0);
+    const op = E.ease(E.seg(t, 2.3, 2.9)); this.lock.userData.open(op);
+    this.lock.rotation.y = -0.35 + 0.25 * Math.sin(t * 0.8) + (t > 2.3 && t < 2.6 ? Math.sin(t * 60) * 0.1 : 0);
     this.door.userData.piv.rotation.y = -E.ease(E.seg(t, 0.4, 1.6)) * 1.2;
     const sw = Math.sin(t * 1.3) * 0.25; this.lamp.position.x = -1.2 + sw; this.lampM.position.x = -1.2 + sw;
     this.bills.forEach((b, i) => { const st = 3.6 + E.hash(i) * 1.2, q = t - st; if (q < 0) { b.visible = false; return; } b.visible = true; b.position.set((E.hash(i + 3) - .5) * 6, 6 - q * (1.6 + E.hash(i) * .8) + Math.sin(q * 3 + i) * 0.2, (E.hash(i + 7) - .5) * 3); b.rotation.set(q * 2 + i, q * 3 * (E.hash(i) - .5), Math.sin(q * 4 + i)); });
