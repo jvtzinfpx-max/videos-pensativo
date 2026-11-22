@@ -10,6 +10,13 @@
 - SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
 - FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
+- CENAS DE ACORDO COM TEMA, NARRATIVA E TOM DA VOZ (22/11 13h20): use as tags de tom do roteiro + a transcrição para mudar a animação no momento exato:
+  [excited]/[upbeat] → objetos entram rápido com pop elástico, balanço maior, mais apoios aparecendo, sons pop/ding/chaching;
+  [mysterious]/[hushed]/[quietly] → entradas lentas (dt maior), câmera aproximando devagar, menos elementos, fundo mais escuro, som grave/riser baixo;
+  [tense]/[serious, dramatic] → tremida curta no objeto principal, cor de alerta (vermelho) só no detalhe, cortes mais rápidos, som hit/error;
+  [sad] → movimento lento, objeto principal desce/encolhe um pouco, cores um pouco mais apagadas;
+  [confident]/[storytelling] → ritmo médio, objetos firmes, montagem peça por peça clara;
+  pergunta final → objeto principal + ícones das cenas anteriores em volta (resumo visual).
 - RÓTULOS só quando acrescentam informação (números, comparações, nomes que não dá para entender pelo objeto). NÃO rotular o óbvio nem palavras soltas da fala ('lá', 'aqui', 'isso'): se o objeto já mostra (ex.: Vênus), não escreva nada (pedido do usuário 22/11 13h18).
 - OBJETOS EM 3D DE VERDADE (22/11 13h07): peças grossas (ZK=3.5 x a espessura) com chanfro e material com luz e sombra (MeshStandard, sem tone mapping), planetas/Terra/sol como ESFERAS (texSphere/addObj), rótulos em TEXTO 3D (Poppins), câmera um pouco de cima e balanço maior (I.sway 0.32) para mostrar a profundidade. Evite símbolos com '=' (a fonte 3D não tem); use ':'.
 - CENA CHEIA (22/11 12h59): cada plano = ícone PRINCIPAL no centro + 2-4 ícones de APOIO menores (I.side) + RÓTULOS curtos (I.label: números, comparações '>' '<', nomes) + fundo do ambiente quando fizer sentido (I.starfield no espaço). Tudo representando a narrativa daquele trecho e entrando no momento da fala. Ver page.html (helper shot) e teste_venus.mp4.
