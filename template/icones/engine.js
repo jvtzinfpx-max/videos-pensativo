@@ -29,6 +29,7 @@ document.getElementById('stage').appendChild(renderer.domElement);
 
 export const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 400);
 let composer, bloom;
+export const BLOOM = { s: 0.55, r: 0.6, th: 0.82 };
 export function makeWorld() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x0a0a0a);
@@ -46,7 +47,7 @@ export function makeWorld() {
 export function setupComposer(scene) {
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-  bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), 0.55, 0.6, 0.82);
+  bloom = new UnrealBloomPass(new THREE.Vector2(W / 2, H / 2), BLOOM.s, BLOOM.r, BLOOM.th);
   composer.addPass(bloom); composer.addPass(new OutputPass());
 }
 export function draw(scene) {
@@ -54,6 +55,7 @@ export function draw(scene) {
   composer.render();
 }
 export function setBloom(s) { if (bloom) bloom.strength = s; }
+export function setBloomP(s, r, th) { if (bloom) { bloom.strength = s; bloom.radius = r; bloom.threshold = th; } }
 
 // ---------- materiais ----------
 const matCache = {};
