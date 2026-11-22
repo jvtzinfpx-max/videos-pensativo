@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#030303;font-family:Inter,Arial,Helvetica,sans-serif}
+#stage{position:absolute;inset:0}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
+#title{position:absolute;top:150px;left:60px;right:160px;text-align:center;color:#BDBDBD;font-weight:900;font-size:76px;letter-spacing:-1px}
+#title em{font-style:normal;color:#39FF88;text-shadow:0 0 22px rgba(57,255,136,.7)}
+#hook{position:absolute;top:330px;left:46%;width:860px;transform:translate(-50%,-50%);background:#fff;color:#000;font-weight:900;font-size:88px;line-height:1.02;text-align:center;padding:24px 32px;border-radius:28px;box-shadow:0 0 60px rgba(57,255,136,.45);display:none}
+#hook em{font-style:normal;color:#0a9a4a}
+#type{position:absolute;top:250px;left:60px;right:160px;text-align:center;color:#fff;font-weight:800;font-size:60px;font-family:'Courier New',monospace;letter-spacing:-1px;text-shadow:0 0 18px rgba(255,255,255,.35);opacity:0}
+#type b{color:#39FF88;text-shadow:0 0 20px rgba(57,255,136,.8)}
+#type .cur{color:#39FF88}
+#caps{position:absolute;top:1330px;left:50px;right:150px;text-align:center;font-weight:900;font-size:84px;line-height:1.1;color:#fff;-webkit-text-stroke:10px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.9)}
+#caps span{display:inline-block}
+#caps span.on{color:#39FF88}
+#cards{display:none}
+</style></head>
+<body><div id="stage"></div><div id="vig"></div><div id="title"></div><div id="type"></div><div id="hook"></div><div id="caps"></div><div id="cards"></div>
+<script type="importmap">{"imports":{"three":"./node_modules/three/build/three.module.js","three/addons/":"./node_modules/three/examples/jsm/"}}</script>
+<script type="module">
+import * as E from './engine.js';
+import * as N from './neon.js';
+const { THREE } = E;
+await E.loadFont();
+window.T = window.T || { DUR: [4.6, 4.8, 5.0], CUE: {} };
+window.WORDS = window.WORDS || 'Chegou uma mensagem do banco dizendo que o seu Pix foi bloqueado e pedindo pra clicar num link mas quando você clica o dinheiro sai da conta em segundos e o pior é que dá pra evitar com dois passos simples'.split(' ').map((w, i) => ({ w, s: 0.25 + i * 0.335, e: 0.25 + i * 0.335 + 0.3 }));
+const P = (o, x, y, z) => { o.position.set(x, y + (o.userData.fy || 0), z); };
+function bankSym(size = 1) { const g = new THREE.Group(); const m = N.WHITE(); const s = size;
+  const roof = new THREE.Mesh(new THREE.ConeGeometry(0.62 * s, 0.32 * s, 4, 1), m); roof.rotation.y = Math.PI / 4; roof.scale.z = 0.25; roof.position.y = 0.38 * s; g.add(roof);
+  for (let i = 0; i < 4; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.055 * s, 0.055 * s, 0.46 * s, 16), m); c.position.set((-0.33 + i * 0.22) * s, 0, 0); g.add(c); }
+  const base = new THREE.Mesh(new THREE.BoxGeometry(0.95 * s, 0.1 * s, 0.14 * s), m); base.position.y = -0.27 * s; g.add(base); return g; }
+function goldCoin() { const g = new THREE.Group(); const c = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.06, 40), N.gloss(0xE7B437, { m: .9, r: .2 })); c.rotation.x = Math.PI / 2; g.add(c); return g; }
+
+const SC = [];
+// --- Shot 1: celular + ícone de chat + mensagens empilhando
+SC.push({
+  hook: 'ESSE GOLPE<br><em>LIMPA</em> SUA CONTA',
+  build() {
+    const s = N.studio();
+    this.ph = N.phone(N.chatScreen([[0, 'Oi! Aqui é do\nseu banco'], [0, 'Seu Pix foi\nBLOQUEADO'], [0, 'Clique no link\npra liberar'], [1, 'Sério??']], 'Banco (?)'), 1.9, 3.9); s.add(this.ph);
+    this.ic = N.appIcon('chat', 'neon', 1.3); s.add(this.ic);
+    this.cards = [['Pix bloqueado?', 0xFF3B4E], ['Clique no link', 0x39FF88]].map(([t, c]) => { const k = N.card3d(t, 2.7, 0.66, { border: '#' + c.toString(16).padStart(6, '0'), font: 56 }); s.add(k); return k; });
+    this.wr = N.appIcon('warn', 'dark', 0.9); s.add(this.wr);
+    this.sp = N.sparks(s, 70, 9); return s;
+  },
+  at(s, t) {
+    N.popIn(this.ph, t, 0.05, 1, 0.06); P(this.ph, 0.35, 1.7, 0); this.ph.rotation.set(-0.08, -0.38 + Math.sin(t * 0.7) * 0.1, 0.06);
+    N.popIn(this.ic, t, 0.55, 1, 0.1); P(this.ic, -1.25, 3.55, 0.9); this.ic.rotation.set(0.1, 0.35 + Math.sin(t * 1.1) * 0.25, -0.08);
+    this.cards.forEach((c, i) => { const t0 = 1.6 + i * 0.9; const k = E.back(E.seg(t, t0, t0 + 0.5)); c.visible = t >= t0; c.scale.setScalar(Math.max(.001, k)); c.position.set(E.lerp(3, 0.15, E.eio(E.seg(t, t0, t0 + 0.5))), 1.6 - i * 0.78 + Math.sin(t * 1.4 + i) * 0.04, 1.3); c.rotation.set(0, 0.25 - 0.1 * i, i ? 0.04 : -0.04); });
+    N.popIn(this.wr, t, 1.75, 1, 0.08); P(this.wr, 1.15, 3.55, 0.6); this.wr.rotation.set(0, -0.4 + Math.sin(t * 2) * 0.2, Math.sin(t * 9) * (t > 1.75 && t < 2.4 ? 0.15 : 0.02));
+    this.sp.userData.upd(t);
+    N.orbit(t, [0, 1.55, 0.3], 8.6, 0.5, -0.25, 0.18, t / 4.6, 8.0);
+  },
+  sfx: () => [[0.05, 'whoosh', .8], [0.55, 'pop'], [0.9, 'notif'], [1.6, 'whoosh', .6], [1.75, 'error', .7], [2.5, 'pop'], [3.6, 'notif', .7]]
+});
+// --- Shot 2: link -> banco, dinheiro escorrendo pela linha, personagem no pedestal, "NÃO CLIQUE"
+SC.push({
+  build() {
+    const s = N.studio(); N.glossFloor(s, 0);
+    this.link = N.orb(null, 0.85); this.link.add(Object.assign(N.chainLink(N.gloss(0x111111)), {})); this.link.children[1].scale.setScalar(0.7); this.link.children[1].position.z = 0.78; s.add(this.link);
+    this.bank = N.appIcon(bankSym(1.2), 'neon', 1.6); s.add(this.bank);
+    this.arc = N.dashArc([1.45, 3.4, 0], [-1.45, 3.4, 0], 1.3, 30); s.add(this.arc);
+    this.coins = Array.from({ length: 6 }, () => { const c = goldCoin(); s.add(c); return c; });
+    this.ped = N.pedestal(0.9, 0.45); s.add(this.ped);
+    this.pg = new THREE.Group(); this.pg.position.y = 0.45; s.add(this.pg);
+    this.man = new E.Person({ h: 1.0, acc: ['glasses'], mat: N.gloss(0xe6e6e6, { r: .35, e: 0xffffff, ei: .06 }) }); this.man.addTo(this.pg);
+    this.no = N.neonText('NÃO CLIQUE', 0.42, N.RED, 2.6); s.add(this.no);
+    this.sp = N.sparks(s, 60, 9); return s;
+  },
+  at(s, t) {
+    N.popIn(this.bank, t, 0.05, 1, 0.08); P(this.bank, 1.45, 3.4, 0); this.bank.rotation.y = -0.35 + Math.sin(t * 0.9) * 0.15;
+    N.popIn(this.link, t, 0.35, 1, 0.08); P(this.link, -1.45, 3.4, 0); this.link.rotation.y = 0.35 + Math.sin(t * 1.1) * 0.2;
+    this.arc.userData.upd(t, E.seg(t, 0.7, 1.5));
+    this.coins.forEach((c, i) => { const u = E.seg(t, 1.6 + i * 0.28, 2.5 + i * 0.28); c.visible = u > 0 && u < 1; const p = this.arc.userData.curve.getPointAt(u); c.position.copy(p); c.rotation.set(0, t * 6 + i, 0); c.scale.setScalar(0.9); });
+    N.popIn(this.ped, t, 0.2, 1, 0); this.ped.position.set(0, 0, 0.6);
+    this.pg.position.set(0, 0.45, 0.6); this.pg.visible = t > 0.45; this.pg.scale.setScalar(Math.max(.001, E.back(E.seg(t, 0.45, 0.9))));
+    E.animate(this.man, t, [{ t: 0, pose: 'idle' }, { t: 1.0, pose: 'point', face: -0.5 }, { t: 2.0, pose: 'scared', face: 0 }, { t: 3.6, pose: 'shrug' }], [0, 0], 0.4);
+    const nk = E.back(E.seg(t, 3.0, 3.4)); const fl = t > 3.0 && t < 3.6 ? (E.hash(Math.floor(t * 20)) > 0.35 ? 1 : 0.2) : 1;
+    this.no.visible = t > 3.0; this.no.scale.setScalar(Math.max(.001, nk) * fl); this.no.position.set(-0.1, 5.05 + Math.sin(t * 2) * 0.05, 0.3); this.no.rotation.y = Math.sin(t * 1.2) * 0.12;
+    this.sp.userData.upd(t);
+    N.orbit(t, [0, 2.6, 0.2], 9.2, 0.6, 0.3, -0.2, t / 4.8, 8.2);
+    E.setBloom ? null : 0;
+  },
+  sfx: () => [[0.05, 'pop'], [0.35, 'pop'], [0.7, 'whoosh', .6], [1.6, 'coinstream', .8], [2.0, 'error', .6], [3.0, 'hit', .9]]
+});
+// --- Shot 3: gráfico neon (cai vermelho / sobe verde) + escudo com anel de progresso + grade de checks
+SC.push({
+  build() {
+    const s = N.studio();
+    const red = [[-1.9, 5.2, 0], [-1.3, 4.9, 0], [-0.8, 5.05, 0], [-0.2, 4.3, 0], [0.3, 4.45, 0], [0.9, 3.6, 0], [1.9, 3.3, 0]];
+    const grn = [[-1.9, 3.5, 0.1], [-1.2, 3.7, 0.1], [-0.6, 3.55, 0.1], [0.0, 4.2, 0.1], [0.6, 4.05, 0.1], [1.2, 4.9, 0.1], [1.9, 5.4, 0.1]];
+    this.lr = N.neonLine(red, N.RED, 0.05); this.lg = N.neonLine(grn, N.NEON, 0.055); s.add(this.lr, this.lg);
+    this.axis = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.02, 0.02), N.glow(0x666666, .6)); this.axis.position.set(0, 3.1, 0); s.add(this.axis);
+    this.sh = N.appIcon('shield', 'dark', 1.5); s.add(this.sh);
+    this.ck = N.symbol('check', 0.7, N.WHITE(), 0.12);
+    this.ring = N.progressRing(1.25); s.add(this.ring);
+    this.tiles = Array.from({ length: 6 }, () => { const k = N.appIcon('check', 'neon', 0.62); s.add(k); return k; });
+    this.sp = N.sparks(s, 70, 9); return s;
+  },
+  at(s, t) {
+    this.lr.userData.reveal(E.seg(t, 0.2, 1.4)); this.lg.userData.reveal(E.seg(t, 1.3, 2.5)); this.lr.children[0].material = t > 2.5 ? N.glow(N.RED, 0.9) : N.glow(N.RED, 2.6);
+    N.popIn(this.sh, t, 2.4, 1, 0.06); P(this.sh, 0, 0.0, 0.2); this.sh.rotation.y = Math.sin(t * 1.3) * 0.3;
+    this.ring.position.set(0, 0.0, 0.2); this.ring.visible = t > 2.4; this.ring.userData.set(E.eio(E.seg(t, 2.6, 3.8)));
+    this.tiles.forEach((k, i) => { const t0 = 3.3 + i * 0.12; N.popIn(k, t, t0, 1, 0.04); const col = i % 3, row = Math.floor(i / 3); P(k, -1.0 + col * 1.0, -1.75 - row * 0.8, 0.4); k.rotation.y = Math.sin(t * 1.5 + i) * 0.2; });
+    this.sp.userData.upd(t);
+    // câmera: começa no gráfico e desce até o escudo/checks
+    const k = E.eio(E.seg(t, 2.0, 3.0)); const ty = E.lerp(4.3, -1.45, k); E.camera.position.set(Math.sin(t * 0.4) * 0.6, ty + 0.3, E.lerp(7.2, 8.6, k)); E.camera.lookAt(0, ty, 0);
+    N.typewriter('desconfie + confirme', t, 0.3, 20, 2.3);
+  },
+  sfx: () => [[0.2, 'riser2', .5], [1.3, 'sparkle', .7], [2.4, 'pop'], [2.6, 'ticks', .5], [3.8, 'ding'], [3.3, 'pop', .6], [3.6, 'pop', .6], [3.9, 'chaching', .8]]
+});
+
+const built = {};
+window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
+window.renderAt = (si, t) => {
+  const S = SC[si]; if (!built[si]) built[si] = S.build(); const s = built[si];
+  document.getElementById('type').style.opacity = 0;
+  S.at(s, t); E.ui(S.title, [], t); E.hook(S.hook, t); E.captions(window.META().START[si] + t);
+  E.draw(s); return true;
+};
+window.READY = true;
+</script></body></html>
