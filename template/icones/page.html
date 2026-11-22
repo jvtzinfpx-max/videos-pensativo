@@ -52,30 +52,30 @@ SC.push(shot(() => I.spinArrow(), { scale: 1.0, my: 0.35, stars: true,
   post(t) { this.p.build(t, -0.15, 0.1); this.p.g.rotation.z = -t * 0.25; this.ic.g.children.forEach(c => { if (c !== this.p.g) c.rotation.z = (c.userData.r0 ?? (c.userData.r0 = c.rotation.z)) + t * 0.35; });
     this.clk.ic.hand.rotation.z = -t * 2.2; this.sn.ic.g.position.x = -0.35 + Math.max(0, t - 1.1) * 0.12; },
   labels: [['DEVAGAR', -0.1, -2.6, 0.34, ORANGE, 1.3]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.4, 'clock', .4], [1.1, 'pop', .6]] }));
+  sfx: [[0.05, 'pop', .7], [0.4, 'clock', .4], [1.1, 'pop', .6]] }));
 // 2 — 243 dias da Terra
 SC.push(shot(() => I.calendar('243', 'DIAS'), { scale: 1.0, my: 0.25, stars: true,
   side: [[() => I.planet(), -1.45, 2.05, 0.36, 0.2], [() => I.earth(), 1.45, -1.75, 0.42, 2.3]],
   labels: [['VÊNUS', -1.45, 1.4, 0.26, '#e6c27a', 0.3], ['TERRA', 1.45, -2.55, 0.3, SKY, 2.4]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'paper', .6], [0.6, 'ding', .6], [2.3, 'pop', .7]] }));
+  sfx: [[0.05, 'pop', .7], [0.3, 'paper', .6], [0.6, 'ding', .6], [2.3, 'pop', .7]] }));
 // 3 — volta completa ao redor do Sol
 SC.push(shot(() => I.orbit(), { scale: 1.1, my: 0.3, stars: true, pre(t) { this.ic.setOrbit(t / 2.7 * 0.95); },
   labels: [['1 VOLTA: 1 ANO', 0, -1.75, 0.36, YEL, 0.6]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'pop', .6], [0.6, 'riser2', .4]] }));
+  sfx: [[0.05, 'pop', .7], [0.3, 'pop', .6], [0.6, 'riser2', .4]] }));
 // 4 — só 225
 SC.push(shot(() => I.calendar('225', 'DIAS'), { scale: 1.0, my: 0.3, stars: true,
   side: [[() => I.calendar('243', 'DIAS'), -1.5, -1.75, 0.34, 0.5]],
   labels: [['<', 0, -1.75, 1.0, ORANGE, 0.45], ['MENOS!', 1.4, -1.75, 0.3, YEL, 0.7]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.45, 'hit', .5], [0.8, 'chaching', .5]] }));
+  sfx: [[0.05, 'pop', .7], [0.45, 'hit', .5], [0.8, 'chaching', .5]] }));
 // 5 — lá, o Sol nasce no oeste (bússola apontando para o oeste)
 SC.push(shot(() => I.sunrise(), { scale: 1.05, my: 0.45, extra(s) { this.cp = I.side(s, I.compass(), -0.9, -1.65, 0.5, 1.6); this.items.push(this.cp); this.vn = I.side(s, I.planet(), -1.5, 2.1, 0.34, 0.9); this.items.push(this.vn); },
   post(t) { this.cp.ic.needle.rotation.z = E.eio(E.seg(t, 2.6, 3.1)) * Math.PI / 2 + Math.sin(t * 6) * 0.05 * (t < 2.6 ? 1 : 0); },
   labels: [['OESTE', 0.75, -1.65, 0.42, ORANGE, 2.9]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [0.5, 'riser2', .4], [0.9, 'pop', .6], [1.6, 'pop', .7], [2.9, 'hit', .6]] }));
+  sfx: [[0.05, 'pop', .6], [0.5, 'riser2', .4], [0.9, 'pop', .6], [1.6, 'pop', .7], [2.9, 'hit', .6]] }));
 // 6 — você sabia?
 SC.push(shot(() => I.question(), { scale: 1.0, my: 0.2, stars: true,
   side: [[() => I.planet(), -1.45, 1.7, 0.34, 0.2], [() => I.sun(), 1.45, 1.7, 0.34, 0.35], [() => I.calendar('243', 'DIAS'), -1.45, -1.6, 0.3, 0.5], [() => I.compass(), 1.45, -1.6, 0.34, 0.65]],
-  sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .8], [0.2, 'pop', .5], [0.35, 'pop', .5], [0.5, 'pop', .5], [0.65, 'pop', .5], [0.9, 'ding', .5]] }));
+  sfx: [[0.05, 'pop', .8], [0.2, 'pop', .5], [0.35, 'pop', .5], [0.5, 'pop', .5], [0.65, 'pop', .5], [0.9, 'ding', .5]] }));
 
 const built = {};
 window.META = () => { const D = window.T.DUR; let st = [], a = 0; D.forEach(d => { st.push(a); a += d; }); const SFX = []; SC.forEach((S, i) => (S.sfx ? S.sfx() : []).forEach(([lt, n, g]) => SFX.push([st[i] + lt, n, g ?? 1]))); return { DUR: D, START: st, TOTAL: a, SFX }; };
