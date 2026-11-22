@@ -70,7 +70,7 @@ SC.push(shot(() => I.calendar('225', 'DIAS'), { scale: 1.0, my: 0.3, stars: true
 // 5 — lá, o Sol nasce no oeste (bússola apontando para o oeste)
 SC.push(shot(() => I.sunrise(), { scale: 1.05, my: 0.45, extra(s) { this.cp = I.side(s, I.compass(), -0.9, -1.65, 0.5, 1.6); this.items.push(this.cp); this.vn = I.side(s, I.planet(), -1.5, 2.1, 0.34, 0.9); this.items.push(this.vn); },
   post(t) { this.cp.ic.needle.rotation.z = E.eio(E.seg(t, 2.6, 3.1)) * Math.PI / 2 + Math.sin(t * 6) * 0.05 * (t < 2.6 ? 1 : 0); },
-  labels: [['LÁ', -1.5, 1.45, 0.28, '#e6c27a', 1.0], ['OESTE', 0.75, -1.65, 0.42, ORANGE, 2.9]],
+  labels: [['OESTE', 0.75, -1.65, 0.42, ORANGE, 2.9]],
   sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .6], [0.5, 'riser2', .4], [0.9, 'pop', .6], [1.6, 'pop', .7], [2.9, 'hit', .6]] }));
 // 6 — você sabia?
 SC.push(shot(() => I.question(), { scale: 1.0, my: 0.2, stars: true,

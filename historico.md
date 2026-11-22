@@ -36,3 +36,4 @@
 - 12h59: usuário pediu MAIS COISAS NA CENA representando a narrativa. Novo padrão: ícone principal + 2-4 ícones de apoio + rótulos + fundo (estrelas etc.). Ícones novos: earth, snail, clock, compass, starfield, side(), label().
 - 13h07: usuário lembrou que pediu OBJETOS EM 3D. Agora: peças grossas com chanfro + luz/sombra, esferas para planetas, texto 3D nos rótulos, câmera levemente de cima. Fonte 3D não tem '=' (virou quadrado) → usar ':'.
 - 13h14: usuário disse que o texto do gancho no início ainda parecia legenda → removido. Sem nenhum texto sobreposto; só rótulos 3D curtos dentro das cenas.
+- 13h18: usuário: o rótulo 'LÁ' em cima de Vênus era desnecessário — só mostrar o objeto. Regra: rótulo só quando acrescenta informação.

@@ -10,6 +10,7 @@
 - SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
 - FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
+- RÓTULOS só quando acrescentam informação (números, comparações, nomes que não dá para entender pelo objeto). NÃO rotular o óbvio nem palavras soltas da fala ('lá', 'aqui', 'isso'): se o objeto já mostra (ex.: Vênus), não escreva nada (pedido do usuário 22/11 13h18).
 - OBJETOS EM 3D DE VERDADE (22/11 13h07): peças grossas (ZK=3.5 x a espessura) com chanfro e material com luz e sombra (MeshStandard, sem tone mapping), planetas/Terra/sol como ESFERAS (texSphere/addObj), rótulos em TEXTO 3D (Poppins), câmera um pouco de cima e balanço maior (I.sway 0.32) para mostrar a profundidade. Evite símbolos com '=' (a fonte 3D não tem); use ':'.
 - CENA CHEIA (22/11 12h59): cada plano = ícone PRINCIPAL no centro + 2-4 ícones de APOIO menores (I.side) + RÓTULOS curtos (I.label: números, comparações '>' '<', nomes) + fundo do ambiente quando fizer sentido (I.starfield no espaço). Tudo representando a narrativa daquele trecho e entrando no momento da fala. Ver page.html (helper shot) e teste_venus.mp4.
 - SEM LEGENDA E SEM TEXTO DE GANCHO na tela (pedido do usuário 22/11 12h55 e 13h14): #caps e #hook escondidos, E.captions/E.hook não são chamados. O gancho existe só na NARRAÇÃO e na legenda do post. Na tela, só os rótulos 3D curtos das cenas.
