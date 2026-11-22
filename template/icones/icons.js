@@ -117,10 +117,10 @@ export function camFront(t, y = 0, dist = 7, k = 0, push = 0.8) { const d = dist
 // balanço do ícone (pequena rotação 3D contínua)
 export function sway(o, t, a = 0.12, ph = 0) { o.rotation.y = Math.sin(t * 0.9 + ph) * a; o.rotation.x = Math.sin(t * 0.7 + ph) * a * 0.35; o.position.y = (o.userData.y0 ?? o.position.y) + Math.sin(t * 1.3 + ph) * 0.05; }
 
-// fundo do modelo "app + notificações": azul-marinho escuro com grade fina e vinheta
+// fundo opcional cinza-escuro com grade fina (o padrão é preto puro; usuário quer fundo preto/cinza)
 export function gridBackdrop(s) { const c = document.createElement('canvas'); c.width = 540; c.height = 960; const x = c.getContext('2d');
-  const g = x.createRadialGradient(270, 420, 40, 270, 480, 620); g.addColorStop(0, '#0a0d30'); g.addColorStop(1, '#02030c'); x.fillStyle = g; x.fillRect(0, 0, 540, 960);
-  x.strokeStyle = 'rgba(90,110,255,0.07)'; x.lineWidth = 1; for (let i = 0; i <= 540; i += 30) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 960); x.stroke(); } for (let j = 0; j <= 960; j += 30) { x.beginPath(); x.moveTo(0, j); x.lineTo(540, j); x.stroke(); }
+  const g = x.createRadialGradient(270, 420, 40, 270, 480, 620); g.addColorStop(0, '#1a1a1a'); g.addColorStop(1, '#050505'); x.fillStyle = g; x.fillRect(0, 0, 540, 960);
+  x.strokeStyle = 'rgba(255,255,255,0.05)'; x.lineWidth = 1; for (let i = 0; i <= 540; i += 30) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i, 960); x.stroke(); } for (let j = 0; j <= 960; j += 30) { x.beginPath(); x.moveTo(0, j); x.lineTo(540, j); x.stroke(); }
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(16, 28.4), new THREE.MeshBasicMaterial({ map: t, toneMapped: false })); m.position.z = -6; s.add(m); return m; }
 // reflexo no chão (cópia invertida e apagada)
 export function reflect(mesh, op = 0.18) { const r = mesh.clone(); r.material = mesh.material.clone(); r.material.transparent = true; r.material.opacity = op; r.scale.y = -1; return r; }

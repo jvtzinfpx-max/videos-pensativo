@@ -51,6 +51,7 @@ export function setupComposer(scene) {
   composer.addPass(bloom); composer.addPass(new OutputPass());
 }
 export function draw(scene) {
+  if (BLOOM.off) { renderer.render(scene, camera); return; } // sem brilho
   if (!composer || composer.passes[0].scene !== scene) setupComposer(scene);
   composer.render();
   // BLOOM.crisp: desenha a cena nítida por cima do brilho -> o glow fica só em volta dos objetos e não "acinzenta" detalhes pretos

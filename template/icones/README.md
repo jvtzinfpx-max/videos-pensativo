@@ -1,9 +1,10 @@
 # REGRAS FIXAS DO USUÁRIO (22/11, valem acima de qualquer outra instrução)
 - Ícones, objetos e ambientes IGUAIS ao modelo dos vídeos de referência dele: ícone branco chapado + detalhes verde-menta, um por vez, frontal,
-  balanço 3D bem leve, montando peça por peça; fundo preto; cena "app 3D verde + notificações de vidro empilhando" com fundo azul-marinho
-  escuro com grade fina (I.gridBackdrop) e reflexo no chão (I.reflect). Use SEMPRE os padrões deste template (icons.js) em vez de inventar estilos novos.
+  balanço 3D bem leve, montando peça por peça; fundo preto; cena "app 3D verde + notificações de vidro empilhando" com fundo preto
+  e reflexo no chão (I.reflect). Use SEMPRE os padrões deste template (icons.js) em vez de inventar estilos novos.
   Só troque o símbolo de cada ícone conforme o tema (nada de logos/marcas reais).
-- BRILHO BAIXO em tudo: E.BLOOM = { s: .32, r: .08, th: .55, crisp: true }; branco 0xd6d6d6, menta 0x33d690. Não aumentar.
+- SEM BRILHO (usuário pediu para remover): E.BLOOM = { off: true }, sem text-shadow de glow no gancho; branco 0xd6d6d6, menta 0x33d690. Não colocar glow/bloom.
+- FUNDO PRETO (ou cinza bem escuro) em TODAS as cenas — nada de azul. I.gridBackdrop (cinza) só se precisar.
 - Sem personagens.
 
 # Estilo "ícones brilhantes 3D" (PADRÃO desde 22/11/2026 — aprovado pelo usuário a partir das referências dele)
