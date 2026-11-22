@@ -25,7 +25,8 @@ Object.assign(E.BLOOM, { off: true }); // usuário: SEM brilho
 await E.loadFont(); await document.fonts.load('900 100px Poppins');
 window.T = window.T || { DUR: [4.3, 3.8, 3.0, 2.7, 56/30, 112/30, 2.2], CUE: {} };
 window.WORDS = window.WORDS || [{"w": "Em", "s": 0.08, "e": 0.24}, {"w": "Vênus,", "s": 0.32, "e": 1.2}, {"w": "um", "s": 1.28, "e": 1.36}, {"w": "dia", "s": 1.44, "e": 1.6}, {"w": "dura", "s": 1.68, "e": 1.92}, {"w": "mais", "s": 2.0, "e": 2.32}, {"w": "do", "s": 2.36, "e": 2.4}, {"w": "que", "s": 2.44, "e": 2.48}, {"w": "um", "s": 2.56, "e": 2.64}, {"w": "ano", "s": 2.72, "e": 2.8}, {"w": "inteiro.", "s": 2.88, "e": 3.52}, {"w": "O", "s": 4.304, "e": 4.32}, {"w": "planeta", "s": 4.4, "e": 4.8}, {"w": "gira", "s": 4.84, "e": 5.12}, {"w": "tão", "s": 5.28, "e": 5.44}, {"w": "devagar", "s": 5.52, "e": 6.08}, {"w": "que", "s": 6.24, "e": 6.32}, {"w": "uma", "s": 6.4, "e": 6.48}, {"w": "volta", "s": 6.56, "e": 6.8}, {"w": "em", "s": 6.88, "e": 6.96}, {"w": "torno", "s": 7.0, "e": 7.2}, {"w": "de", "s": 7.28, "e": 7.36}, {"w": "si", "s": 7.44, "e": 7.52}, {"w": "mesmo", "s": 7.6, "e": 8.0}, {"w": "leva", "s": 8.16, "e": 8.36}, {"w": "243", "s": 8.4, "e": 9.84}, {"w": "dias", "s": 10.0, "e": 10.24}, {"w": "da", "s": 10.28, "e": 10.32}, {"w": "Terra.", "s": 10.48, "e": 10.96}, {"w": "Mas", "s": 11.2, "e": 11.36}, {"w": "a", "s": 11.4, "e": 11.44}, {"w": "volta", "s": 11.52, "e": 11.76}, {"w": "completa", "s": 11.84, "e": 12.24}, {"w": "ao", "s": 12.28, "e": 12.32}, {"w": "redor", "s": 12.44, "e": 12.64}, {"w": "do", "s": 12.72, "e": 12.8}, {"w": "Sol", "s": 12.88, "e": 13.12}, {"w": "leva", "s": 13.2, "e": 13.44}, {"w": "só", "s": 13.6, "e": 13.68}, {"w": "225.", "s": 13.84, "e": 15.6}, {"w": "E", "s": 15.667, "e": 15.68}, {"w": "tem", "s": 15.76, "e": 15.92}, {"w": "mais:", "s": 16.0, "e": 16.8}, {"w": "lá,", "s": 16.88, "e": 17.36}, {"w": "o", "s": 17.44, "e": 17.52}, {"w": "Sol", "s": 17.68, "e": 17.92}, {"w": "nasce", "s": 18.0, "e": 18.32}, {"w": "no", "s": 18.4, "e": 18.48}, {"w": "oeste.", "s": 18.56, "e": 19.28}, {"w": "Você", "s": 19.52, "e": 19.68}, {"w": "sabia", "s": 19.76, "e": 20.0}, {"w": "disso?", "s": 20.08, "e": 20.64}];
-function world() { const s = new THREE.Scene(); s.background = new THREE.Color(0x000000); const l = new THREE.DirectionalLight(0xffffff, 2); l.position.set(2, 3, 6); s.add(l, new THREE.AmbientLight(0xffffff, .6)); return s; }
+E.renderer.toneMapping = THREE.NoToneMapping;
+function world() { const s = new THREE.Scene(); s.background = new THREE.Color(0x000000); const key = new THREE.DirectionalLight(0xffffff, 1.9); key.position.set(3, 5, 7); const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(-5, 2, -3); s.add(key, rim, new THREE.HemisphereLight(0xffffff, 0x303030, 1.1)); return s; }
 // entrada de cada plano: ícone nasce menor e cresce (zoom)
 const enter = (g, t, base = 1) => { const k = E.back(E.seg(t, 0, 0.35)); g.scale.setScalar(Math.max(1e-4, base * (0.6 + 0.4 * k))); };
 
@@ -59,7 +60,7 @@ SC.push(shot(() => I.calendar('243', 'DIAS'), { scale: 1.0, my: 0.25, stars: tru
   sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'paper', .6], [0.6, 'ding', .6], [2.3, 'pop', .7]] }));
 // 3 — volta completa ao redor do Sol
 SC.push(shot(() => I.orbit(), { scale: 1.1, my: 0.3, stars: true, pre(t) { this.ic.setOrbit(t / 2.7 * 0.95); },
-  labels: [['1 VOLTA = 1 ANO', 0, -1.75, 0.36, YEL, 0.6]],
+  labels: [['1 VOLTA: 1 ANO', 0, -1.75, 0.36, YEL, 0.6]],
   sfx: [[0.0, 'whoosh', .5], [0.05, 'pop', .7], [0.3, 'pop', .6], [0.6, 'riser2', .4]] }));
 // 4 — só 225
 SC.push(shot(() => I.calendar('225', 'DIAS'), { scale: 1.0, my: 0.3, stars: true,

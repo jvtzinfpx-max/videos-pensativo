@@ -3,9 +3,9 @@
 <script type="module">
 import * as E from './engine.js'; import * as I from './icons.js'; const { THREE } = E; Object.assign(E.BLOOM, { off: true });
 await E.loadFont(); await document.fonts.load('900 100px Poppins');
-const s = new THREE.Scene(); s.background = new THREE.Color(0); s.add(new THREE.AmbientLight(0xffffff, 1));
-const L = [I.phoneCart(), I.windowsStack(), I.school(), I.barChart(), I.coin(), I.bank(), I.lock(), I.globe(), I.bulb(), I.magnifier(), I.warning(), I.rocket(), I.planet(), I.sun(), I.orbit(), I.calendar('243','DIAS'), I.spinArrow(), I.question(), I.sunrise()];
-L.forEach((ic, i) => { ic.build(99, 0, 0.1); ic.g.scale.setScalar(0.62); ic.g.position.set(-3.1 + (i % 4) * 2.07, 7.2 - Math.floor(i / 4) * 2.9, 0); s.add(ic.g); });
-const a = I.app3d(I.coin(), 1.0); a.userData.inner.build(99, 0, .1); a.position.set(3.1, 7.2 - 4 * 2.9, 0); s.add(a);
-E.camera.position.set(0, 1.4, 16.5); E.camera.lookAt(0, 1.4, 0); E.draw(s); window.READY = true;
+E.renderer.toneMapping = THREE.NoToneMapping; const s = new THREE.Scene(); s.background = new THREE.Color(0); const key = new THREE.DirectionalLight(0xffffff, 1.9); key.position.set(3, 5, 7); const rim = new THREE.DirectionalLight(0xffffff, 0.6); rim.position.set(-5, 2, -3); s.add(key, rim, new THREE.HemisphereLight(0xffffff, 0x303030, 1.1));
+const L = [I.phoneCart(), I.windowsStack(), I.school(), I.barChart(), I.coin(), I.bank(), I.lock(), I.globe(), I.bulb(), I.magnifier(), I.warning(), I.rocket(), I.planet(), I.sun(), I.orbit(), I.calendar('243','DIAS'), I.spinArrow(), I.question(), I.sunrise(), I.earth(), I.clock(), I.compass(), I.snail()];
+L.forEach((ic, i) => { ic.build(99, 0, 0.1); ic.g.scale.setScalar(0.62); ic.g.position.set(-3.1 + (i % 4) * 2.07, 7.2 - Math.floor(i / 4) * 2.9, 0); ic.g.rotation.set(-0.25, 0.45, 0); s.add(ic.g); });
+const a = I.app3d(I.coin(), 1.0); a.userData.inner.build(99, 0, .1); a.position.set(3.1, 7.2 - 5 * 2.9, 0); s.add(a);
+E.camera.position.set(0, 0.0, 19.5); E.camera.lookAt(0, 0.0, 0); E.draw(s); window.READY = true;
 </script></body></html>

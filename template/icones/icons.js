@@ -25,22 +25,31 @@ export function stroke(pts, w = 0.1) { const out = []; for (let i = 0; i < pts.l
 export function withHoles(shape, ...holes) { holes.forEach(h => shape.holes.push(h)); return shape; }
 
 // ---------- peça extrudada ----------
+// 3D DE VERDADE (pedido do usuário): peças grossas (ZK x a espessura), cantos chanfrados e material com luz/sombra
+export const ZK = 3.5;
+const SM = {};
+const lit = (c) => SM[c] || (SM[c] = new THREE.MeshStandardMaterial({ color: c, roughness: 0.42, metalness: 0.05 }));
 export function part(shape, col = 'white', z = 0, depth = 0.08) {
-  const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 18 });
-  const [f, sd] = COL[col] || [col, col];
-  const m = new THREE.Mesh(g, [basic(f), basic(sd)]); m.position.z = z; return m;
+  const d = depth * ZK, bv = Math.min(0.035, d * 0.3);
+  const g = new THREE.ExtrudeGeometry(shape, { depth: d, bevelEnabled: true, bevelThickness: bv, bevelSize: bv * 0.7, bevelSegments: 3, curveSegments: 20 });
+  const [f] = COL[col] || [col, col];
+  const m = new THREE.Mesh(g, lit(f)); m.castShadow = true; m.position.z = z; return m;
 }
+// esfera com textura desenhada (planetas, Terra, sol) — objeto 3D redondo de verdade
+export function texSphere(r, draw, rough = 0.6) { const c = document.createElement('canvas'); c.width = 1024; c.height = 512; draw(c.getContext('2d'), 1024, 512);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.Mesh(new THREE.SphereGeometry(r, 64, 48), new THREE.MeshStandardMaterial({ map: t, roughness: rough })); }
+
 // ícone = grupo de peças com ordem de montagem
 export class Icon {
   constructor() { this.g = new THREE.Group(); this.parts = []; }
   add(shape, col = 'white', o = {}) { // o: {z, step, depth, from:'pop'|'up'|'down'|'left'|'right'|'grow'|'fade', pivot:[x,y], rot, at:[x,y]}
     const piv = new THREE.Group(); const m = part(shape, col, 0, o.depth ?? 0.08); const pv = o.pivot || [0, 0];
-    m.position.set(-pv[0], -pv[1], 0); piv.add(m); piv.position.set(pv[0] + (o.at?.[0] || 0), pv[1] + (o.at?.[1] || 0), o.z ?? 0); if (o.rot) piv.rotation.z = o.rot;
+    m.position.set(-pv[0], -pv[1], 0); piv.add(m); piv.position.set(pv[0] + (o.at?.[0] || 0), pv[1] + (o.at?.[1] || 0), (o.z ?? 0) * ZK); if (o.rot) piv.rotation.z = o.rot;
     this.g.add(piv); this.parts.push({ o: piv, step: o.step ?? this.parts.length, from: o.from || 'pop', base: piv.position.clone(), m }); return piv;
   }
   addStroke(pts, w, col, o = {}) { stroke(pts, w).forEach(sg => this.add(sg.shape, col, { ...o, at: sg.at, rot: sg.rot })); }
   // build: k global do ícone (tempo desde o início), cada passo dura ~0.22 s
-  build(t, t0 = 0, dt = 0.13) { this.parts.forEach(p => { const k = seg(t, t0 + p.step * dt, t0 + p.step * dt + 0.32), e = back(k), o = p.o; o.visible = k > 0;
+  build(t, t0 = 0, dt = 0.13) { if (this.spin) this.spin(t); this.parts.forEach(p => { const k = seg(t, t0 + p.step * dt, t0 + p.step * dt + 0.32), e = back(k), o = p.o; o.visible = k > 0;
       o.scale.setScalar(1); o.position.copy(p.base);
       if (p.from === 'pop') o.scale.setScalar(Math.max(1e-4, e));
       else if (p.from === 'grow') o.scale.set(1, Math.max(1e-4, eio(k)), 1);
@@ -49,6 +58,8 @@ export class Icon {
       else { const d = { up: [0, -0.6], down: [0, 0.6], left: [0.6, 0], right: [-0.6, 0] }[p.from] || [0, 0]; o.position.x += d[0] * (1 - e); o.position.y += d[1] * (1 - e); o.scale.setScalar(Math.max(1e-4, eio(k))); } }); }
 }
 
+// adiciona um objeto 3D pronto (mesh/grupo) como peça do ícone
+Icon.prototype.addObj = function (obj, o = {}) { const piv = new THREE.Group(); piv.add(obj); piv.position.set(o.at?.[0] || 0, o.at?.[1] || 0, (o.z ?? 0) * ZK); this.g.add(piv); this.parts.push({ o: piv, step: o.step ?? this.parts.length, from: o.from || 'pop', base: piv.position.clone(), m: obj }); return piv; };
 // ================= BIBLIOTECA DE ÍCONES (desenhos próprios) =================
 export function phoneCart() { const I = new Icon();
   I.add(rrect(1.3, 2.4, 0.2), 'white', { step: 0 }); I.add(rrect(1.06, 1.7, 0.05, 0, 0.02), 'black', { z: 0.081, step: 1, from: 'fade', depth: 0.01 });
@@ -83,13 +94,14 @@ export function barChart(vals = [0.5, 0.8, 0.65, 1.2, 1.6]) { const I = new Icon
   const pts = vals.map((v, i) => [x0 + i * (w + gap), -0.9 + v + 0.3]); I.addStroke(pts, 0.08, 'green', { z: 0.12, step: 1 + n * .5 + 0.5 });
   const L = pts[n - 1]; I.add(poly([[L[0] + 0.05, L[1] + 0.22], [L[0] + 0.22, L[1] - 0.08], [L[0] - 0.12, L[1] - 0.05]]), 'green', { z: 0.12, step: 1 + n * .5 + 1 }); return I; }
 export function coin(sym = '$') { const I = new Icon(); I.add(circ(0.8), 'gold', { step: 0 }); I.add(ring(0.64, 0.07), 'yellow', { z: .09, step: 1, depth: .01 });
-  const t = text3d(sym, 0.85, basic(0x9a7418), 0.02); t.geometry.computeBoundingBox(); const bb = t.geometry.boundingBox; t.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); t.position.z = 0.1; const piv = new THREE.Group(); piv.add(t); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m: t }); return I; }
+  const t = text3d(sym, 0.85, basic(0x9a7418), 0.02); t.geometry.computeBoundingBox(); const bb = t.geometry.boundingBox; t.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); t.position.z = 0.1 * ZK + 0.02; const piv = new THREE.Group(); piv.add(t); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m: t }); return I; }
 export function bank() { const I = new Icon(); I.add(poly([[-1.2, 0.55], [1.2, 0.55], [0, 1.25]]), 'stone', { step: 0, from: 'down' }); I.add(rrect(2.3, 0.14, 0.04, 0, 0.47), 'beige', { step: 1, from: 'growx' });
   [-0.8, -0.27, 0.27, 0.8].forEach((x, i) => I.add(rrect(0.26, 1.05, 0.05, x, -0.15), 'beige', { step: 2 + i * .3, from: 'grow', pivot: [x, -0.68] }));
   I.add(rrect(2.4, 0.16, 0.04, 0, -0.78), 'beige', { step: 3.5, from: 'growx' }); I.add(rrect(2.7, 0.14, 0.04, 0, -0.98), 'beige', { step: 3.8, from: 'growx' }); I.add(circ(0.13, 0, 0.8), 'black', { z: .081, step: 4, depth: .01 }); return I; }
 export function lock(open = 0) { const I = new Icon(); I.add(ring(0.5, 0.17, 0, 0.45, 0, Math.PI), 'silver', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, -0.5, 0.3), 'silver', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, 0.5, 0.3), 'silver', { step: 0, from: 'down' });
   I.add(rrect(1.5, 1.2, 0.18, 0, -0.45), 'gold', { step: 1 }); I.add(circ(0.15, 0, -0.35), 'black', { z: .081, step: 2, depth: .01 }); I.add(poly([[-0.07, -0.4], [0.07, -0.4], [0.1, -0.75], [-0.1, -0.75]]), 'black', { z: .081, step: 2, depth: .01 }); return I; }
-export function globe() { const I = new Icon(); I.add(circ(1.0), 'blue', { step: 0 });
+export function globe() { return earth(); }
+export function globeFlat() { const I = new Icon(); I.add(circ(1.0), 'blue', { step: 0 });
   // continentes (formas próprias) em verde, recortados dentro do círculo
   [[[-0.55, 0.55], [-0.15, 0.7], [0.0, 0.45], [-0.25, 0.2], [-0.2, -0.1], [-0.5, -0.05], [-0.75, 0.25]], [[0.15, 0.1], [0.55, 0.25], [0.75, 0.0], [0.6, -0.45], [0.3, -0.6], [0.2, -0.25]], [[-0.35, -0.45], [-0.05, -0.5], [-0.15, -0.78], [-0.4, -0.7]]]
     .forEach((pts, i) => I.add(poly(pts), 'green', { z: .085, step: 1 + i * .3, depth: .02 }));
@@ -119,9 +131,9 @@ export function word(text, h = 0.6, color = '#ffffff') { const c = document.crea
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return new THREE.Mesh(new THREE.PlaneGeometry(h * w / 220, h), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); }
 
 // câmera frontal com leve balanço 3D (gira o ícone um pouco para mostrar a espessura)
-export function camFront(t, y = 0, dist = 7, k = 0, push = 0.8) { const d = dist - push * eio(clamp(k)); camera.position.set(Math.sin(t * 0.6) * 0.15, y + Math.sin(t * 0.45) * 0.06, d); camera.lookAt(0, y, 0); }
+export function camFront(t, y = 0, dist = 7, k = 0, push = 0.8) { const d = dist - push * eio(clamp(k)); camera.position.set(Math.sin(t * 0.6) * 0.5, y + 1.1 + Math.sin(t * 0.45) * 0.1, d); camera.lookAt(0, y, 0); }
 // balanço do ícone (pequena rotação 3D contínua)
-export function sway(o, t, a = 0.12, ph = 0) { o.rotation.y = Math.sin(t * 0.9 + ph) * a; o.rotation.x = Math.sin(t * 0.7 + ph) * a * 0.35; o.position.y = (o.userData.y0 ?? o.position.y) + Math.sin(t * 1.3 + ph) * 0.05; }
+export function sway(o, t, a = 0.32, ph = 0) { o.rotation.y = Math.sin(t * 0.9 + ph) * a; o.rotation.x = Math.sin(t * 0.7 + ph) * a * 0.35; o.position.y = (o.userData.y0 ?? o.position.y) + Math.sin(t * 1.3 + ph) * 0.05; }
 
 // fundo opcional cinza-escuro com grade fina (o padrão é preto puro; usuário quer fundo preto/cinza)
 export function gridBackdrop(s) { const c = document.createElement('canvas'); c.width = 540; c.height = 960; const x = c.getContext('2d');
@@ -132,20 +144,20 @@ export function gridBackdrop(s) { const c = document.createElement('canvas'); c.
 export function reflect(mesh, op = 0.18) { const r = mesh.clone(); r.material = mesh.material.clone(); r.material.transparent = true; r.material.opacity = op; r.scale.y = -1; return r; }
 
 // ---------- ícones extras (espaço / tempo) ----------
-export function planet(base = 'venus', band = 'venusband', spot = null) { const I = new Icon(); const R = 0.95; I.add(circ(R), base, { step: 0 });
-  [[0.42, 0.2], [0.02, 0.14], [-0.4, 0.17]].forEach(([y, h], i) => { const hw = Math.sqrt(R * R - (Math.abs(y) + h / 2) ** 2) - 0.12; I.add(rrect(hw * 2, h, h / 2, (i - 1) * 0.06, y), band, { z: .085, step: 1 + i * .3, from: 'growx', depth: .02 }); });
-  if (spot) { I.add(circ(0.08, 0.45, 0.205), spot, { z: .09, step: 2.2, depth: .02 }); I.add(circ(0.08, -0.3, -0.18), spot, { z: .09, step: 2.4, depth: .02 }); } return I; }
-export function sun() { const I = new Icon(); I.add(circ(0.62), 'yellow', { step: 0 });
+export function planet(base = '#e6c27a', band = '#c99a52') { const I = new Icon();
+  const sp = texSphere(0.95, (x, W, H) => { x.fillStyle = base; x.fillRect(0, 0, W, H); x.fillStyle = band; [[0.25, 30], [0.42, 22], [0.6, 34], [0.78, 18]].forEach(([y, h], i) => { x.beginPath(); for (let k = 0; k <= W; k += 16) x.lineTo(k, y * H + Math.sin(k / 70 + i) * 10); for (let k = W; k >= 0; k -= 16) x.lineTo(k, y * H + h + Math.sin(k / 90 + i * 2) * 8); x.fill(); }); });
+  I.sp = I.addObj(sp, { step: 0 }); I.spin = t => { sp.rotation.y = t * 0.35; }; return I; }
+export function sun() { const I = new Icon(); I.addObj(new THREE.Mesh(new THREE.SphereGeometry(0.62, 48, 32), new THREE.MeshStandardMaterial({ color: 0xffc531, emissive: 0xff9a1a, emissiveIntensity: 0.35, roughness: .5 })), { step: 0 });
   for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.16, 0.42, 0.08), 'orange', { step: 1 + i * .12, at: [Math.cos(a) * 0.95, Math.sin(a) * 0.95], rot: a - Math.PI / 2 }); } return I; }
 // órbita: sol no centro + anel + planeta pequeno (posição do planeta via .orbitK)
-export function orbit() { const I = new Icon(); I.add(ring(1.15, 0.05), 'gray', { step: 0, depth: .02 }); I.add(circ(0.42), 'yellow', { step: 1 });
+export function orbit() { const I = new Icon(); I.add(ring(1.15, 0.05), 'gray', { step: 0, depth: .02 }); I.addObj(new THREE.Mesh(new THREE.SphereGeometry(0.42, 48, 32), new THREE.MeshStandardMaterial({ color: 0xffc531, emissive: 0xff9a1a, emissiveIntensity: 0.35, roughness: .5 })), { step: 1 });
   for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.08, 0.2, 0.04), 'orange', { step: 1.3, at: [Math.cos(a) * 0.6, Math.sin(a) * 0.6], rot: a - Math.PI / 2 }); }
-  I.pl = I.add(circ(0.2, 0, 0), 'venus', { step: 2, z: .05 }); I.setOrbit = k => { const a = Math.PI / 2 - k * Math.PI * 2; I.pl.position.set(Math.cos(a) * 1.15, Math.sin(a) * 1.15, .05); I.parts.find(p => p.o === I.pl).base.copy(I.pl.position); }; I.setOrbit(0); return I; }
+  I.pl = I.addObj(new THREE.Mesh(new THREE.SphereGeometry(0.2, 32, 24), new THREE.MeshStandardMaterial({ color: 0xe6c27a, roughness: .6 })), { step: 2, z: .05 }); I.setOrbit = k => { const a = Math.PI / 2 - k * Math.PI * 2; I.pl.position.set(Math.cos(a) * 1.15, Math.sin(a) * 1.15, .05 * ZK); I.parts.find(p => p.o === I.pl).base.copy(I.pl.position); }; I.setOrbit(0); return I; }
 // calendário com número grande (textura) — num é string
 export function calendar(num = '243', sub = 'DIAS') { const I = new Icon(); I.add(rrect(1.9, 1.9, 0.18, 0, -0.1), 'paper', { step: 0 }); I.add(rrect(1.9, 0.45, 0.18, 0, 0.62), 'brick', { z: .02, step: 1, depth: .08 });
   [-0.5, 0.5].forEach(x => I.add(rrect(0.14, 0.4, 0.07, x, 0.9), 'silver', { z: .1, step: 1.5 }));
   const c = document.createElement('canvas'); c.width = 512; c.height = 400; const x = c.getContext('2d'); x.fillStyle = '#111'; x.textAlign = 'center'; x.font = '900 230px Poppins, Arial'; x.fillText(num, 256, 250); x.font = '900 80px Poppins, Arial'; x.fillStyle = '#c4473a'; x.fillText(sub, 256, 360);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.25), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); m.position.set(0, -0.35, 0.09);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.25), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); m.position.set(0, -0.35, 0.09 * ZK + 0.04);
   const piv = new THREE.Group(); piv.add(m); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m }); return I; }
 // seta curva de rotação (giro lento)
 export function spinArrow(col = 'sky') { const I = new Icon(); I.add(ring(1.15, 0.16, 0, 0, Math.PI * 0.15, Math.PI * 1.75), col, { step: 0, from: 'fade' }); const a = Math.PI * 1.75, x = Math.cos(a) * 1.15, y = Math.sin(a) * 1.15;
@@ -162,9 +174,11 @@ export function star4(r = 0.12) { const p = []; for (let i = 0; i < 8; i++) { co
 export function starfield(s, n = 40, w = 6, h = 10, z = -2) { const g = new THREE.Group(); const list = [];
   for (let i = 0; i < n; i++) { const big = hash(i * 3.1) > 0.8; const m = part(big ? star4(0.11) : circ(0.025), big ? 'yellow' : 'white', 0, 0.01); m.position.set((hash(i) - .5) * w, (hash(i + 40) - .5) * h, z); g.add(m); list.push(m); }
   g.userData.upd = t => list.forEach((m, i) => m.scale.setScalar(0.7 + 0.3 * Math.sin(t * 2 + i))); s.add(g); return g; }
-export function earth() { const I = new Icon(); I.add(circ(1.0), 'blue', { step: 0 });
-  [[[-0.6, 0.5], [-0.1, 0.65], [0.05, 0.3], [-0.3, 0.05], [-0.65, 0.15]], [[0.2, 0.0], [0.65, 0.2], [0.7, -0.3], [0.35, -0.65], [0.15, -0.3]]].forEach((pts, i) => I.add(poly(pts), 'green', { z: .085, step: 1 + i * .3, depth: .02 }));
-  I.add(rrect(0.9, 0.14, 0.07, -0.2, 0.82), 'white', { z: .09, step: 2, depth: .02 }); return I; }
+export function earth() { const I = new Icon();
+  const sp = texSphere(1.0, (x, W, H) => { x.fillStyle = '#2f6fd6'; x.fillRect(0, 0, W, H); x.fillStyle = '#3fae4a';
+    [[180, 170, 130, 90], [260, 300, 70, 110], [520, 160, 120, 70], [560, 280, 80, 100], [800, 190, 110, 60], [840, 330, 60, 40]].forEach(([cx, cy, rx, ry]) => { x.beginPath(); x.ellipse(cx, cy, rx, ry, 0.3, 0, 7); x.fill(); });
+    x.fillStyle = '#f2f2f2'; x.fillRect(0, 0, W, 28); x.fillRect(0, H - 28, W, 28); });
+  I.addObj(sp, { step: 0 }); I.spin = t => { sp.rotation.y = t * 0.4; }; return I; }
 export function snail() { const I = new Icon(); I.add(rrect(2.0, 0.42, 0.21, 0.1, -0.55), 'tan', { step: 0, from: 'growx' }); I.add(circ(0.62, -0.15, 0.1), 'orange', { step: 1 });
   I.add(ring(0.34, 0.12, -0.15, 0.1), 'brown', { z: .085, step: 1.5, depth: .02 }); I.add(circ(0.1, -0.15, 0.1), 'brown', { z: .085, step: 1.6, depth: .02 });
   I.addStroke([[0.85, -0.4], [0.95, 0.15]], 0.08, 'tan', { step: 2 }); I.addStroke([[1.0, -0.4], [1.2, 0.1]], 0.08, 'tan', { step: 2 }); I.add(circ(0.09, 0.95, 0.2), 'dark', { step: 2.2 }); I.add(circ(0.09, 1.22, 0.15), 'dark', { step: 2.2 }); return I; }
@@ -172,12 +186,12 @@ export function clock() { const I = new Icon(); I.add(circ(1.0), 'paper', { step
   for (let i = 0; i < 12; i++) { const a = i / 12 * Math.PI * 2; I.add(rrect(0.05, i % 3 ? 0.08 : 0.16, 0.02), 'dark', { z: .085, step: 1.2, at: [Math.cos(a) * 0.72, Math.sin(a) * 0.72], rot: a - Math.PI / 2, depth: .01 }); }
   I.hand = I.add(rrect(0.07, 0.6, 0.035, 0, 0.26), 'dark', { z: .1, step: 2, pivot: [0, 0], depth: .02 }); I.add(rrect(0.08, 0.42, 0.04, 0.17, 0.08), 'dark', { z: .1, step: 2, rot: -1.1, depth: .02 }); I.add(circ(0.07), 'brick', { z: .12, step: 2.2, depth: .02 }); return I; }
 export function compass() { const I = new Icon(); I.add(circ(1.0), 'silver', { step: 0 }); I.add(circ(0.85), 'paper', { z: .02, step: 0.5 });
-  I.needle = new THREE.Group(); I.needle.position.z = 0.12; const n1 = part(poly([[0, 0.7], [0.13, 0], [-0.13, 0]]), 'red', 0, .03), n2 = part(poly([[0, -0.7], [0.13, 0], [-0.13, 0]]), 'dark', 0, .03); I.needle.add(n1, n2); I.g.add(I.needle); I.parts.push({ o: I.needle, step: 1.5, from: 'pop', base: I.needle.position.clone(), m: n1 });
+  I.needle = new THREE.Group(); I.needle.position.z = 0.12 * ZK; const n1 = part(poly([[0, 0.7], [0.13, 0], [-0.13, 0]]), 'red', 0, .03), n2 = part(poly([[0, -0.7], [0.13, 0], [-0.13, 0]]), 'dark', 0, .03); I.needle.add(n1, n2); I.g.add(I.needle); I.parts.push({ o: I.needle, step: 1.5, from: 'pop', base: I.needle.position.clone(), m: n1 });
   I.add(circ(0.07), 'gold', { z: .16, step: 1.8, depth: .02 }); return I; }
 
 // coloca um ícone de apoio (menor) na cena; retorna {ic, upd(t)} que faz o pop no tempo t0 e flutua
 export function side(parent, ic, x, y, s = 0.45, t0 = 0.4, dt = 0.08) { s *= 1.3; y *= 1.2; ic.g.position.set(x, y, 0.3); parent.add(ic.g);
   return { ic, upd(t) { ic.build(t, t0, dt); const k = back(seg(t, t0, t0 + 0.4)); ic.g.scale.setScalar(Math.max(1e-4, s * k)); ic.g.visible = t >= t0; ic.g.position.y = y + Math.sin(t * 1.6 + x * 3) * 0.05; ic.g.rotation.y = Math.sin(t * 0.9 + x) * 0.15; } }; }
 // rótulo de texto (palavra/número) que aparece no tempo t0
-export function label(parent, text, x, y, h = 0.38, color = '#ffffff', t0 = 0.5) { h *= 1.35; y *= 1.2; const w = word(text, h, color); w.position.set(x, y, 0.35); parent.add(w);
+export function label(parent, text, x, y, h = 0.38, color = '#ffffff', t0 = 0.5) { h *= 1.35; y *= 1.2; const w = text3d(text, h * 0.72, new THREE.MeshStandardMaterial({ color: new THREE.Color(color), roughness: .45 }), h * 0.28); w.geometry.computeBoundingBox(); const bb = w.geometry.boundingBox; w.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); w.position.set(x, y, 0.35); parent.add(w);
   return { w, upd(t) { const k = back(seg(t, t0, t0 + 0.35)); w.visible = t >= t0; w.scale.setScalar(Math.max(1e-4, k)); } }; }
