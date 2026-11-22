@@ -1,5 +1,9 @@
 # REGRAS FIXAS DO USUÁRIO (22/11, valem acima de qualquer outra instrução)
-- Ícones, objetos e ambientes IGUAIS ao modelo dos vídeos de referência dele: ícone branco chapado + detalhes verde-menta, um por vez, frontal,
+- CORES REAIS (22/11 12h51): cada objeto/ambiente com a SUA cor certa (sol amarelo/laranja, Vênus bege, moeda dourada, globo azul com
+  continentes verdes, telhado vermelho, porta marrom, cadeado dourado, calendário com topo vermelho...). NÃO deixar tudo branco e verde.
+  Use as cores de COL em icons.js (yellow, orange, tan, venus, beige, brick, blue, sky, brown, green, silver, gold, paper, stone, red...).
+  Veja galeria_icones.jpg (abrir gallery.html renderiza todos os ícones para conferir).
+- Ícones, objetos e ambientes no modelo dos vídeos de referência dele: ícone chapado com cores reais, um por vez, frontal,
   balanço 3D bem leve, montando peça por peça; fundo preto; cena "app 3D verde + notificações de vidro empilhando" com fundo preto
   e reflexo no chão (I.reflect). Use SEMPRE os padrões deste template (icons.js) em vez de inventar estilos novos.
   Só troque o símbolo de cada ícone conforme o tema (nada de logos/marcas reais).

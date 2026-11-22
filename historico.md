@@ -31,3 +31,4 @@
 - 12h36: usuário pediu BRILHO MENOR em tudo e ícones/objetos/ambientes IGUAIS ao modelo das referências (sem ficar inventando). Aplicado: bloom s .32, branco/menta mais escuros, balanço menor, ícones um pouco menores, cena de notificações com fundo azul-marinho com grade + reflexo. Regras fixas no topo do template/icones/README.md.
 - 12h42: usuário pediu fundo preto/cinza (sem azul) e REMOVER o brilho. Aplicado: E.BLOOM.off, sem glow no gancho, cena de notificações em fundo preto.
 - 12h50: teste de 20 s (Vênus) com narração no estilo ícones. Melhorias: legenda não mistura frases, sem flash cinza na troca, ícones novos (planeta, sol, órbita, calendário, seta de giro, interrogação, nascer do sol).
+- 12h51: usuário pediu CORES CERTAS para cada objeto/ambiente (estava tudo branco e verde). Todos os ícones do kit agora têm cores reais (galeria_icones.jpg). Verde-menta fica só como cor de destaque do texto (gancho/legenda).

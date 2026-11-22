@@ -7,7 +7,11 @@ import { clamp, seg, back, eio, lerp, hash, camera, text3d } from './engine.js';
 export const MINT = 0x3DF5A6, MINT_CSS = '#3DF5A6';
 const MB = {};
 const basic = (c) => MB[c] || (MB[c] = new THREE.MeshBasicMaterial({ color: c, toneMapped: false }));
-export const COL = { white: [0xd6d6d6, 0x6e6e6e], mint: [0x33d690, 0x197a52], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xffd257, 0xa8862c] };
+export const COL = { white: [0xd6d6d6, 0x6e6e6e], mint: [0x33d690, 0x197a52], black: [0x050505, 0x050505], gray: [0x9a9a9a, 0x555555], red: [0xff4d5e, 0x9a2430], gold: [0xf2b632, 0x9a7418],
+  // CORES REAIS (pedido do usuário: cada objeto/ambiente com a cor certa)
+  yellow: [0xffc531, 0xa67c12], orange: [0xf28c28, 0x9a5512], tan: [0xe0b872, 0x8f7140], venus: [0xe6c27a, 0x94763f], venusband: [0xcfa35a, 0x8a6a35], beige: [0xe8d9b5, 0x93876a],
+  brick: [0xc4473a, 0x7a2a22], blue: [0x3b82f6, 0x1f4f9e], sky: [0x6fb3ee, 0x3f6f99], brown: [0x7a4e2d, 0x4a2f1a], green: [0x3fae4a, 0x23692b],
+  silver: [0xbfc3c7, 0x75787b], dark: [0x2a2a2a, 0x161616], paper: [0xf4f1ea, 0x9b978e], stone: [0xbfb49a, 0x7a725f] };
 
 // ---------- formas 2D ----------
 export function rrect(w, h, r = 0.1, x = 0, y = 0) { const s = new THREE.Shape(), X = x - w / 2, Y = y - h / 2; r = Math.min(r, w / 2, h / 2);
@@ -50,54 +54,56 @@ export function phoneCart() { const I = new Icon();
   I.add(rrect(1.3, 2.4, 0.2), 'white', { step: 0 }); I.add(rrect(1.06, 1.7, 0.05, 0, 0.02), 'black', { z: 0.081, step: 1, from: 'fade', depth: 0.01 });
   I.add(rrect(0.3, 0.05, 0.025, 0, 1.0), 'black', { z: 0.081, step: 1, depth: .01 }); I.add(circ(0.09, 0, -1.0), 'black', { z: 0.081, step: 1, depth: .01 });
   // carrinho
-  I.add(poly([[-0.33, 0.25], [0.37, 0.25], [0.28, -0.08], [-0.25, -0.08]]), 'mint', { z: 0.1, step: 2 });
-  I.addStroke([[-0.48, 0.4], [-0.33, 0.25]], 0.07, 'mint', { z: 0.1, step: 2 });
-  I.addStroke([[-0.22, -0.2], [0.3, -0.2]], 0.06, 'mint', { z: 0.1, step: 3, from: 'growx' });
-  I.add(circ(0.07, -0.17, -0.33), 'mint', { z: 0.1, step: 3 }); I.add(circ(0.07, 0.24, -0.33), 'mint', { z: 0.1, step: 3 }); return I; }
+  I.add(poly([[-0.33, 0.25], [0.37, 0.25], [0.28, -0.08], [-0.25, -0.08]]), 'orange', { z: 0.1, step: 2 });
+  I.addStroke([[-0.48, 0.4], [-0.33, 0.25]], 0.07, 'orange', { z: 0.1, step: 2 });
+  I.addStroke([[-0.22, -0.2], [0.3, -0.2]], 0.06, 'silver', { z: 0.1, step: 3, from: 'growx' });
+  I.add(circ(0.07, -0.17, -0.33), 'silver', { z: 0.1, step: 3 }); I.add(circ(0.07, 0.24, -0.33), 'silver', { z: 0.1, step: 3 }); return I; }
 export function windowsStack(n = 3) { const I = new Icon();
   for (let i = n - 1; i >= 0; i--) { const dx = i * 0.18, dy = i * 0.18, z = -i * 0.12, st = (n - 1 - i);
-    I.add(rrect(1.7, 1.45, 0.1, dx, dy), 'white', { z, step: st, from: 'up' }); I.add(rrect(1.7, 0.28, 0.1, dx, dy + 0.59), 'mint', { z: z + 0.082, step: st, from: 'up', depth: .02 });
+    I.add(rrect(1.7, 1.45, 0.1, dx, dy), 'white', { z, step: st, from: 'up' }); I.add(rrect(1.7, 0.28, 0.1, dx, dy + 0.59), 'blue', { z: z + 0.082, step: st, from: 'up', depth: .02 });
     if (i === 0) { [0.5, 0.62, 0.74].forEach((x, j) => I.add(circ(0.04, x, 0.59), 'white', { z: 0.11, step: n + j * .3, depth: .01 }));
-      [0.25, 0.0, -0.25, -0.5].forEach((y, j) => I.add(rrect(1.25 - (j === 3 ? .4 : 0), 0.11, 0.05, j === 3 ? -.2 : 0, y), 'mint', { z: 0.09, step: n + 1 + j * .5, from: 'growx', depth: .02 })); } }
+      [0.25, 0.0, -0.25, -0.5].forEach((y, j) => I.add(rrect(1.25 - (j === 3 ? .4 : 0), 0.11, 0.05, j === 3 ? -.2 : 0, y), 'silver', { z: 0.09, step: n + 1 + j * .5, from: 'growx', depth: .02 })); } }
   return I; }
 export function school() { const I = new Icon();
   // corpo + telhado + frontão + bandeira + janelas + porta + escada (tudo encostado, sem peças soltas)
-  I.add(rrect(2.2, 1.3, 0.06, 0, -0.1), 'white', { step: 0 });
-  I.add(poly([[-1.3, 0.5], [1.3, 0.5], [0.95, 0.85], [-0.95, 0.85]]), 'mint', { z: .02, step: 1, from: 'down' });
-  I.add(poly([[-0.5, 0.45], [0.5, 0.45], [0.5, 0.88], [0, 1.25], [-0.5, 0.88]]), 'white', { z: .05, step: 2, from: 'up' });
+  I.add(rrect(2.2, 1.3, 0.06, 0, -0.1), 'beige', { step: 0 });
+  I.add(poly([[-1.3, 0.5], [1.3, 0.5], [0.95, 0.85], [-0.95, 0.85]]), 'brick', { z: .02, step: 1, from: 'down' });
+  I.add(poly([[-0.5, 0.45], [0.5, 0.45], [0.5, 0.88], [0, 1.25], [-0.5, 0.88]]), 'beige', { z: .05, step: 2, from: 'up' });
   I.add(circ(0.14, 0, 0.8), 'black', { z: 0.14, step: 3, depth: .02 });
-  I.add(rrect(0.06, 0.45, 0.03, 0, 1.45), 'white', { z: .05, step: 4, from: 'grow', pivot: [0, 1.23] }); I.add(poly([[0.03, 1.66], [0.36, 1.56], [0.03, 1.46]]), 'mint', { z: .05, step: 4.5 });
+  I.add(rrect(0.06, 0.45, 0.03, 0, 1.45), 'silver', { z: .05, step: 4, from: 'grow', pivot: [0, 1.23] }); I.add(poly([[0.03, 1.66], [0.36, 1.56], [0.03, 1.46]]), 'red', { z: .05, step: 4.5 });
   [-0.8, -0.52, 0.52, 0.8].forEach((x, j) => [0.18, -0.22].forEach((y, k) => I.add(rrect(0.18, 0.26, 0.03, x, y), 'black', { z: .085, step: 5 + j * .25 + k * .15, depth: .02 })));
   // porta em arco (preta) com contorno menta
   const door = new THREE.Shape(); door.moveTo(-0.22, -0.75); door.lineTo(-0.22, -0.2); door.absarc(0, -0.2, 0.22, Math.PI, 0, true); door.lineTo(0.22, -0.75); door.closePath();
   const frame = new THREE.Shape(); frame.moveTo(-0.3, -0.75); frame.lineTo(-0.3, -0.2); frame.absarc(0, -0.2, 0.3, Math.PI, 0, true); frame.lineTo(0.3, -0.75); frame.closePath();
-  I.add(frame, 'mint', { z: .085, step: 6, depth: .02, from: 'grow', pivot: [0, -0.75] }); I.add(door, 'black', { z: .11, step: 6.3, depth: .02, from: 'grow', pivot: [0, -0.75] });
-  I.add(rrect(0.85, 0.12, 0.03, 0, -0.81), 'white', { step: 7, from: 'growx' }); I.add(rrect(1.05, 0.12, 0.03, 0, -0.93), 'white', { step: 7.3, from: 'growx' }); return I; }
+  I.add(frame, 'brick', { z: .085, step: 6, depth: .02, from: 'grow', pivot: [0, -0.75] }); I.add(door, 'brown', { z: .11, step: 6.3, depth: .02, from: 'grow', pivot: [0, -0.75] });
+  I.add(rrect(0.85, 0.12, 0.03, 0, -0.81), 'silver', { step: 7, from: 'growx' }); I.add(rrect(1.05, 0.12, 0.03, 0, -0.93), 'silver', { step: 7.3, from: 'growx' }); return I; }
 export function barChart(vals = [0.5, 0.8, 0.65, 1.2, 1.6]) { const I = new Icon(); const n = vals.length, w = 0.32, gap = 0.14, x0 = -((n - 1) * (w + gap)) / 2;
-  I.add(rrect(2.6, 0.07, 0.03, 0, -0.95), 'white', { step: 0, from: 'growx' });
-  vals.forEach((v, i) => I.add(rrect(w, v, 0.06, x0 + i * (w + gap), -0.9 + v / 2), i === n - 1 ? 'mint' : 'white', { step: 1 + i * .5, from: 'grow', pivot: [x0 + i * (w + gap), -0.9] }));
-  const pts = vals.map((v, i) => [x0 + i * (w + gap), -0.9 + v + 0.3]); I.addStroke(pts, 0.08, 'mint', { z: 0.12, step: 1 + n * .5 + 0.5 });
-  const L = pts[n - 1]; I.add(poly([[L[0] + 0.05, L[1] + 0.22], [L[0] + 0.22, L[1] - 0.08], [L[0] - 0.12, L[1] - 0.05]]), 'mint', { z: 0.12, step: 1 + n * .5 + 1 }); return I; }
-export function coin(sym = '$') { const I = new Icon(); I.add(circ(0.8), 'white', { step: 0 }); I.add(ring(0.64, 0.07), 'mint', { z: .09, step: 1, depth: .01 });
-  const t = text3d(sym, 0.85, basic(MINT), 0.02); t.geometry.computeBoundingBox(); const bb = t.geometry.boundingBox; t.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); t.position.z = 0.1; const piv = new THREE.Group(); piv.add(t); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m: t }); return I; }
-export function bank() { const I = new Icon(); I.add(poly([[-1.2, 0.55], [1.2, 0.55], [0, 1.25]]), 'mint', { step: 0, from: 'down' }); I.add(rrect(2.3, 0.14, 0.04, 0, 0.47), 'white', { step: 1, from: 'growx' });
-  [-0.8, -0.27, 0.27, 0.8].forEach((x, i) => I.add(rrect(0.26, 1.05, 0.05, x, -0.15), 'white', { step: 2 + i * .3, from: 'grow', pivot: [x, -0.68] }));
-  I.add(rrect(2.4, 0.16, 0.04, 0, -0.78), 'white', { step: 3.5, from: 'growx' }); I.add(rrect(2.7, 0.14, 0.04, 0, -0.98), 'white', { step: 3.8, from: 'growx' }); I.add(circ(0.13, 0, 0.8), 'black', { z: .081, step: 4, depth: .01 }); return I; }
-export function lock(open = 0) { const I = new Icon(); I.add(ring(0.5, 0.17, 0, 0.45, 0, Math.PI), 'white', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, -0.5, 0.3), 'white', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, 0.5, 0.3), 'white', { step: 0, from: 'down' });
-  I.add(rrect(1.5, 1.2, 0.18, 0, -0.45), 'mint', { step: 1 }); I.add(circ(0.15, 0, -0.35), 'black', { z: .081, step: 2, depth: .01 }); I.add(poly([[-0.07, -0.4], [0.07, -0.4], [0.1, -0.75], [-0.1, -0.75]]), 'black', { z: .081, step: 2, depth: .01 }); return I; }
-export function globe() { const I = new Icon(); I.add(circ(1.0), 'white', { step: 0 }); I.add(ring(0.5, 0.08, 0, 0), 'mint', { z: .09, step: 1, depth: .01 });
-  [[-0.5, 0.45, 0.4], [0.35, -0.25, 0.5]].forEach(([x, y, r], i) => I.add(circ(r * 0.6, x, y), 'mint', { z: .09, step: 1.5 + i * .4, depth: .01 }));
-  I.add(rrect(2.05, 0.08, 0.04), 'black', { z: .085, step: 2.5, from: 'growx', depth: .005 }); I.add(rrect(0.08, 2.05, 0.04), 'black', { z: .085, step: 2.7, from: 'grow', depth: .005 }); return I; }
-export function bulb() { const I = new Icon(); I.add(circ(0.75, 0, 0.3), 'white', { step: 0 }); I.add(poly([[-0.42, -0.25], [0.42, -0.25], [0.3, -0.65], [-0.3, -0.65]]), 'white', { step: 0 });
-  I.add(rrect(0.62, 0.13, 0.06, 0, -0.78), 'mint', { step: 1, from: 'growx' }); I.add(rrect(0.52, 0.13, 0.06, 0, -0.96), 'mint', { step: 1.3, from: 'growx' });
-  I.addStroke([[-0.2, -0.2], [-0.12, 0.35], [0, 0.15], [0.12, 0.35], [0.2, -0.2]], 0.07, 'mint', { z: .09, step: 2, depth: .01 });
-  for (let i = 0; i < 7; i++) { const a = Math.PI * (0.05 + i / 6 * 0.9); I.addStroke([[Math.cos(a) * 1.0, 0.3 + Math.sin(a) * 1.0], [Math.cos(a) * 1.25, 0.3 + Math.sin(a) * 1.25]], 0.08, 'mint', { step: 3 + i * .15 }); } return I; }
-export function magnifier() { const I = new Icon(); I.add(ring(0.6, 0.2, -0.2, 0.25), 'white', { step: 0 }); I.add(circ(0.5, -0.2, 0.25), 'mint', { z: -.02, step: 1, depth: .02 });
-  I.addStroke([[0.25, -0.22], [0.85, -0.85]], 0.26, 'white', { step: 2 }); return I; }
-export function warning() { const I = new Icon(); I.add(poly([[0, 1.0], [1.15, -0.9], [-1.15, -0.9]]), 'white', { step: 0 }); I.add(rrect(0.16, 0.8, 0.08, 0, 0.0), 'black', { z: .081, step: 1, from: 'grow', depth: .01 }); I.add(circ(0.1, 0, -0.6), 'black', { z: .081, step: 1.5, depth: .01 }); return I; }
-export function rocket() { const I = new Icon(); I.add(poly([[0, 1.25], [0.42, 0.55], [0.42, -0.6], [-0.42, -0.6], [-0.42, 0.55]]), 'white', { step: 0, from: 'up' }); I.add(circ(0.18, 0, 0.35), 'mint', { z: .09, step: 1, depth: .01 });
-  I.add(poly([[-0.42, -0.1], [-0.8, -0.75], [-0.42, -0.55]]), 'mint', { step: 1.5 }); I.add(poly([[0.42, -0.1], [0.8, -0.75], [0.42, -0.55]]), 'mint', { step: 1.5 });
-  I.add(poly([[-0.25, -0.65], [0.25, -0.65], [0, -1.2]]), 'mint', { step: 2, from: 'grow', pivot: [0, -0.65] }); return I; }
+  I.add(rrect(2.6, 0.07, 0.03, 0, -0.95), 'silver', { step: 0, from: 'growx' });
+  vals.forEach((v, i) => I.add(rrect(w, v, 0.06, x0 + i * (w + gap), -0.9 + v / 2), i === n - 1 ? 'green' : 'blue', { step: 1 + i * .5, from: 'grow', pivot: [x0 + i * (w + gap), -0.9] }));
+  const pts = vals.map((v, i) => [x0 + i * (w + gap), -0.9 + v + 0.3]); I.addStroke(pts, 0.08, 'green', { z: 0.12, step: 1 + n * .5 + 0.5 });
+  const L = pts[n - 1]; I.add(poly([[L[0] + 0.05, L[1] + 0.22], [L[0] + 0.22, L[1] - 0.08], [L[0] - 0.12, L[1] - 0.05]]), 'green', { z: 0.12, step: 1 + n * .5 + 1 }); return I; }
+export function coin(sym = '$') { const I = new Icon(); I.add(circ(0.8), 'gold', { step: 0 }); I.add(ring(0.64, 0.07), 'yellow', { z: .09, step: 1, depth: .01 });
+  const t = text3d(sym, 0.85, basic(0x9a7418), 0.02); t.geometry.computeBoundingBox(); const bb = t.geometry.boundingBox; t.geometry.translate(0, -(bb.max.y + bb.min.y) / 2, 0); t.position.z = 0.1; const piv = new THREE.Group(); piv.add(t); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m: t }); return I; }
+export function bank() { const I = new Icon(); I.add(poly([[-1.2, 0.55], [1.2, 0.55], [0, 1.25]]), 'stone', { step: 0, from: 'down' }); I.add(rrect(2.3, 0.14, 0.04, 0, 0.47), 'beige', { step: 1, from: 'growx' });
+  [-0.8, -0.27, 0.27, 0.8].forEach((x, i) => I.add(rrect(0.26, 1.05, 0.05, x, -0.15), 'beige', { step: 2 + i * .3, from: 'grow', pivot: [x, -0.68] }));
+  I.add(rrect(2.4, 0.16, 0.04, 0, -0.78), 'beige', { step: 3.5, from: 'growx' }); I.add(rrect(2.7, 0.14, 0.04, 0, -0.98), 'beige', { step: 3.8, from: 'growx' }); I.add(circ(0.13, 0, 0.8), 'black', { z: .081, step: 4, depth: .01 }); return I; }
+export function lock(open = 0) { const I = new Icon(); I.add(ring(0.5, 0.17, 0, 0.45, 0, Math.PI), 'silver', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, -0.5, 0.3), 'silver', { step: 0, from: 'down' }); I.add(rrect(0.17, 0.35, 0.02, 0.5, 0.3), 'silver', { step: 0, from: 'down' });
+  I.add(rrect(1.5, 1.2, 0.18, 0, -0.45), 'gold', { step: 1 }); I.add(circ(0.15, 0, -0.35), 'black', { z: .081, step: 2, depth: .01 }); I.add(poly([[-0.07, -0.4], [0.07, -0.4], [0.1, -0.75], [-0.1, -0.75]]), 'black', { z: .081, step: 2, depth: .01 }); return I; }
+export function globe() { const I = new Icon(); I.add(circ(1.0), 'blue', { step: 0 });
+  // continentes (formas próprias) em verde, recortados dentro do círculo
+  [[[-0.55, 0.55], [-0.15, 0.7], [0.0, 0.45], [-0.25, 0.2], [-0.2, -0.1], [-0.5, -0.05], [-0.75, 0.25]], [[0.15, 0.1], [0.55, 0.25], [0.75, 0.0], [0.6, -0.45], [0.3, -0.6], [0.2, -0.25]], [[-0.35, -0.45], [-0.05, -0.5], [-0.15, -0.78], [-0.4, -0.7]]]
+    .forEach((pts, i) => I.add(poly(pts), 'green', { z: .085, step: 1 + i * .3, depth: .02 }));
+  I.add(ring(0.98, 0.06), 'sky', { z: .09, step: 2, depth: .01 }); return I; }
+export function bulb() { const I = new Icon(); I.add(circ(0.75, 0, 0.3), 'yellow', { step: 0 }); I.add(poly([[-0.42, -0.25], [0.42, -0.25], [0.3, -0.65], [-0.3, -0.65]]), 'yellow', { step: 0 });
+  I.add(rrect(0.62, 0.13, 0.06, 0, -0.78), 'silver', { step: 1, from: 'growx' }); I.add(rrect(0.52, 0.13, 0.06, 0, -0.96), 'silver', { step: 1.3, from: 'growx' });
+  I.addStroke([[-0.2, -0.2], [-0.12, 0.35], [0, 0.15], [0.12, 0.35], [0.2, -0.2]], 0.07, 'orange', { z: .09, step: 2, depth: .01 });
+  for (let i = 0; i < 7; i++) { const a = Math.PI * (0.05 + i / 6 * 0.9); I.addStroke([[Math.cos(a) * 1.0, 0.3 + Math.sin(a) * 1.0], [Math.cos(a) * 1.25, 0.3 + Math.sin(a) * 1.25]], 0.08, 'yellow', { step: 3 + i * .15 }); } return I; }
+export function magnifier() { const I = new Icon(); I.add(ring(0.6, 0.2, -0.2, 0.25), 'silver', { step: 0 }); I.add(circ(0.5, -0.2, 0.25), 'sky', { z: -.02, step: 1, depth: .02 });
+  I.addStroke([[0.25, -0.22], [0.85, -0.85]], 0.26, 'silver', { step: 2 }); return I; }
+export function warning() { const I = new Icon(); I.add(poly([[0, 1.0], [1.15, -0.9], [-1.15, -0.9]]), 'yellow', { step: 0 }); I.add(rrect(0.16, 0.8, 0.08, 0, 0.0), 'black', { z: .081, step: 1, from: 'grow', depth: .01 }); I.add(circ(0.1, 0, -0.6), 'black', { z: .081, step: 1.5, depth: .01 }); return I; }
+export function rocket() { const I = new Icon(); I.add(poly([[0, 1.25], [0.42, 0.55], [0.42, -0.6], [-0.42, -0.6], [-0.42, 0.55]]), 'white', { step: 0, from: 'up' }); I.add(circ(0.18, 0, 0.35), 'sky', { z: .09, step: 1, depth: .01 });
+  I.add(poly([[-0.42, -0.1], [-0.8, -0.75], [-0.42, -0.55]]), 'red', { step: 1.5 }); I.add(poly([[0.42, -0.1], [0.8, -0.75], [0.42, -0.55]]), 'red', { step: 1.5 });
+  I.add(poly([[-0.25, -0.65], [0.25, -0.65], [0, -1.2]]), 'orange', { step: 2, from: 'grow', pivot: [0, -0.65] }); return I; }
 
 // card de notificação de vidro (canvas) — empilha embaixo de um ícone
 export function notifCard(title, body, w = 3.2, h = 0.72) { const c = document.createElement('canvas'); c.width = Math.round(w * 200); c.height = Math.round(h * 200); const x = c.getContext('2d'), W = c.width, H = c.height;
@@ -126,26 +132,26 @@ export function gridBackdrop(s) { const c = document.createElement('canvas'); c.
 export function reflect(mesh, op = 0.18) { const r = mesh.clone(); r.material = mesh.material.clone(); r.material.transparent = true; r.material.opacity = op; r.scale.y = -1; return r; }
 
 // ---------- ícones extras (espaço / tempo) ----------
-export function planet() { const I = new Icon(); const R = 0.95; I.add(circ(R), 'white', { step: 0 });
-  [[0.42, 0.2], [0.02, 0.14], [-0.4, 0.17]].forEach(([y, h], i) => { const hw = Math.sqrt(R * R - (Math.abs(y) + h / 2) ** 2) - 0.12; I.add(rrect(hw * 2, h, h / 2, (i - 1) * 0.06, y), 'mint', { z: .085, step: 1 + i * .3, from: 'growx', depth: .02 }); });
-  I.add(circ(0.08, 0.45, 0.205), 'gray', { z: .09, step: 2.2, depth: .02 }); I.add(circ(0.08, -0.3, -0.18), 'gray', { z: .09, step: 2.4, depth: .02 }); return I; }
-export function sun() { const I = new Icon(); I.add(circ(0.62), 'mint', { step: 0 });
-  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.16, 0.42, 0.08), 'white', { step: 1 + i * .12, at: [Math.cos(a) * 0.95, Math.sin(a) * 0.95], rot: a - Math.PI / 2 }); } return I; }
+export function planet(base = 'venus', band = 'venusband', spot = null) { const I = new Icon(); const R = 0.95; I.add(circ(R), base, { step: 0 });
+  [[0.42, 0.2], [0.02, 0.14], [-0.4, 0.17]].forEach(([y, h], i) => { const hw = Math.sqrt(R * R - (Math.abs(y) + h / 2) ** 2) - 0.12; I.add(rrect(hw * 2, h, h / 2, (i - 1) * 0.06, y), band, { z: .085, step: 1 + i * .3, from: 'growx', depth: .02 }); });
+  if (spot) { I.add(circ(0.08, 0.45, 0.205), spot, { z: .09, step: 2.2, depth: .02 }); I.add(circ(0.08, -0.3, -0.18), spot, { z: .09, step: 2.4, depth: .02 }); } return I; }
+export function sun() { const I = new Icon(); I.add(circ(0.62), 'yellow', { step: 0 });
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.16, 0.42, 0.08), 'orange', { step: 1 + i * .12, at: [Math.cos(a) * 0.95, Math.sin(a) * 0.95], rot: a - Math.PI / 2 }); } return I; }
 // órbita: sol no centro + anel + planeta pequeno (posição do planeta via .orbitK)
-export function orbit() { const I = new Icon(); I.add(ring(1.15, 0.05), 'gray', { step: 0, depth: .02 }); I.add(circ(0.42), 'mint', { step: 1 });
-  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.08, 0.2, 0.04), 'mint', { step: 1.3, at: [Math.cos(a) * 0.6, Math.sin(a) * 0.6], rot: a - Math.PI / 2 }); }
-  I.pl = I.add(circ(0.2, 0, 0), 'white', { step: 2, z: .05 }); I.setOrbit = k => { const a = Math.PI / 2 - k * Math.PI * 2; I.pl.position.set(Math.cos(a) * 1.15, Math.sin(a) * 1.15, .05); I.parts.find(p => p.o === I.pl).base.copy(I.pl.position); }; I.setOrbit(0); return I; }
+export function orbit() { const I = new Icon(); I.add(ring(1.15, 0.05), 'gray', { step: 0, depth: .02 }); I.add(circ(0.42), 'yellow', { step: 1 });
+  for (let i = 0; i < 8; i++) { const a = i / 8 * Math.PI * 2; I.add(rrect(0.08, 0.2, 0.04), 'orange', { step: 1.3, at: [Math.cos(a) * 0.6, Math.sin(a) * 0.6], rot: a - Math.PI / 2 }); }
+  I.pl = I.add(circ(0.2, 0, 0), 'venus', { step: 2, z: .05 }); I.setOrbit = k => { const a = Math.PI / 2 - k * Math.PI * 2; I.pl.position.set(Math.cos(a) * 1.15, Math.sin(a) * 1.15, .05); I.parts.find(p => p.o === I.pl).base.copy(I.pl.position); }; I.setOrbit(0); return I; }
 // calendário com número grande (textura) — num é string
-export function calendar(num = '243', sub = 'DIAS') { const I = new Icon(); I.add(rrect(1.9, 1.9, 0.18, 0, -0.1), 'white', { step: 0 }); I.add(rrect(1.9, 0.45, 0.18, 0, 0.62), 'mint', { z: .02, step: 1, depth: .08 });
-  [-0.5, 0.5].forEach(x => I.add(rrect(0.14, 0.4, 0.07, x, 0.9), 'gray', { z: .1, step: 1.5 }));
-  const c = document.createElement('canvas'); c.width = 512; c.height = 400; const x = c.getContext('2d'); x.fillStyle = '#111'; x.textAlign = 'center'; x.font = '900 230px Poppins, Arial'; x.fillText(num, 256, 250); x.font = '900 80px Poppins, Arial'; x.fillStyle = '#1b8f5f'; x.fillText(sub, 256, 360);
+export function calendar(num = '243', sub = 'DIAS') { const I = new Icon(); I.add(rrect(1.9, 1.9, 0.18, 0, -0.1), 'paper', { step: 0 }); I.add(rrect(1.9, 0.45, 0.18, 0, 0.62), 'brick', { z: .02, step: 1, depth: .08 });
+  [-0.5, 0.5].forEach(x => I.add(rrect(0.14, 0.4, 0.07, x, 0.9), 'silver', { z: .1, step: 1.5 }));
+  const c = document.createElement('canvas'); c.width = 512; c.height = 400; const x = c.getContext('2d'); x.fillStyle = '#111'; x.textAlign = 'center'; x.font = '900 230px Poppins, Arial'; x.fillText(num, 256, 250); x.font = '900 80px Poppins, Arial'; x.fillStyle = '#c4473a'; x.fillText(sub, 256, 360);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; const m = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.25), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false })); m.position.set(0, -0.35, 0.09);
   const piv = new THREE.Group(); piv.add(m); I.g.add(piv); I.parts.push({ o: piv, step: 2, from: 'pop', base: piv.position.clone(), m }); return I; }
 // seta curva de rotação (giro lento)
-export function spinArrow(col = 'mint') { const I = new Icon(); I.add(ring(1.15, 0.16, 0, 0, Math.PI * 0.15, Math.PI * 1.75), col, { step: 0, from: 'fade' }); const a = Math.PI * 1.75, x = Math.cos(a) * 1.15, y = Math.sin(a) * 1.15;
+export function spinArrow(col = 'sky') { const I = new Icon(); I.add(ring(1.15, 0.16, 0, 0, Math.PI * 0.15, Math.PI * 1.75), col, { step: 0, from: 'fade' }); const a = Math.PI * 1.75, x = Math.cos(a) * 1.15, y = Math.sin(a) * 1.15;
   I.add(poly([[x - 0.25, y - 0.1], [x + 0.25, y - 0.1], [x + 0.05, y + 0.32]].map(([px, py]) => [px, py])), col, { step: 0.6, rot: 0 }); return I; }
-export function question() { const I = new Icon(); I.add(ring(0.5, 0.26, 0, 0.45, -Math.PI * 0.5, Math.PI * 1.0), 'white', { step: 0, from: 'fade' }); I.add(rrect(0.26, 0.45, 0.1, 0, -0.25), 'white', { step: 0.5, from: 'grow', pivot: [0, 0.0] }); I.add(circ(0.17, 0, -0.85), 'mint', { step: 1 }); return I; }
+export function question() { const I = new Icon(); I.add(ring(0.5, 0.26, 0, 0.45, -Math.PI * 0.5, Math.PI * 1.0), 'white', { step: 0, from: 'fade' }); I.add(rrect(0.26, 0.45, 0.1, 0, -0.25), 'white', { step: 0.5, from: 'grow', pivot: [0, 0.0] }); I.add(circ(0.17, 0, -0.85), 'yellow', { step: 1 }); return I; }
 // horizonte com sol nascendo + rótulo
-export function sunrise() { const I = new Icon(); I.add(rrect(2.6, 0.12, 0.06, 0, -0.4), 'white', { step: 0, from: 'growx' });
-  const half = new THREE.Shape(); half.absarc(0, -0.34, 0.75, 0, Math.PI, false); half.closePath(); I.sunHalf = I.add(half, 'mint', { step: 1, from: 'up', z: -.05 });
-  [0, 1, 2, 3, 4].forEach(i => { const a = Math.PI * (0.1 + i * 0.2); I.add(rrect(0.12, 0.32, 0.06), 'white', { step: 1.5 + i * .12, at: [Math.cos(a) * 1.05, -0.34 + Math.sin(a) * 1.05], rot: a - Math.PI / 2 }); }); return I; }
+export function sunrise() { const I = new Icon(); I.add(rrect(2.6, 0.12, 0.06, 0, -0.4), 'brown', { step: 0, from: 'growx' });
+  const half = new THREE.Shape(); half.absarc(0, -0.34, 0.75, 0, Math.PI, false); half.closePath(); I.sunHalf = I.add(half, 'orange', { step: 1, from: 'up', z: -.05 });
+  [0, 1, 2, 3, 4].forEach(i => { const a = Math.PI * (0.1 + i * 0.2); I.add(rrect(0.12, 0.32, 0.06), 'yellow', { step: 1.5 + i * .12, at: [Math.cos(a) * 1.05, -0.34 + Math.sin(a) * 1.05], rot: a - Math.PI / 2 }); }); return I; }
