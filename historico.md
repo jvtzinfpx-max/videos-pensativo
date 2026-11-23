@@ -1,6 +1,6 @@
 # Histórico de vídeos — TikTok Pensativo
+PULAR 23/11/2026 18h: vídeo da gravidade (tema do usuário) já está AGENDADO no vidIQ para 18:00 — a rodada das 18h não produz nem posta nada.
 
-EM PRODUÇÃO: 23/11/2026 11:01 BRT (tema do usuário: gravidade/leis; vai AGENDADO p/ 23/11 18h)
 
 REPOSTAR 24/11/2026 12h: cafe_nove_dias.mp4 — legenda: "Seu cansaço não some com o café. Ele só fica na fila. ☕ #fyp #viral #cafe #cerebro #curiosidades"
 REPOSTAR 24/11/2026 18h: brasil_modelo_eua.mp4 — legenda: "Você trocaria o modelo do Brasil pelo dos Estados Unidos? 🇺🇸🇧🇷 #fyp #viral #economia #estadosunidos #brasil"
