@@ -1,5 +1,4 @@
 # Histórico de vídeos — TikTok Pensativo
-EM PRODUÇÃO: 23/11/2026 11:25 BRT (rodada 12h)
 PULAR 23/11/2026 18h: vídeo da gravidade (tema do usuário) já está AGENDADO no vidIQ para 18:00 — a rodada das 18h não produz nem posta nada.
 
 
@@ -154,3 +153,18 @@ Bandeira do Brasil line-art, bandeira dos EUA line-art, mastro, boneco deitado l
 - Legenda: "Existem regras que não perguntam no que você acredita. Elas só funcionam. 🌍 #fyp #viral #reflexao #gravidade #curiosidades"
 - Revisão: 79,4 s, 1080x1080, -14,2 LUFS, true peak -1,7 dB. Créditos ElevenLabs após o vídeo: ~3.700 (a rodada das 12h de hoje também gasta).
 - Código: template/lineart/scenes_regras.js + main_regras.js.
+
+## 23/11/2026 (12h) — Se o país inteiro apagasse, quem liga tudo de novo? (black start)
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Religar um país depois de um apagão: usina precisa de energia pra ligar (bateria morta); hidrelétrica liga sozinha (comporta → água → turbina = black start, "partida no escuro"); não dá pra ligar tudo de uma vez (frequência cai, usina engasga e cai de novo) → bairro por bairro; Espanha abr/2025 religou com hidrelétricas + França e Marrocos, quase tudo só na manhã seguinte; Tucuruí (PA) fez o teste anual de black start em ~28 min (nov/2026) | apagao_religar.mp4 | 23/11 11:36 (imediato) — https://www.tiktok.com/@pensante_4/video/7711375485439102228 | Postes com cone de luz apagando um por um, botão ON gigante que racha ("não existe um botão"), boneco com CAPACETE de operador, painel com alavancas, gerador com tomada vazia "0% ENERGIA", carro que não pega (CLIC CLIC + fumaça) com bateria vazia, barragem com comporta subindo + água tracejada correndo até a turbina girando, medidor de frequência 60 Hz caindo/estabilizando, 4 blocos-bairro acendendo em sequência com faíscas no fio, contorno da Península Ibérica com cidades apagando/religando + setas FRANÇA/MARROCOS + relógio digital 12:33→07:00 "+1 DIA", cronômetro 00:00→28:08, botão "LIGAR" no pedestal com onda de luz |
+- Tema em alta: "APAGÃO MUNDIAL dia 17 de novembro às 21h07?" (@guiatoptec, 787 mil views, 832x a mediana, 11/11) — simulação hora a hora de sobrevivência + kit de 72 h da UE. Padrão de gancho: boato datado + "e se for verdade?".
+- Nosso ângulo diferente do viral: em vez de "como sobreviver sem luz" (hora a hora, Pix, torres, água, kit), o nosso é "QUEM RELIGA o país e COMO" — a engenharia da volta (black start, bairro por bairro), com prova real (Espanha 2025) e notícia brasileira da semana (Tucuruí). Virada: "não existe um botão" → no fim "você teria coragem de apertar o primeiro botão?".
+- ATENÇÃO/LIÇÃO: o 1º roteiro (sobrevivência hora a hora) gastou 1.389 créditos e foi DESCARTADO depois de assistir ao viral, porque repetia a estrutura e os exemplos dele. LIÇÃO: assistir ao viral (vidiq_watch_shortform_content) ANTES de escrever/gerar a voz.
+- Fontes: Times Brasil e Aos Fatos (boato do dia 17/11), Yahoo/AP e PBS (Espanha 99% restabelecida na manhã seguinte), Atalayar e Morocco World News (ajuda do Marrocos e da França), DOE (hidrelétricas como recurso de black start), Cenário Energia (Tucuruí: teste anual de black start em 28 min 8 s, nov/2026).
+- Legenda: "Se o país inteiro apagasse agora, não existe um botão pra ligar de novo. ⚡ #fyp #viral #apagao #energia #curiosidades"
+- Revisão: 80,5 s, 1080x1080 30 fps, -14,3 LUFS, true peak -1,4 dB. Créditos ElevenLabs após o vídeo: ~1.100 (NÃO dá para o próximo vídeo; renova ~23/12).
+- Código: template/lineart/scenes_apagao.js + main_apagao.js. Correção: medidor usa ângulo (ang-180) para 90 = ponteiro em pé.
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Poste de rua com cone de luz, botão ON gigante rachando, capacete de operador, painel com 3 alavancas e luzinhas, gerador com bobina, plugue + tomada, pílula "0% ENERGIA", carro de lado (hatch) tremendo, bateria de carro com +/−, fumaça do escapamento, barragem com reservatório ondulado e comporta, água tracejada correndo, turbina com pás girando, medidor de frequência 60 Hz, blocos-bairro com 9 janelas, fio com faíscas viajando, contorno da Península Ibérica com pontos de cidade, setas de ajuda (FRANÇA/MARROCOS), carimbo "REAL", relógio digital, cronômetro, botão "LIGAR" em pedestal, botão SEGUIR com "+".
