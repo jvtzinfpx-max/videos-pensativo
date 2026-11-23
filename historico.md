@@ -1,5 +1,7 @@
 # Histórico de vídeos — TikTok Pensativo
 
+EM PRODUÇÃO: 23/11/2026 06:22 BRT
+
 | Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
 |---|---|---|---|---|
 | 2026-11-21 | Roubo do Banco Central (Fortaleza 2005 + golpe C&M 2025) | roubo_banco_central.mp4 | 21/11 ~20:08 | Sincronia por palavra (transcrição ElevenLabs) |
