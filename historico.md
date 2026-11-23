@@ -1,6 +1,5 @@
 # Histórico de vídeos — TikTok Pensativo
 
-EM PRODUÇÃO: 23/11/2026 07:20 BRT (pedido do usuário: EUA)
 
 | Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
 |---|---|---|---|---|
@@ -123,3 +122,19 @@ Superfície da água ondulando, leito do rio com algas, barbatana cortando a ág
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Xícara/caneca com vapor e pires, raio riscado, lençol cobrindo o boneco ("cansaço escondido"), comanda/conta saindo da xícara, mesa simples, sol nascendo, contorno tracejado de xícara sumida, cérebro line-art, molécula de adenosina (hexágono com Z), molécula de cafeína (hexágono + pentágono), membrana com receptores em U ("encaixes") e trava, caixa tracejada "FILA", fileira de 7 xícaras, banquinho com xícara caindo, ampulheta virando, linhas de dor em volta da cabeça, peso "SONO" caindo na cabeça, rabisco de irritação, régua de dias 1-9 com marcador, proveta com líquido baixando, relógio de 5 horas, sol se pondo + lua com estrelas, boneco transparente com líquido pela metade, balão com xícara, ciclo de 3 setas, fileira de 9 xícaras com X, pílulas AGUENTO/NÃO AGUENTO, botão SEGUIR com ícone de pessoa.
+
+
+## 23/11/2026 (07:38) — E se o Brasil adotasse o modelo econômico dos EUA? (TEMA PEDIDO PELO USUÁRIO)
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Brasil funcionando como os EUA: carga tributária ~32% do PIB (2025, recorde) × ~25% nos EUA (OCDE); 1.500 h/ano para pagar imposto (Banco Mundial, Doing Business 2020) × <200 h; investidor rápido e empresas de garagem que valem trilhões; renda por pessoa >8x; outro lado: sem SUS, conta de hospital vira dívida, >20 milhões sem plano de saúde, sem 13º nem férias pagas por lei; fecho "mais liberdade e dinheiro × mais responsabilidade" | brasil_modelo_eua.mp4 | 23/11 07:38 (agendado 9 min à frente pelo pacing do vidIQ) — https://www.tiktok.com/@pensante_4/video/7711314379089677589 | Bandeiras line-art BR e EUA (EUA "se desenhando" listra por listra), boneco ACORDANDO deitado no chão, placa "SUA CIDADE", livro de regras que vira a capa BR→EUA, bolso de calça com notas, pizza da produção com fatia saindo (32% × 25%), placa CONTRATA-SE balançando, rolo de papel desenrolando com contador 1.500 H, garagem que vira arranha-céu com janelas acendendo, pilhas de moedas 1 × 8, cartão SUS com X, ambulância, prancheta "$$$$" caindo, grade de pessoinhas, envelope 13º e guarda-sol com X, gangorra LIBERDADE/DINHEIRO × RESPONSABILIDADE, mochila caindo nas costas do boneco |
+- Pedido do usuário: tema dele e com MAIS PRÓS do modelo americano. Feito: 3 blocos de prós (bolso, papelada, investimento/renda) + 1 bloco curto do outro lado (saúde, 13º/férias) para dar credibilidade e puxar comentário; sem partidos nem políticos.
+- Fontes: Receita Federal/Tesouro (carga 32,4% do PIB em 2025 — Folha PE, Times Brasil), OCDE Revenue Statistics (EUA ~25%), Banco Mundial Doing Business 2020 (Brasil 1.501 h × EUA 175 h; Tax Foundation), CMS/AMA (gastos de saúde dos EUA), CRS (sem seguro).
+- Legenda: "E se o Brasil funcionasse igual aos Estados Unidos amanhã? 🇺🇸🇧🇷 #fyp #viral #economia #estadosunidos #brasil"
+- Revisão: 74,2 s, 1080x1080, -14,1 LUFS, true peak -1,6 dB. Créditos ElevenLabs após o vídeo: ~5.000.
+- Código: template/lineart/scenes_eua.js + main_eua.js.
+- LIÇÃO: o vidIQ avisa "pacing too_close" quando 2 posts saem com menos de ~1 h; seguir o suggestedPublishAt.
+- PRÓXIMA RODADA AUTOMÁTICA: segue normal (tema em alta pesquisado), mas NÃO repetir economia/política; preferir ciência, mistério ou curiosidade.
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Bandeira do Brasil line-art, bandeira dos EUA line-art, mastro, boneco deitado levantando, placa "SUA CIDADE", livro de regras, bolso de calça com notas, pizza com fatia, pote, nota de $, placa CONTRATA-SE, gravata desenhada, rolo de papel desenrolando, folha única, quadro "RANKING BANCO MUNDIAL", garagem com portão, estrela de ideia, saco de dinheiro, arranha-céu com janelas, pilhas de moedas, cartão SUS, ambulância com sirene, prancheta de conta, grade de pessoinhas, envelope 13º, guarda-sol, gangorra, mochila, setas de troca ⇄.
