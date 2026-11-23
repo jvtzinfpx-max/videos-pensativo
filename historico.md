@@ -63,3 +63,11 @@
 - Revisão: 75,6 s, -14,3 LUFS, true peak -1,5 dB.
 - 22/11 23h: post publicado — https://www.tiktok.com/@pensante_4/video/7711179929261509895
 - **22/11 23h: usuário definiu o estilo line-art preto e branco (template/lineart/) como PADRÃO dos próximos vídeos**, no lugar dos ícones 3D coloridos.
+
+## 23/11/2026 (12h) — E se você virasse presidente: esquerda × direita
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | E se você virasse presidente — de esquerda/socialista ou de direita/capitalista (proposta + crítica de cada lado, Dinamarca ~45% do PIB em impostos, China abriu o mercado em 1978) | esquerda_direita.mp4 | 23/11 12:00 (agendado) | Câmera vai para a ESQUERDA do mundo na parte da esquerda e para a DIREITA na parte da direita (pan longo entre os lados); estrutura simétrica (4 propostas + crítica com exemplo histórico para cada lado); boneco presidente com faixa; ícones novos: governo, fábrica, hospital, escola, peso, prateleira, loja, gráficos subindo/descendo, rede de proteção, carteira, cofre, púlpito, caneta, pino, porta, slider Estado↔Mercado |
+- Tema político: mantido neutro — cada lado com a mesma estrutura (o que propõe + o que os críticos dizem), sem partidos nem políticos atuais; pergunta final de opinião ("mais Estado ou mais mercado?").
+- Revisão: 83,7 s, -14,1 LUFS, true peak -1,5 dB.
+- ATENÇÃO: créditos do ElevenLabs praticamente zerados após este vídeo (~12 restantes; renova ~18/12). Próximos vídeos precisam de recarga ou de take enviado pelo usuário.
