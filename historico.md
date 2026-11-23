@@ -1,7 +1,5 @@
 # Histórico de vídeos — TikTok Pensativo
 
-EM PRODUÇÃO: 23/11/2026 06:22 BRT
-
 | Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
 |---|---|---|---|---|
 | 2026-11-21 | Roubo do Banco Central (Fortaleza 2005 + golpe C&M 2025) | roubo_banco_central.mp4 | 21/11 ~20:08 | Sincronia por palavra (transcrição ElevenLabs) |
@@ -107,3 +105,19 @@ Nota de R$100 desenhada, carrinho de supermercado enchendo, cesta básica (e mei
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Superfície da água ondulando, leito do rio com algas, barbatana cortando a água com rastro, tubarão line-art (boca com dentes, barriga grávida tracejada, filhotes), tubarão inchando, gota de sangue com cristais de sal, glândula pulsando soltando sal, fígado com gota de gordura, seta para baixo, régua de profundidade com linha "30 M", mapa com rio sinuoso + onda do mar + bandeira (Iquitos), barreira tracejada "MAR", canoa com 2 pescadores e linha de pesca, respingos, texto subindo da água com bolhas, orca line-art com coroa, rio que afunila (Sena), contador de dias, pele descamando, margem do rio com barbatana circulando, pílulas SIM/NÃO.
+
+
+## 23/11/2026 (~06:45) — E se você parasse de tomar café amanhã?
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Cafeína não dá energia, bloqueia a adenosina (a molécula do sono); cérebro cria mais receptores com o uso diário; ao parar, abstinência começa em ~12 h, pior entre o 1º e o 2º dia, normaliza em até ~9 dias; meia-vida ~5 h (café das 16h ainda pela metade às 21h) | cafe_nove_dias.mp4 | 23/11 ~06:45 (imediato) — https://www.tiktok.com/@pensante_4/video/7711298505871985941 | 1º vídeo de CIÊNCIA DO CORPO no line-art; "encaixes" (receptores em U numa membrana) com moléculas que entram/saem: adenosina = hexágono com "Z", cafeína = hexágono+pentágono; fila de cansaço numa caixa tracejada que invade tudo de uma vez; boneco "por dentro" (contorno com líquido pela metade); ciclo café→noite ruim→cansaço com setas girando |
+- Tema em alta: "Energia emprestada" (@vsr..lobaoo1, 264 mil views, 242x a mediana, 12/11 — porco e lobo falando de Red Bull/cafeína). Padrão de gancho: afirmação que contraria o senso comum ("não dá energia") + promessa de explicação.
+- Nosso ângulo diferente do viral: o viral conta a HISTÓRIA da marca de energético com personagens animais; o nosso é a hipótese "e se você PARASSE amanhã", com o mecanismo de encaixe visual, a linha do tempo da abstinência (12 h → pior dia 1-2 → dia 9) e a virada da meia-vida (café das 4 da tarde ainda está pela metade às 9 da noite).
+- Fontes: StatPearls/NCBI (Caffeine Withdrawal; meia-vida ~5 h, sintomas 12–24 h, pico 20–51 h, duração 2–9 dias), Canaltech ("o café não te dá mais energia, te empresta"), Correio Braziliense.
+- Legenda: "O café não te dá energia. Ele só empresta... e cobra depois. ☕ #fyp #viral #cafe #cerebro #curiosidades"
+- Revisão: 84,3 s, 1080x1080, -14,2 LUFS, true peak -1,7 dB. Créditos ElevenLabs após o vídeo: ~6.260.
+- Código: template/lineart/scenes_cafe.js + main_cafe.js (usar com page_tubarao.html renomeado para page.html; carrega scenes.js e main.js).
+- LIÇÃO: ElevenLabs Free às vezes responde "Free generations are busy" — nada é cobrado; esperar ~1-2 min e tentar de novo resolve. Câmera com zoom 1,1-1,2 nas cenas de "diagrama" deixa os objetos pequenos legíveis, mas conferir margens (boneco na ponta saía do limite de 12%).
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Xícara/caneca com vapor e pires, raio riscado, lençol cobrindo o boneco ("cansaço escondido"), comanda/conta saindo da xícara, mesa simples, sol nascendo, contorno tracejado de xícara sumida, cérebro line-art, molécula de adenosina (hexágono com Z), molécula de cafeína (hexágono + pentágono), membrana com receptores em U ("encaixes") e trava, caixa tracejada "FILA", fileira de 7 xícaras, banquinho com xícara caindo, ampulheta virando, linhas de dor em volta da cabeça, peso "SONO" caindo na cabeça, rabisco de irritação, régua de dias 1-9 com marcador, proveta com líquido baixando, relógio de 5 horas, sol se pondo + lua com estrelas, boneco transparente com líquido pela metade, balão com xícara, ciclo de 3 setas, fileira de 9 xícaras com X, pílulas AGUENTO/NÃO AGUENTO, botão SEGUIR com ícone de pessoa.
