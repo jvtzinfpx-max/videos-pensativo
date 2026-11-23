@@ -76,3 +76,5 @@
 ### Objetos/ambientes JÁ USADOS no estilo line-art (não repetir sem redesenhar)
 Tesla: cama, despertador, casa, celular, banco, moeda, máquina com engrenagens, balão de pensamento, chave inglesa, usina, torre de energia, casinhas, tomada, plugue, olho, calendário, globo, documento, quarto de hotel (porta, janela com lua, cama), notas de dívida, lâmpada, escudo, botão seguir, cursor, balão de comentário.
 Esquerda × direita: púlpito, faixa presidencial, caneta, cofre, multidão, bifurcação, prédio do governo, fábrica, hospital, escola, peso "IMPOSTO", engrenagem parando, prateleira vazia, loja, pilha de papéis, gráfico subindo/descendo, rede de proteção, carteira vazia, pino de mapa, slider Estado↔Mercado, porta.
+
+EM PRODUÇÃO: 23/11/2026 00:16 BRT — nota de 100 reais de 1994 (inflação), feito na conversa principal
