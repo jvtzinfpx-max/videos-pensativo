@@ -1,5 +1,8 @@
 # Histórico de vídeos — TikTok Pensativo
 
+REPOSTAR 24/11/2026 12h: cafe_nove_dias.mp4 — legenda: "Seu cansaço não some com o café. Ele só fica na fila. ☕ #fyp #viral #cafe #cerebro #curiosidades"
+REPOSTAR 24/11/2026 18h: brasil_modelo_eua.mp4 — legenda: "Você trocaria o modelo do Brasil pelo dos Estados Unidos? 🇺🇸🇧🇷 #fyp #viral #economia #estadosunidos #brasil"
+
 
 | Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
 |---|---|---|---|---|
