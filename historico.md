@@ -77,4 +77,13 @@
 Tesla: cama, despertador, casa, celular, banco, moeda, máquina com engrenagens, balão de pensamento, chave inglesa, usina, torre de energia, casinhas, tomada, plugue, olho, calendário, globo, documento, quarto de hotel (porta, janela com lua, cama), notas de dívida, lâmpada, escudo, botão seguir, cursor, balão de comentário.
 Esquerda × direita: púlpito, faixa presidencial, caneta, cofre, multidão, bifurcação, prédio do governo, fábrica, hospital, escola, peso "IMPOSTO", engrenagem parando, prateleira vazia, loja, pilha de papéis, gráfico subindo/descendo, rede de proteção, carteira vazia, pino de mapa, slider Estado↔Mercado, porta.
 
-EM PRODUÇÃO: 23/11/2026 00:16 BRT — nota de 100 reais de 1994 (inflação), feito na conversa principal
+
+## 23/11/2026 (00h) — E se você acordasse em 1994 com uma nota de 100?
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Inflação desde o Plano Real: nota de R$100 de jul/1994 (1,5 salário mínimo, 1,5 cesta básica SP, pão R$0,09, gasolina R$0,55; +4.000% nos 12 meses antes do Real; hoje equivale a ~R$890) | nota100_1994.mp4 | 23/11 ~00:30 (imediato) | 1º vídeo com as regras de CENAS RICAS: 8 ambientes em line-art de fundo com parallax (quarto 1994, supermercado, posto, mercado 1993 em flashback com moldura tracejada e flicker, quarto à noite com timelapse 1994→2026 onde a TV de tubo vira TV de tela plana e o telefone fixo vira celular, lupa, quarto 2026 com skyline na janela, rua com prédios e carro passando) |
+- Tema escolhido pela pesquisa: vídeos de dinheiro/inflação em animação simples de boneco viralizando no BR (ex.: "R$ 10.000 não é dinheiro de rico" 182x a mediana; "Por que seu dinheiro não rende"). Nosso ângulo próprio: viagem no tempo com a nota de 100 + colchão.
+- Narração gerada na CONTA NOVA do ElevenLabs (plano Free, 10.000 créditos/mês; este vídeo gastou ~1.130).
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Nota de R$100 desenhada, carrinho de supermercado enchendo, cesta básica (e meia), pão francês, etiqueta de preço pendurada, bomba de gasolina com visor, carro antigo, balança de pratos com cartões de salário, lata, maquininha de etiqueta (remarcadora), gráfico explodindo, colchão levantando, TV de tubo, TV de tela plana, telefone fixo, celular, quadro na parede, luminária pendente, janela com sol/lua/skyline, lupa, sacolas de compra, cofrinho de porquinho, prédios da rua com janelas acendendo.

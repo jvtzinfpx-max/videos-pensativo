@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden;background:#050505}
+svg{position:absolute;inset:0}
+text{font-family:Montserrat,sans-serif}
+</style></head>
+<body>
+<svg id="s" width="1080" height="1080" viewBox="0 0 1080 1080"></svg>
+<script>
+// ---------- utils ----------
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const ease=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
+const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const back=x=>{x=clamp(x);const c1=1.7,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const FY=780;
+// appear/disappear: returns [opacity, scale]
+function ap(t,a,b=1e9,din=.38,dout=.3){
+  if(t<a||t>b+dout)return [0,0];
+  if(t<b){const p=seg(t,a,a+din);return [ease(p*1.6),back(p)]}
+  const q=seg(t,b,b+dout);return [1-q,1-.15*q];
+}
+const W='#FFFFFF';
+const LS=`stroke="${W}" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"`;
+function g(x,y,s,o,inner,extra=''){if(o<=0.001||s<=0.001)return '';return `<g transform="translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${s.toFixed(4)})" opacity="${clamp(o).toFixed(3)}" ${extra}>${inner}</g>`}
+function T(x,y,str,size,{w=800,col=W,ls=3,anchor='middle',op=1,filt='tg'}={}){return `<text x="${x}" y="${y}" font-size="${size}" font-weight="${w}" fill="${col}" letter-spacing="${ls}" text-anchor="${anchor}" opacity="${op}" ${filt?`filter="url(#${filt})"`:''}>${str}</text>`}
+// line-draw path (pathLength=1)
+function P(d,p=1,sw=5,extra=''){if(p<=0)return '';return `<path d="${d}" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="${(1-clamp(p)).toFixed(4)}" stroke="${W}" fill="none" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" ${extra}/>`}
+
+// ---------- icons (centered at 0,0, ~100px) ----------
+const I={
+ house:(p=1)=>P('M-50 0 L0 -44 L50 0',p)+P('M-38 -10 L-38 44 L38 44 L38 -10',p)+P('M-10 44 L-10 16 L10 16 L10 44',p),
+ phone:(p=1,inner='')=>P('M-32 -54 Q-32 -60 -26 -60 L26 -60 Q32 -60 32 -54 L32 54 Q32 60 26 60 L-26 60 Q-32 60 -32 54 Z',p)+P('M-10 -50 L10 -50',p,4)+inner,
+ bank:(p=1)=>P('M-54 -18 L0 -50 L54 -18 Z',p)+P('M-38 -8 L-38 34 M-13 -8 L-13 34 M13 -8 L13 34 M38 -8 L38 34',p)+P('M-56 46 L56 46',p),
+ bolt:(s=1,fill=W)=>`<path d="M4 -26 L-12 4 L0 4 L-4 26 L12 -4 L0 -4 Z" transform="scale(${s})" fill="${fill}" stroke="${W}" stroke-width="2" stroke-linejoin="round"/>`,
+ gear:(r=22,rot=0,teeth=8)=>{let d='';for(let i=0;i<teeth;i++){const a=(i/teeth)*Math.PI*2;d+=`M${(Math.cos(a)*r).toFixed(1)} ${(Math.sin(a)*r).toFixed(1)} L${(Math.cos(a)*(r+9)).toFixed(1)} ${(Math.sin(a)*(r+9)).toFixed(1)} `}
+   return `<g transform="rotate(${rot})"><circle r="${r}" ${LS} stroke-width="4"/><circle r="${r*.35}" ${LS} stroke-width="4"/><path d="${d}" ${LS} stroke-width="6"/></g>`},
+ machine:(p=1,rot=0)=>P('M-90 50 L-90 -40 L90 -40 L90 50 Z',p)+P('M40 -40 L40 -90 L62 -90 L62 -40',p)+P('M90 0 L120 0 L120 20 L90 20',p)+
+   (p>.6?`<g opacity="${seg(p,.6,1)}"><g transform="translate(-40 6)">${I.gear(24,rot)}</g><g transform="translate(14 14)">${I.gear(15,-rot*1.6,7)}</g></g>`:''),
+ check:(s=1)=>`<g transform="scale(${s})"><circle r="24" fill="#050505" ${LS} stroke-width="4"/><path d="M-11 1 L-3 9 L12 -8" ${LS} stroke-width="5"/></g>`,
+ x:(s=1)=>`<g transform="scale(${s})"><circle r="24" fill="#050505" ${LS} stroke-width="4"/><path d="M-9 -9 L9 9 M9 -9 L-9 9" ${LS} stroke-width="5"/></g>`,
+ coin:(s=1)=>`<g transform="scale(${s})"><circle r="20" fill="#050505" ${LS} stroke-width="4"/>${T(0,9,'$',24,{w:900,ls:0,filt:''})}</g>`,
+ bubbleT:(w,h,p=1)=>P(`M${-w/2+30} ${-h/2} L${w/2-30} ${-h/2} Q${w/2} ${-h/2} ${w/2} ${-h/2+30} L${w/2} ${h/2-30} Q${w/2} ${h/2} ${w/2-30} ${h/2} L${-w/2+30} ${h/2} Q${-w/2} ${h/2} ${-w/2} ${h/2-30} L${-w/2} ${-h/2+30} Q${-w/2} ${-h/2} ${-w/2+30} ${-h/2} Z`,p),
+ bulb:(p=1)=>P('M-26 22 Q-50 0 -46 -30 Q-40 -70 0 -72 Q40 -70 46 -30 Q50 0 26 22 Z',p)+P('M-20 34 L20 34 M-14 46 L14 46',p)+P('M-12 10 L-6 -22 L0 -6 L6 -22 L12 10',p,4),
+ eye:(o=1)=>`<path d="M-70 0 Q0 ${-56*o} 70 0 Q0 ${56*o} -70 0 Z" ${LS}/><circle r="${20*o}" fill="${W}"/>`,
+ tower:(p=1)=>P('M-26 0 L-8 -150 L8 -150 L26 0 M-17 -70 L17 -70 M-12 -110 L12 -110 M-40 -130 L40 -130',p),
+ plant:(p=1,rot=0)=>P('M-110 0 L-110 -120 L60 -120 L60 0',p)+P('M10 -120 L10 -190 L36 -190 L36 -120',p)+(p>.5?`<g transform="translate(-40 -60)" opacity="${seg(p,.5,1)}">${I.gear(26,rot)}</g>`:''),
+ houseS:(lit=0,p=1)=>P('M-40 0 L-40 -60 L0 -92 L40 -60 L40 0',p)+`<rect x="-14" y="-52" width="28" height="24" rx="3" fill="${lit>0?W:'none'}" fill-opacity="${lit}" ${LS} stroke-width="4" opacity="${p>.7?1:0}"/>`,
+ outlet:(p=1)=>P('M-110 -130 L110 -130 Q130 -130 130 -110 L130 110 Q130 130 110 130 L-110 130 Q-130 130 -130 110 L-130 -110 Q-130 -130 -110 -130 Z',p,6)+P('M0 -88 A88 88 0 1 1 -0.1 -88',p,5)+(p>.7?`<g opacity="${seg(p,.7,1)}"><circle cx="-32" cy="0" r="13" ${LS}/><circle cx="32" cy="0" r="13" ${LS}/><circle cx="0" cy="42" r="11" ${LS}/></g>`:''),
+ globe:(rot=0)=>{const k=Math.sin(rot);return `<circle r="60" ${LS}/><ellipse rx="${Math.abs(26*Math.cos(rot))+4}" ry="60" ${LS} stroke-width="4"/><path d="M-60 0 L60 0 M-52 -30 L52 -30 M-52 30 L52 30" ${LS} stroke-width="4"/>`},
+ doc:(s=1)=>`<g transform="scale(${s})"><path d="M-22 -30 L10 -30 L22 -18 L22 30 L-22 30 Z" fill="#050505" ${LS} stroke-width="4"/><path d="M-12 -12 L12 -12 M-12 0 L12 0 M-12 12 L4 12" ${LS} stroke-width="3"/></g>`,
+ bill:(s=1)=>`<g transform="scale(${s})"><rect x="-38" y="-22" width="76" height="44" rx="5" fill="#050505" ${LS} stroke-width="4"/>${T(0,9,'−$',22,{w:900,ls:0,filt:''})}</g>`,
+ shield:(p=1)=>P('M0 -70 L56 -48 Q56 30 0 70 Q-56 30 -56 -48 Z',p),
+ calendar:(txt,sub='ANO')=>`<rect x="-80" y="-70" width="160" height="150" rx="18" fill="#050505" ${LS}/><path d="M-80 -24 L80 -24" ${LS} stroke-width="4"/><path d="M-40 -84 L-40 -58 M40 -84 L40 -58" ${LS} stroke-width="6"/>${T(0,-36,sub,18,{ls:4,filt:''})}${T(0,42,txt,50,{w:900,ls:1,filt:''})}`,
+ wrench:()=>`<path d="M-40 40 L10 -10 M10 -10 A22 22 0 1 0 30 -34 L18 -22 L8 -26 L4 -36 L16 -48" ${LS} stroke-width="7"/>`,
+ pill:(txt,{fill=false,size=22,pad=26}={})=>{const w=txt.length*size*.78+pad*2;return `<rect x="${-w/2}" y="-24" width="${w}" height="48" rx="24" fill="${fill?W:'#050505'}" stroke="${W}" stroke-width="4"/>${T(0,size*.36,txt,size,{w:800,col:fill?'#050505':W,ls:2,filt:''})}`},
+ dpill:(txt,size=24)=>{const w=txt.length*size*.8+56;return `<rect x="${-w/2}" y="-26" width="${w}" height="52" rx="12" fill="#050505" stroke="${W}" stroke-width="4" stroke-dasharray="10 8"/>${T(0,size*.36,txt,size,{w:900,ls:3,filt:''})}`},
+ tie:()=>`<path d="M-7 -118 L7 -118 L4 -110 L10 -76 L0 -66 L-10 -76 L-4 -110 Z" fill="#050505"/>`,
+};
+function label(x,y,small,big,o=1){return g(x,y,1,o,(small?T(0,0,small,15,{w:700,col:'#A8A8A8',ls:5,filt:''}):'')+T(0,small?28:0,big,20,{w:800,ls:5}))}
+
+// ---------- character ----------
+// feet at (x,y). opts: s, dim(0..1), tie, rot, bolts(0..1), ring, glowK
+function person(x,y,t,o={}){
+  const s=o.s||1,dim=o.dim||0,rot=o.rot||0;
+  const br=o.still?0:Math.sin(t*2.2+(o.ph||0));
+  const sy=(1+0.012*br)*(o.sq||1), hy=-2*br+(1-(o.sq||1))*120;
+  const op=1-0.55*dim;
+  const fil=dim>.5?'fD':'fP';
+  let body=`<path d="M-40 0 L-40 -82 A40 40 0 0 1 40 -82 L40 0 Z" fill="${W}" transform="scale(1 ${sy})"/>`;
+  let head=`<circle cx="0" cy="${-160+hy+(o.headDY||0)}" r="31" fill="${W}"/>`;
+  let extra='';
+  if(o.tie) extra+=I.tie();
+  if(o.sash) extra+=`<path d="M-40 -74 L40 -22 L40 -6 L-40 -58 Z" fill="#050505"/><circle cx="18" cy="-30" r="7" fill="#050505"/>`;
+  let inner=`<g filter="url(#${fil})">${body}${head}</g>${extra}`;
+  if(o.ring){const q=o.ring;extra='';inner+=`<circle cy="${-160+hy}" r="${44}" ${LS} stroke-width="4" opacity="${q}" filter="url(#tg)"/>`}
+  if(o.bolts){const n=5;for(let i=0;i<n;i++){const a=t*1.6+i*Math.PI*2/n;const bx=Math.cos(a)*78,by=-160+hy+Math.sin(a)*30;const z=Math.sin(a)>0?1:.75;
+      inner+=`<g transform="translate(${bx.toFixed(1)} ${(by-6).toFixed(1)}) scale(${(.55*z*o.bolts).toFixed(3)})" opacity="${o.bolts}" filter="url(#tg)">${I.bolt(1)}</g>`}}
+  if(o.dollars){const n=5;for(let i=0;i<n;i++){const a=-t*1.3+i*Math.PI*2/n;const bx=Math.cos(a)*74,by=-160+hy+Math.sin(a)*28;
+      inner+=T(bx.toFixed(1),(by+9).toFixed(1),'$',30,{w:900,ls:0,op:o.dollars})}}
+  const sh=`<ellipse cx="0" cy="4" rx="${48}" ry="7" fill="#fff" opacity="${.10*(1-dim)}" filter="url(#tg)"/>`;
+  return `<g transform="translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${rot}) scale(${s})" opacity="${(op*(o.op===undefined?1:o.op)).toFixed(3)}">${rot===0?sh:''}${inner}</g>`;
+}
+
+// ================= NOTA DE 100 DE 1994 =================
+const GF='filter="url(#tg)"';
+let CAMX=0;
+// parallax background layer (dim, thinner lines)
+function BG(X,o,inner){return `<g transform="translate(${((CAMX-X)*0.35).toFixed(1)} 0)" opacity="${(0.42*o).toFixed(3)}" ${GF}>${inner}</g>`}
+const LT=`stroke="${W}" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"`;
+function line(d,w=3){return `<path d="${d}" ${LT} stroke-width="${w}"/>`}
+
+// ---------- new icons ----------
+I.note100=(s=1,shine=-1)=>{let h=`<g transform="scale(${s})"><rect x="-110" y="-55" width="220" height="110" rx="10" fill="#050505" ${LS}/><rect x="-96" y="-41" width="192" height="82" rx="6" ${LS} stroke-width="2.5"/>`+
+  T(-60,14,'R$',26,{w:900,ls:0,filt:''})+T(52,22,'100',48,{w:900,ls:1,filt:''})+`<path d="M-80 32 Q-40 18 0 32 T80 32" ${LS} stroke-width="2.5"/>`+
+  `<path d="M-10 -30 Q8 -42 22 -30 Q8 -18 -10 -30 Z M22 -30 L32 -36 L32 -24 Z" ${LS} stroke-width="2.5"/>`;
+  if(shine>=0&&shine<=1){const x=-130+shine*260;h+=`<path d="M${x} -55 L${x+30} -55 L${x-10} 55 L${x-40} 55 Z" fill="#fff" opacity=".55" clip-path="url(#noteclip)"/>`}
+  return h+'</g>'};
+I.cart=(items=0)=>{let h=`<path d="M-110 -110 L-80 -110 L-55 0 L70 0 L95 -80 L-70 -80" ${LS}/><circle cx="-40" cy="22" r="12" ${LS}/><circle cx="55" cy="22" r="12" ${LS}/>`;
+  const boxes=[[-50,-80,30,40],[-14,-80,26,55],[16,-80,34,30],[54,-80,24,46],[-34,-120,30,40],[4,-135,22,55]];
+  boxes.forEach((b,i)=>{const k=clamp(items*boxes.length-i);if(k<=0)return;const yo=(1-ease(k))*-160;h+=`<rect x="${b[0]}" y="${b[1]-b[3]+yo}" width="${b[2]}" height="${b[3]}" rx="4" fill="#050505" ${LS} stroke-width="3.5" opacity="${ease(k*2)}"/>`});return h};
+I.basket=()=>`<path d="M-50 -40 L50 -40 L38 10 L-38 10 Z" fill="#050505" ${LS}/><path d="M-30 -40 Q0 -90 30 -40" ${LS}/><path d="M-30 -24 L30 -24 M-25 -8 L25 -8 M-15 -40 L-10 10 M15 -40 L10 10" ${LS} stroke-width="3"/>`;
+I.bread=()=>`<path d="M-70 0 Q-70 -40 0 -40 Q70 -40 70 0 Q70 18 0 18 Q-70 18 -70 0 Z" fill="#050505" ${LS}/><path d="M-36 -24 L-24 -4 M-8 -28 L4 -6 M20 -26 L32 -6" ${LS} stroke-width="4"/>`;
+I.tag=(txt)=>`<path d="M0 0 L0 -22" ${LS} stroke-width="3"/><path d="M-60 -22 L60 -22 L60 -70 L-60 -70 Z" fill="#050505" ${LS} stroke-width="4"/><circle cx="0" cy="-60" r="4" fill="${W}"/>`+T(0,-34,txt,24,{w:900,ls:1,filt:''});
+I.pump=(val)=>`<rect x="-55" y="-200" width="110" height="200" rx="10" fill="#050505" ${LS}/><rect x="-38" y="-178" width="76" height="46" rx="5" ${LS} stroke-width="4"/>`+T(0,-146,val,22,{w:900,ls:0,filt:''})+
+  `<path d="M55 -110 L80 -110 L80 -40 Q80 -20 95 -20 L95 -80" ${LS}/><rect x="84" y="-100" width="22" height="30" rx="4" ${LS} stroke-width="4"/><path d="M-30 -100 L30 -100 M-30 -80 L30 -80" ${LS} stroke-width="3"/>`;
+I.car=()=>`<path d="M-120 0 L-120 -40 L-80 -46 L-50 -86 L40 -86 L80 -46 L120 -40 L120 0 Z" fill="#050505" ${LS}/><path d="M-40 -78 L-10 -78 L-10 -48 L-66 -48 Z M2 -78 L34 -78 L64 -48 L2 -48 Z" ${LS} stroke-width="3"/><circle cx="-70" cy="2" r="20" fill="#050505" ${LS}/><circle cx="70" cy="2" r="20" fill="#050505" ${LS}/>`;
+I.scale=(tilt=0)=>`<path d="M0 0 L0 -180 M-40 0 L40 0" ${LS}/><g transform="translate(0 -180) rotate(${tilt})"><path d="M-130 0 L130 0" ${LS}/><path d="M-130 0 L-160 60 M-130 0 L-100 60 M-170 60 L-90 60" ${LS} stroke-width="3"/><path d="M130 0 L100 60 M130 0 L160 60 M90 60 L170 60" ${LS} stroke-width="3"/></g><circle cy="-180" r="8" fill="${W}"/>`;
+I.salaryCard=(frac=1)=>`<rect x="-55" y="-18" width="${110*frac}" height="36" rx="6" fill="#050505" ${LS} stroke-width="3.5"/>`+(frac>.9?T(0,7,'SALÁRIO',14,{w:900,ls:1,filt:''}):T(-55+55*frac,7,'½',18,{w:900,ls:0,filt:''}));
+I.can=()=>`<rect x="-30" y="-80" width="60" height="80" rx="6" fill="#050505" ${LS} stroke-width="4"/><path d="M-30 -66 L30 -66 M-30 -14 L30 -14" ${LS} stroke-width="3"/>`;
+I.gun=(press=0)=>`<g transform="rotate(${-10+press*14})"><path d="M-70 -30 L50 -30 Q70 -30 70 -10 L70 10 L-30 10 L-40 60 L-70 60 L-60 10 L-70 10 Z" fill="#050505" ${LS}/><circle cx="20" cy="-30" r="22" fill="#050505" ${LS} stroke-width="4"/><circle cx="20" cy="-30" r="8" ${LS} stroke-width="3"/><path d="M-30 18 Q-20 40 -34 46" ${LS} stroke-width="4"/><path d="M70 0 L92 0" ${LS} stroke-width="6"/></g>`;
+I.chartUp=(k=1)=>{const pts=[[0,0],[40,-6],[80,-18],[120,-50],[150,-110],[170,-220]];let d=`M${pts[0][0]} ${pts[0][1]}`;const n=Math.max(1,Math.floor(k*(pts.length-1)));for(let i=1;i<=n;i++)d+=` L${pts[i][0]} ${pts[i][1]}`;
+  return `<path d="M-10 10 L190 10 M-10 10 L-10 -240" ${LS} stroke-width="3"/><path d="${d}" ${LS} stroke-width="6"/>`};
+I.mattress=(lift=0)=>`<g transform="translate(-140 0) rotate(${-lift*28}) translate(140 0)"><rect x="-140" y="-34" width="280" height="30" rx="12" fill="#050505" ${LS}/></g>`;
+I.bedFrame=()=>`<path d="M-160 0 L-160 -110 Q-160 -130 -140 -130 L-140 -4 M-160 -4 L160 -4 L160 -40 M-150 0 L-150 6 M150 0 L150 6" ${LS} stroke-width="4"/>`;
+I.lupa=()=>`<circle r="70" ${LS} stroke-width="7"/><path d="M50 50 L120 120" ${LS} stroke-width="14"/>`;
+I.piggy=()=>`<ellipse cx="0" cy="-40" rx="70" ry="48" fill="#050505" ${LS}/><circle cx="64" cy="-46" r="16" ${LS} stroke-width="4"/><circle cx="68" cy="-48" r="2.5" fill="${W}"/><circle cx="72" cy="-43" r="2.5" fill="${W}"/><path d="M-20 -90 L10 -90" ${LS} stroke-width="5"/><path d="M-40 4 L-40 14 M30 4 L30 14" ${LS} stroke-width="8"/><path d="M-70 -46 Q-90 -60 -80 -70" ${LS} stroke-width="4"/><circle cx="34" cy="-56" r="3.5" fill="${W}"/>`;
+I.bags=()=>`<path d="M-60 0 L-50 -80 L10 -80 L20 0 Z" fill="#050505" ${LS}/><path d="M-36 -80 Q-20 -110 -4 -80" ${LS} stroke-width="4"/><path d="M0 0 L8 -60 L60 -60 L66 0 Z" fill="#050505" ${LS}/><path d="M20 -60 Q34 -84 48 -60" ${LS} stroke-width="4"/>`;
+I.crt=()=>`<rect x="-70" y="-120" width="140" height="110" rx="12" ${LT}/><rect x="-56" y="-108" width="96" height="84" rx="16" ${LT}/><circle cx="56" cy="-90" r="5" ${LT}/><path d="M-20 -120 L-40 -160 M20 -120 L40 -160" ${LT}/><path d="M-80 -10 L80 -10 L80 0 L-80 0" ${LT}/>`;
+I.flat=()=>`<rect x="-110" y="-150" width="220" height="125" rx="5" ${LT}/><path d="M0 -25 L0 -10 M-30 -10 L30 -10" ${LT}/>`;
+I.landline=()=>`<path d="M-30 0 L-22 -28 L22 -28 L30 0 Z" ${LT}/><path d="M-34 -34 Q0 -50 34 -34" ${LT} stroke-width="7"/><path d="M30 -8 Q50 -6 46 10 Q42 24 60 22" ${LT}/>`;
+I.smart=()=>`<rect x="-14" y="-36" width="28" height="36" rx="4" ${LT}/><path d="M-6 -32 L6 -32" ${LT}/>`;
+
+// ---------- environments ----------
+function room(X,t,{night=false,modern=false,cal='1994',timelapse=0}={}){
+  let h='';
+  // window
+  h+=line(`M${X-380} 260 L${X-200} 260 L${X-200} 450 L${X-380} 450 Z M${X-290} 260 L${X-290} 450 M${X-380} 355 L${X-200} 355`,4);
+  if(timelapse>0){const ph=(timelapse*6)%1;const sx=X-290+Math.cos(ph*Math.PI)*-70, sy=430-Math.sin(ph*Math.PI)*140;h+=`<circle cx="${sx}" cy="${sy}" r="14" ${LT}/>`}
+  else if(night)h+=`<path d="M${X-245} 300 A16 16 0 1 0 ${X-245} 332 A12 12 0 1 1 ${X-245} 300 Z" fill="${W}"/>`;
+  else{const sy=lerp(440,300,ease(seg(t,0.4,2.6)));h+=`<circle cx="${X-330}" cy="${sy}" r="16" ${LT}/>`+[0,1,2,3,4,5].map(i=>{const a=i*Math.PI/3+t*.5;return line(`M${X-330+Math.cos(a)*24} ${sy+Math.sin(a)*24} L${X-330+Math.cos(a)*34} ${sy+Math.sin(a)*34}`,2.5)}).join('')}
+  if(modern){for(let i=0;i<5;i++){const bx=X-372+i*34,bh=40+((i*37)%60);h+=line(`M${bx} 450 L${bx} ${450-bh} L${bx+26} ${450-bh} L${bx+26} 450`,2.5);if(Math.sin(t*2+i*3)>0)h+=`<rect x="${bx+9}" y="${450-bh+10}" width="7" height="7" fill="${W}"/>`}}
+  // pendant lamp
+  const sw=Math.sin(t*1.3)*3;h+=`<g transform="rotate(${sw} ${X+40} 90)">${line(`M${X+40} 90 L${X+40} 170 M${X+10} 200 L${X+40} 170 L${X+70} 200 Z`,3)}</g>`;
+  // picture frame
+  h+=line(`M${X+150} 250 L${X+250} 250 L${X+250} 330 L${X+150} 330 Z M${X+162} 318 L${X+190} 282 L${X+212} 306 L${X+226} 290 L${X+240} 318`,3);
+  // nightstand + phone
+  h+=line(`M${X-200} ${FY} L${X-200} ${FY-90} L${X-120} ${FY-90} L${X-120} ${FY} M${X-200} ${FY-50} L${X-120} ${FY-50}`,3);
+  h+=`<g transform="translate(${X-160} ${FY-90})">${modern?I.smart():I.landline()}</g>`;
+  // TV
+  h+=`<g transform="translate(${X+330} ${modern?FY-200:FY-80})">${modern?I.flat():I.crt()}</g>`;
+  if(!modern)h+=line(`M${X+260} ${FY} L${X+260} ${FY-80} L${X+400} ${FY-80} L${X+400} ${FY}`,3);
+  // wall calendar
+  h+=line(`M${X+140} 380 L${X+220} 380 L${X+220} 460 L${X+140} 460 Z M${X+140} 400 L${X+220} 400`,3)+`<text x="${X+180}" y="444" font-size="22" font-weight="800" fill="${W}" text-anchor="middle">${cal}</text>`;
+  return h;
+}
+function market(X,t,dark=false){
+  let h='';
+  for(let r=0;r<3;r++){const y=390+r*95;h+=line(`M${X-420} ${y} L${X+420} ${y}`,3);
+    for(let i=0;i<14;i++){const bx=X-410+i*60,bw=26+((i*7+r*5)%14),bh=34+((i*11+r*3)%30);h+=`<rect x="${bx}" y="${y-bh}" width="${bw}" height="${bh}" rx="3" ${LT} stroke-width="2.5"/>`}}
+  h+=line(`M${X-420} 660 L${X+420} 660`,3);
+  h+=line(`M${X-150} 120 L${X-150} 160 M${X+150} 120 L${X+150} 160 M${X-200} 160 L${X+200} 160 L${X+200} 205 L${X-200} 205 Z`,3)+`<text x="${X}" y="193" font-size="22" font-weight="800" letter-spacing="5" fill="${W}" text-anchor="middle">${dark?'MERCADO':'SUPERMERCADO'}</text>`;
+  for(let i=0;i<4;i++){const lx=X-330+i*220;const fl=dark?(Math.sin(t*23+i)>-.6?1:.2):1;h+=`<g opacity="${fl}">${line(`M${lx-40} 80 L${lx+40} 80`,6)}</g>`}
+  return h;
+}
+function station(X,t){
+  let h=line(`M${X-380} 170 L${X+380} 170 L${X+380} 210 L${X-380} 210 Z M${X-300} 210 L${X-300} ${FY} M${X+300} 210 L${X+300} ${FY}`,4);
+  h+=line(`M${X+360} ${FY} L${X+360} 300 M${X+300} 300 L${X+420} 300 L${X+420} 440 L${X+300} 440 Z`,3)+`<text x="${X+360}" y="345" font-size="18" font-weight="800" fill="${W}" text-anchor="middle">GASOLINA</text><text x="${X+360}" y="400" font-size="30" font-weight="900" fill="${W}" text-anchor="middle">0,55</text>`;
+  for(let i=0;i<6;i++){const dx=((i*160-t*60)%960+960)%960-480;h+=line(`M${X+dx} ${FY+60} L${X+dx+70} ${FY+60}`,4)}
+  return h;
+}
+function street(X,t){
+  let h='';const bs=[[-430,260],[-330,180],[-240,320],[-120,220],[200,300],[300,200],[400,270]];
+  bs.forEach(([dx,hh],i)=>{h+=line(`M${X+dx} ${FY} L${X+dx} ${FY-hh} L${X+dx+80} ${FY-hh} L${X+dx+80} ${FY}`,3);for(let r=0;r<Math.floor(hh/50);r++)for(let c=0;c<2;c++){const on=Math.sin(t*1.5+i*7+r*3+c)>.2;h+=`<rect x="${X+dx+16+c*32}" y="${FY-hh+16+r*48}" width="16" height="20" ${LT} stroke-width="2" ${on?`fill="${W}" fill-opacity=".6"`:''}/>`}});
+  h+=line(`M${X-40} ${FY} L${X-40} ${FY-250} Q${X-40} ${FY-280} ${X-10} ${FY-280} L${X+10} ${FY-280}`,4)+`<circle cx="${X+14}" cy="${FY-270}" r="10" fill="${W}"/>`;
+  const cx=((t*80)%1400)-700;h+=`<g transform="translate(${X+cx} ${FY+70}) scale(.55)">${I.car()}</g>`;
+  return h;
+}
+function noteClipDef(){return `<clipPath id="noteclip"><rect x="-110" y="-55" width="220" height="110" rx="10"/></clipPath>`}
+
+// ---------- camera ----------
+const CAM=[
+ [0,  -40,600,1.12,0],
+ [1.4, 40,560,1.05,.8],
+ [2.5, 180,430,1.55,.7],
+ [5.2, 60,520,1.05,.7],
+ [12.9,1500,540,1.0,.8],
+ [17.3,1480,540,1.0,.5],
+ [23.4,3000,540,1.0,.75],
+ [26.25,4500,540,1.0,.8],
+ [32.6,4540,520,1.15,.5],
+ [39.6,6000,540,1.0,.8],
+ [44.1,6000,520,0.95,.6],
+ [45.9,7500,540,1.0,.6],
+ [49.0,9000,540,1.0,.6],
+ [63.5,10500,540,1.0,.7],
+];
+const PUNCH=[[4.52,.05],[6.24,.04],[12.4,.05],[16.8,.04],[20.08,.03],[22.37,.04],[25.52,.04],[33.2,.04],[37.8,.06],[43.36,.05],[48.08,.05],[50.88,.04],[58.88,.05],[62.32,.06],[67.4,.03],[68.96,.03],[71.0,.04]];
+const SHAKE=[[33.3,1.5,4],[37.8,1.2,8],[43.4,.4,6]];
+function cam(t){
+  let cur=[CAM[0][1],CAM[0][2],CAM[0][3]];
+  for(let i=1;i<CAM.length;i++){const k=CAM[i];if(t<k[0])break;const p=eio(seg(t,k[0],k[0]+k[4]));cur=[lerp(cur[0],k[1],p),lerp(cur[1],k[2],p),lerp(cur[2],k[3],p)];}
+  cur[0]+=Math.sin(t*.35)*10; cur[1]+=Math.sin(t*.27+1)*5; cur[2]*=1+0.014*Math.sin(t*.22);
+  for(const [pt,amt] of PUNCH){const q=t-pt;if(q>=0&&q<.5)cur[2]*=1+amt*Math.sin(Math.PI*q/.5)*(1-q/.5)}
+  return cur;
+}
+
+// ---------- titles ----------
+const TITLES=[
+ [0.08,'E SE VOCÊ ACORDASSE AMANHÃ...'],
+ [2.36,'EM JULHO DE 1994'],
+ [5.36,'COM UMA NOTA DE 100','NO BOLSO',6.88],
+ [8.08,'MOEDA NOVINHA'],[9.44,'ACABOU DE NASCER'],
+ [10.96,'E VOCÊ IA SE SENTIR RICO'],
+ [13.17,'100 REAIS VALIAM','MAIS DE 1,5 SALÁRIO MÍNIMO',15.04],
+ [17.48,'DAVA PRA ENCHER O CARRINHO'],
+ [18.96,'UMA CESTA BÁSICA E MEIA','EM SÃO PAULO',20.28],
+ [21.32,'O PÃOZINHO: R$ 0,09'],
+ [23.52,'A GASOLINA: R$ 0,55'],
+ [26.4,'AÍ VEM A PARTE ESTRANHA'],
+ [28.32,'UM ANO ANTES...','O PREÇO MUDAVA TODO DIA',30.13],
+ [32.6,'A MAQUININHA DE ETIQUETA','NÃO PARAVA',33.76],
+ [35.0,'EM 12 MESES','OS PREÇOS SUBIRAM +4.000%',36.24],
+ [39.76,'ENTÃO VOCÊ FAZ','O QUE PARECE SEGURO',40.76],
+ [42.08,'GUARDA A NOTA','EMBAIXO DO COLCHÃO',42.84],
+ [44.16,'E ESQUECE LÁ ATÉ HOJE'],
+ [46.1,''],
+ [49.2,'A NOTA CONTINUA LÁ','INTACTA',50.88],
+ [52.0,'MESMO NÚMERO','MESMO PAPEL',53.08],
+ [54.4,'PRA COMPRAR O QUE ELA','COMPRAVA EM 1994...',55.36],
+ [57.28,'HOJE VOCÊ PRECISARIA','DE QUASE R$ 900',58.56],
+ [60.8,'ELA NÃO SUMIU'],[62.0,'ELA ENCOLHEU'],
+ [63.74,'ENTÃO ME DIZ'],
+ [64.64,'COM 100 REAIS EM 1994...'],
+ [67.2,'GASTAVA TUDO OU GUARDAVA?'],
+ [70.0,'COMENTA AÍ E ME SEGUE'],
+];
+function typed(str,t0,t,cps=42){if(t<t0)return '';return str.slice(0,Math.floor((t-t0)*cps)+1)}
+function titleLayer(t){let cur=null;for(const x of TITLES){if(t>=x[0])cur=x}if(!cur||!cur[1])return '';
+  let h=T(540,250,typed(cur[1],cur[0],t),cur[1].length>28?30:36,{w:900,ls:cur[1].length>28?3:4});
+  if(cur[2])h+=T(540,294,typed(cur[2],cur[3],t,50),22,{w:700,col:'#C8C8C8',ls:4});return h}
+
+// ---------- scenes ----------
+function s1(t){ // quarto 1994
+  const X=0;let h=BG(X,1,room(X,t,{cal:t<2.5?'2026':(t<4.6?String(2026-Math.round(32*ease(seg(t,2.6,4.5)))):'1994')}));
+  // bed
+  h+=g(X-10,FY,1,1,I.bedFrame(),GF)+g(X-10,FY,1,1,`<path d="M-140 -34 L140 -34 L140 -4 L-140 -4 Z" fill="#050505" ${LS}/><rect x="-130" y="-60" width="60" height="24" rx="9" ${LS} stroke-width="4"/>`,GF);
+  const p=eio(seg(t,1.44,2.1));
+  const px=lerp(120,230,p),py=lerp(FY-40,FY,p),rot=lerp(-90,0,p);
+  const rich=ease(seg(t,11.8,12.4));
+  h+=person(px,py,t,{rot,still:p<1,dollars:rich,ring:rich*.8});
+  if(t<1.4){for(let i=0;i<3;i++){const k=(t*0.9+i/3)%1;h+=T(-20+k*40,FY-110-k*70,'z',22-i*3,{op:(1-k)})}}
+  // calendar highlight (front) when zoomed
+  if(t>2.5&&t<5.4){const [o,s]=ap(t,2.5,5.1);const yr=t<4.6?String(2026-Math.round(32*ease(seg(t,2.6,4.5)))):'1994';
+    h+=g(X+180,420,s*.9,o,I.calendar(yr,'JULHO'),GF);
+    for(let i=0;i<4;i++){const a=2.7+i*.45;if(t<a||t>a+.6)continue;const q=seg(t,a,a+.6);h+=g(X+180+q*120,330-q*90,1,1-q,`<g transform="rotate(${q*120})"><rect x="-50" y="-30" width="100" height="60" rx="6" fill="#050505" ${LS} stroke-width="3"/></g>`,GF)}}
+  // the note
+  if(t>5.8){const lift=ease(seg(t,6.24,7.1));const nx=lerp(px+20,X+30,lift),ny=lerp(FY-60,420,lift),ns=lerp(.25,1.25,lift)*(t>8.08&&t<8.6?1+.06*Math.sin((t-8.08)*20):1);
+    const shine=t>8.08&&t<9.0?seg(t,8.08,8.9):-1;h+=g(nx,ny,ns,ease(seg(t,5.8,6.1)),I.note100(1,shine),GF);
+    if(t>9.44){const [o,s]=ap(t,9.44,12.8);h+=g(X+30,300,s,o,I.pill('NOVINHA EM FOLHA',{fill:true,size:20}),GF)}
+    if(t>8.2){for(let i=0;i<6;i++){const k=((t-8.2)*.8+i/6)%1;const a=i*1.05;h+=`<path d="M${X+30+Math.cos(a)*(150+k*40)} ${420+Math.sin(a)*(80+k*30)} l0 -8 m-4 4 l8 0" ${LS} stroke-width="2" opacity="${(1-k)*.9}" ${GF}/>`}}}
+  return h;
+}
+function s2(t){ // supermercado
+  const X=1500;let h=BG(X,1,market(X,t));
+  h+=person(X-330,FY,t,{ph:1});
+  // balance: note vs 1.5 salary
+  if(t<17.6){const [o,s]=ap(t,14.4,17.3);const tilt=lerp(0,-12,ease(seg(t,16.8,17.3)));
+    h+=g(X+80,FY,s*1.25,o,I.scale(tilt),GF);
+    const K=1.25,sn=Math.sin(tilt*Math.PI/180),cs=Math.cos(tilt*Math.PI/180);const lx=X+80-130*K*cs, ly=FY-180*K-130*K*sn+60*K;
+    const rx=X+80+130*K*cs, ry=FY-180*K+130*K*sn+60*K;
+    h+=g(lx,ly-30,s*.5,o,I.note100(1),GF);
+    if(t>15.9){const [o2,s2]=ap(t,15.9,17.3);h+=g(rx,ry-18,s2,o2,I.salaryCard(1),GF)}
+    if(t>16.8){const [o3,s3]=ap(t,16.8,17.3);h+=g(rx,ry-58,s3,o3,I.salaryCard(.5),GF)}}
+  // cart filling
+  if(t>17.48&&t<21.4){const [o,s]=ap(t,17.5,21.1);h+=g(X-60,FY-30,s*1.2,o,I.cart(seg(t,17.9,19.0)),GF);
+    if(t>19.16){const [o2,s2]=ap(t,19.16,21.1);h+=g(X+180,FY-40,s2,o2,I.basket(),GF);
+      if(t>20.08){const [o3,s3]=ap(t,20.08,21.1);h+=g(X+300,FY-40,s3,o3,`<clipPath id="half"><rect x="-60" y="-100" width="60" height="140"/></clipPath><g clip-path="url(#half)">${I.basket()}</g><path d="M0 -100 L0 20" ${LS} stroke-width="3" stroke-dasharray="6 8"/>`,GF)}
+      h+=label(X+240,FY+44,'','1,5 CESTA',o2)}}
+  // bread
+  if(t>21.32){const [o,s]=ap(t,21.4,23.3);h+=g(X+40,FY-70,s*1.3,o,I.bread(),GF);
+    const sw=Math.sin((t-21.9)*5)*10*Math.exp(-(t-21.9)*1.2);if(t>21.9)h+=g(X+150,FY-150,ap(t,21.9,23.3)[1],o,`<g transform="rotate(${sw})">${I.tag('R$ 0,09')}</g>`,GF)}
+  return h;
+}
+function s3(t){ // posto
+  const X=3000;let h=BG(X,1,station(X,t));
+  const cx=lerp(X-700,X-160,ease(seg(t,23.4,24.3)));h+=g(cx,FY-22,1,1,I.car(),GF);
+  const v=t<24.96?'0,00':'0,'+String(Math.round(55*ease(seg(t,24.96,25.6)))).padStart(2,'0');
+  h+=g(X+130,FY,1.15,1,I.pump(v),GF);
+  if(t>24.08){h+=`<path d="M${X+130+109} ${FY-80} Q${X+120} ${FY+10} ${X-60} ${FY-60}" ${LS} stroke-width="4" opacity="${ease(seg(t,24.08,24.4))}" ${GF}/>`}
+  if(t>25.6){const [o,s]=ap(t,25.6);h+=g(X+130,FY-290,s,o,I.pill('R$ 0,55 O LITRO',{fill:true,size:20}),GF)}
+  return h;
+}
+function s4(t){ // mercado 1993 - remarcação
+  const X=4500;let h=BG(X,1,market(X,t,true));
+  // flashback frame
+  const fb=ease(seg(t,26.4,27.0));h+=`<rect x="${X-470}" y="110" width="940" height="760" rx="20" ${LS} stroke-width="3" stroke-dasharray="14 12" opacity="${.5*fb}" ${GF}/>`;
+  if(t>26.8&&t<28.4){const [o,s]=ap(t,26.8,28.2);h+=g(X,470,s*1.1,o,I.calendar('1993'),GF)}
+  // can with changing price
+  if(t>28.3){const days=Math.floor(Math.max(0,t-29.6)*2.2);const price=(1200*Math.pow(1.35,days)).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+    const [o,s]=ap(t,28.3);h+=g(X-120,FY,s*1.4,o,I.can(),GF);
+    const pop=t>29.6?1+.12*Math.max(0,Math.sin(((t-29.6)*2.2%1)*Math.PI))*1:1;
+    h+=g(X-120,FY-140,s*pop,o,I.tag('CR$ '+price),GF);
+    if(t>30.5&&t<32.7){const d=1+days%30;const [o2,s2]=ap(t,30.5,32.5);h+=g(X+200,440,s2*.8,o2,I.calendar(String(d),'DIA'),GF)}}
+  // price gun
+  if(t>32.7){const k=(t-33.0)*3.2;const press=t>33.0?Math.max(0,Math.sin(k*Math.PI)):0;
+    const [o,s]=ap(t,32.7,35.2);h+=g(X+40,FY-210,s*1.4,o,I.gun(press),GF);
+    // tags stamped piling
+    const n=t>33.0?Math.min(9,Math.floor(k)+1):0;for(let i=0;i<n;i++){const ang=(i%2?7:-6)*(1+i%3);h+=g(X-120+((i*13)%30)-15,FY-170-i*7,.9,o,`<g transform="rotate(${ang})"><rect x="-52" y="-16" width="104" height="32" rx="4" fill="#050505" ${LS} stroke-width="3"/></g>`+T(0,7,'CR$ '+(1200+i*987*(i+1)),15,{w:900,ls:0,filt:''}),GF)}}
+  // 12 months + 4000%
+  if(t>35.0){const [o,s]=ap(t,35.0);
+    h+=g(X-250,520,s*.8,o,I.calendar(String(Math.min(12,1+Math.floor(seg(t,35.2,36.2)*12))),'MESES'),GF);
+    h+=g(X+40,FY-20,s*1.3,o,I.chartUp(seg(t,36.3,37.7)),GF);
+    if(t>37.32){const c=Math.round(4000*ease(seg(t,37.4,38.9)));const [o2,s2]=ap(t,37.32);h+=g(X+200,400,s2*1.2,o2,I.dpill('+'+c.toLocaleString('pt-BR')+'%',30),GF)}}
+  return h;
+}
+function s5(t){ // colchão + timelapse
+  const X=6000;const tl=seg(t,44.2,45.9);
+  const modern=tl>.7;const yr=t<44.2?'1994':String(1994+Math.round(32*tl));
+  let h=BG(X,1,room(X,t,{night:true,modern,cal:yr,timelapse:t>44.2&&t<45.9?tl:0}));
+  h+=g(X-10,FY,1,1,I.bedFrame(),GF);
+  const lift=t<42.4?0:(t<43.3?ease(seg(t,42.4,42.9)):1-ease(seg(t,43.2,43.45)));
+  h+=g(X-10,FY,1,1,I.mattress(lift),GF);
+  const fo=1-ease(seg(t,44.6,45.3));
+  h+=person(X-240,FY,t,{op:fo});
+  if(t>40.2&&t<43.4){const [o,s]=ap(t,40.2);const nx=lerp(X-180,X-60,ease(seg(t,42.7,43.2))),ny=lerp(FY-260,FY-24,ease(seg(t,42.7,43.25)));const sc=lerp(.6,.35,ease(seg(t,42.7,43.2)));
+    h+=g(nx,ny,s*sc,o,I.note100(1),GF)}
+  if(t>40.88&&t<42.2){const [o,s]=ap(t,40.88,41.9);h+=g(X+60,420,s,o,I.pill('SEGURO?',{size:24}),GF)}
+  if(t>44.2){const [o,s]=ap(t,44.2,45.7);h+=g(X+40,380,s*1.1,o,I.calendar(yr,'ANO'),GF)}
+  return h;
+}
+function s6(t){ // lupa twist
+  const X=7500;let h='';
+  h+=T(X,420,typed('AGORA',46.16,t,30),24,{w:800,ls:8,col:'#BDBDBD'});
+  h+=T(X,500,typed('O DETALHE QUE',46.69,t,30),30,{w:800,ls:6});
+  if(t>47.24){h+=T(X,580,'QUASE NINGUÉM PERCEBE',46,{w:900,ls:2,col:'#3A3A3A',filt:''});
+    const lx=lerp(X-300,X+300,eio(seg(t,47.3,48.9)));
+    h+=`<clipPath id="lens"><circle cx="${lx}" cy="565" r="66"/></clipPath><g clip-path="url(#lens)">${T(X,580,'QUASE NINGUÉM PERCEBE',46,{w:900,ls:2,filt:'big2'})}</g>`;
+    h+=g(lx,565,1,ease(seg(t,47.24,47.5)),I.lupa(),GF)}
+  return h;
+}
+function s7(t){ // quarto 2026
+  const X=9000;let h=BG(X,1,room(X,t,{night:true,modern:true,cal:'2026'}));
+  h+=g(X-10,FY,1,1,I.bedFrame(),GF);
+  const lift=ease(seg(t,49.3,49.8))*(1-ease(seg(t,53.9,54.3)));
+  h+=g(X-10,FY,1,1,I.mattress(lift),GF);
+  h+=person(X-300,FY,t,{ph:2});
+  // note out
+  const out=ease(seg(t,49.8,50.6));
+  if(t>49.6){const shrink=t>62.32?lerp(1,.28,back(seg(t,62.32,62.9))):1;
+    const nx=lerp(X-60,X+40,out),ny=lerp(FY-24,400,out),ns=lerp(.35,1.15,out)*shrink;
+    const glow=t>60.8&&t<62.3?1+.05*Math.sin((t-60.8)*12):1;
+    h+=g(nx,ny,ns*glow,1,I.note100(1,t>52.0&&t<53.0?seg(t,52.0,52.9):-1),GF);
+    if(t>62.32){h+=g(X+40,400,1.15,ease(seg(t,62.4,62.8)),`<rect x="-110" y="-55" width="220" height="110" rx="10" ${LS} stroke-width="3" stroke-dasharray="10 10"/>`,GF)}
+    if(t>50.88&&t<54.3){const [o,s]=ap(t,50.88,53.9);h+=g(X+200,300,s,o,I.check(1.3),GF)}
+    if(t>52.36&&t<54.3){const [o,s]=ap(t,52.36,53.9);h+=g(X-130,560,s,o,I.pill('MESMO Nº ✓',{size:18}),GF)}
+    if(t>53.36&&t<54.3){const [o,s]=ap(t,53.36,53.9);h+=g(X+210,560,s,o,I.pill('MESMO PAPEL ✓',{size:18}),GF)}}
+  // ghost cart 1994 + notes needed
+  if(t>54.6&&t<60.8){const [o,s]=ap(t,54.6,60.5);h+=g(X+250,FY-30,s,o*.85,I.cart(1),GF)+label(X+250,FY+44,'O CARRINHO DE','1994',o)}
+  if(t>57.28&&t<62.3){const n=Math.min(9,1+Math.floor(seg(t,57.6,59.6)*8.99));const val=Math.round(lerp(100,890,ease(seg(t,57.6,59.8))));const [o]=ap(t,57.28,62.0);
+    for(let i=0;i<n;i++){h+=g(X-150+i*6,FY-40-i*16,.42,o,I.note100(1),GF)}
+    h+=g(X-150,FY-250-n*4,1,o,I.pill('R$ '+val,{fill:true,size:26}),GF)}
+  if(t>62.32){const [o,s]=ap(t,62.4);h+=g(X+40,540,s,o,I.dpill('ENCOLHEU',26),GF)}
+  return h;
+}
+function s8(t){ // rua - gastar ou guardar
+  const X=10500;let h=BG(X,1,street(X,t));
+  h+=person(X,FY,t,{ph:.7});
+  if(t>64.6){const [o,s]=ap(t,64.6);h+=g(X,FY-300,s*.5,o,I.note100(1),GF)}
+  const L=t>67.4&&t<68.8,R=t>68.8;
+  if(t>67.4){const [o,s]=ap(t,67.4);h+=g(X-250,FY,s*1.2*(L?1.08:1),o*(R&&t<70?.45:1),I.bags(),GF)+g(X-250,FY+46,1,o,I.pill('GASTAR',{fill:L,size:20}),GF)}
+  if(t>68.96){const [o,s]=ap(t,68.96);h+=g(X+250,FY,s*1.1*(R&&t<70?1.08:1),o,I.piggy(),GF)+g(X+250,FY+46,1,o,I.pill('GUARDAR',{fill:R,size:20}),GF)}
+  if(t>70.0){const [ob,sb]=ap(t,70.0);let dots='';for(let i=0;i<3;i++){const k=.5+.5*Math.sin(t*8-i*.9);dots+=`<circle cx="${-30+i*30}" cy="${-4-k*5}" r="8" fill="${W}" opacity="${.5+.5*k}"/>`}
+    h+=g(X+40,370,sb,ob,`<path d="M-100 -50 Q-100 -75 -75 -75 L75 -75 Q100 -75 100 -50 L100 25 Q100 50 75 50 L-30 50 L-65 82 L-58 50 L-75 50 Q-100 50 -100 25 Z" ${LS} fill="#050505"/>`+dots,GF)}
+  if(t>70.8){const clicked=t>71.45;const [o2,s2]=ap(t,70.8);h+=g(X+40,500,s2*1.1,o2,I.pill(clicked?'SEGUINDO ✓':'+ SEGUIR',{fill:clicked,size:22}),GF);
+    const cp=ease(seg(t,70.85,71.35));const cx=lerp(X+230,X+70,cp),cy=lerp(640,515,cp);h+=g(cx,cy,t>71.35&&t<71.55?.85:1,ease(seg(t,70.85,71.0)),`<path d="M0 0 L0 46 L12 34 L22 56 L30 52 L20 30 L36 30 Z" fill="${W}" stroke="#050505" stroke-width="3"/>`,GF);
+    if(clicked){const q=seg(t,71.45,72.1);h+=`<circle cx="${X+40}" cy="500" r="${70+q*130}" ${LS} stroke-width="3" opacity="${1-q}" ${GF}/>`}}
+  return h;
+}
+const SCENES=[[0,s1,0,13.6],[1500,s2,12.5,24.2],[3000,s3,23.0,27.1],[4500,s4,25.8,40.4],[6000,s5,39.2,46.6],[7500,s6,45.5,49.8],[9000,s7,48.5,64.3],[10500,s8,63.0,99]];
+const TOTAL=72.8;
+function render(t){
+  const [cx,cy,z]=cam(t);CAMX=cx;
+  let sx=0,sy=0;for(const [a,d,amp] of SHAKE){const q=t-a;if(q>=0&&q<d){const k=amp*(1-q/d);sx+=Math.sin(q*67)*k;sy+=Math.cos(q*53)*k}}
+  let world='';const floorO=1-ease(seg(t,46.0,46.4))+ease(seg(t,48.9,49.3));
+  world+=`<path d="M-3000 ${FY} L14000 ${FY}" stroke="#8A8A8A" stroke-width="2" opacity="${clamp(floorO)}"/>`;
+  for(const [x,f,a,b] of SCENES){if(t>=a&&t<=b)world+=f(t)}
+  let dust='';for(let i=0;i<26;i++){const px=((i*137.5+t*(6+i%5))%1240)-80, py=((i*89.3-t*(4+i%3))%1080+1080)%1080;dust+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${1+(i%3)*.6}" fill="#fff" opacity="${.05+.05*Math.sin(t+i)}"/>`}
+  const fade=Math.min(ease(seg(t,0,.25)),1-seg(t,TOTAL-.45,TOTAL));
+  const fb=t>26.4&&t<39.7?1:0;
+  document.getElementById('s').innerHTML=`
+  <defs>
+   <filter id="fP" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <filter id="fD" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <filter id="tg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <filter id="big2" x="-50%" y="-80%" width="200%" height="260%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+   <filter id="big" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="30"/></filter>
+   <radialGradient id="spot" cx=".5" cy=".48" r=".55"><stop offset="0" stop-color="${fb?'#222':'#2a2a2a'}"/><stop offset=".55" stop-color="#121212"/><stop offset="1" stop-color="#050505"/></radialGradient>
+   <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="7" cy="7" r="1" fill="#fff" opacity=".035"/></pattern>
+   ${noteClipDef()}
+  </defs>
+  <rect width="1080" height="1080" fill="url(#spot)"/><rect width="1080" height="1080" fill="url(#dots)"/>
+  <g transform="translate(${(540+sx).toFixed(2)} ${(540+sy).toFixed(2)}) scale(${z.toFixed(4)}) translate(${(-cx).toFixed(2)} ${(-cy).toFixed(2)})">${world}</g>
+  ${fb?`<rect width="1080" height="1080" fill="#000" opacity="${(.06+.05*Math.sin(t*41)).toFixed(3)}"/>`:''}
+  ${dust}${titleLayer(t)}
+  <rect width="1080" height="1080" fill="#000" opacity="${(1-fade).toFixed(3)}"/>`;
+}
+window.render=render;window.TOTAL=TOTAL;
+window.SFX=[
+ [0.1,'alarm',.8],[1.5,'pop',.6],[2.6,'whoosh',.7],[2.7,'pageflip',.7],[3.2,'pageflip',.6],[3.6,'pageflip',.6],[4.05,'pageflip',.6],[4.55,'ding',.8],
+ [5.8,'paper',.8],[6.3,'grow',.6],[8.1,'sparkle',.9],[9.45,'pop',.8],[11.8,'chaching',.9],
+ [12.9,'whoosh',.6],[13.3,'shopbell',.6],[14.45,'pop',.7],[16.0,'pop',.7],[16.85,'pop',.7],[17.0,'thud',.4],[17.9,'coinbag',.5],[18.2,'tap',.8],[18.4,'tap',.8],[18.6,'tap',.8],[18.8,'tap',.8],[19.2,'pop',.8],[20.1,'pop',.7],[21.4,'pop',.8],[21.9,'register',.7],
+ [23.4,'chairmove',.6],[24.1,'click',.8],[24.96,'ticks',.6],[25.6,'ding',.7],
+ [26.25,'whoosh',.8],[26.5,'glitch',.6],[26.8,'pageflip',.6],[28.4,'pop',.7],[29.7,'click',.8],[30.15,'click',.8],[30.6,'click',.8],[31.05,'click',.8],[31.5,'click',.8],[31.95,'click',.8],
+ [33.0,'stampsoft',.7],[33.31,'stampsoft',.7],[33.62,'stampsoft',.7],[33.94,'stampsoft',.7],[34.25,'stampsoft',.7],[34.56,'stampsoft',.7],[35.0,'clockfast',.5],[36.3,'riser',.8],[37.4,'hit',.9],[37.5,'buzz',.6],
+ [39.6,'whoosh',.6],[40.9,'pop',.6],[42.4,'creak',.7],[43.25,'thud',.9],[44.2,'timelapse',.7],[45.6,'ding',.6],
+ [45.9,'whoosh',.5],[46.2,'heartbeat',.6],[47.3,'scan',.6],[48.08,'hit',.7],
+ [49.0,'whoosh',.5],[49.3,'creak',.6],[49.8,'paper',.8],[50.9,'ding',.7],[52.4,'pop',.7],[53.4,'pop',.7],[54.6,'pop',.6],[57.6,'paperdrop',.6],[58.4,'paperdrop',.6],[59.2,'paperdrop',.6],[59.84,'ding',.6],[60.8,'sparkle',.7],[62.32,'vacuum',.8],[62.4,'error',.6],
+ [63.5,'whoosh',.5],[64.6,'pop',.7],[67.4,'pop',.9],[68.96,'coin',.9],[70.0,'bubble',1],[70.8,'pop',.9],[71.4,'click',1.2],[71.45,'smallwin',.8],
+];
+</script>
+</body></html>
