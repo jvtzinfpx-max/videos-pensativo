@@ -143,3 +143,13 @@ Xícara/caneca com vapor e pires, raio riscado, lençol cobrindo o boneco ("cans
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Bandeira do Brasil line-art, bandeira dos EUA line-art, mastro, boneco deitado levantando, placa "SUA CIDADE", livro de regras, bolso de calça com notas, pizza com fatia, pote, nota de $, placa CONTRATA-SE, gravata desenhada, rolo de papel desenrolando, folha única, quadro "RANKING BANCO MUNDIAL", garagem com portão, estrela de ideia, saco de dinheiro, arranha-céu com janelas, pilhas de moedas, cartão SUS, ambulância com sirene, prancheta de conta, grade de pessoinhas, envelope 13º, guarda-sol, gangorra, mochila, setas de troca ⇄.
+
+## 23/11/2026 — Regras que funcionam pra todo mundo (TEMA PEDIDO PELO USUÁRIO) — agendado 18:00
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Inspirado na frase viral "a gravidade não quer saber se você acredita em Deus" (sem copiar a frase): 4 regras que funcionam igual pra todos — gravidade (martelo e pena na Lua, Apollo 15, 1971), juro composto (a favor: cresce sozinho; contra: rotativo do cartão > 400% a.a.), corpo (~18 h acordado ≈ reflexos de quem bebeu), tempo (86.400 s/dia pra todo mundo); virada respeitosa: fé e essas regras não brigam, uma não cancela a outra | regras_todo_mundo.mp4 | 23/11 18:00 (AGENDADO no vidIQ, postId 06ed70b9) | Superfície da Lua curva com crateras + Terra pequena no céu, astronauta (boneco com capacete), martelo e pena caindo juntos com poeira, seta gigante que o boneco empurra sem mover, quadro "REGRAS DO JOGO", bola de neve rolando e crescendo na rampa, árvore de dinheiro crescendo, cartão de crédito com setas de rotativo girando, taça balançando, bola que o boneco não pega (reflexo), 3 bonecos (gravata/normal/coroa) com o mesmo contador de segundos, quebra-cabeça FÉ + REGRAS encaixando, casa com telhado + escada (boneco recua da beira), tesoura cortando o cartão, fileira final 1-4 para comentar o número |
+- Tom: respeitoso com a fé (nunca diz que orar não adianta); a mensagem é "fé + conhecer as regras".
+- Fontes: NASA (Apollo 15 hammer-feather drop), Banco Central via Jornal do Comércio (rotativo 444,9% a.a. em ago/2026), Williamson & Feyer 2000 (17-19 h acordado ≈ 0,05% de álcool no sangue).
+- Legenda: "Existem regras que não perguntam no que você acredita. Elas só funcionam. 🌍 #fyp #viral #reflexao #gravidade #curiosidades"
+- Revisão: 79,4 s, 1080x1080, -14,2 LUFS, true peak -1,7 dB. Créditos ElevenLabs após o vídeo: ~3.700 (a rodada das 12h de hoje também gasta).
+- Código: template/lineart/scenes_regras.js + main_regras.js.
