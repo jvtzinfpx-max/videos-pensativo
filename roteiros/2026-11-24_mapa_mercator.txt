@@ -1,0 +1,17 @@
+ROTEIRO PRONTO — AGUARDANDO NARRAÇÃO (ElevenLabs desconectado na rodada de 24/11)
+Tema: o mapa da escola mostra o Brasil menor do que ele é (Mercator x Equal Earth; resolução da ONU de 4/9/2026)
+Gerar no app do ElevenLabs: modelo eleven_v4, voz Dallin (alFofuDn3cOwyoz1i44T), 1 take.
+
+[curious] O mapa que você estudou na escola mostra o Brasil menor do que ele é.
+Olha a Groenlândia, lá em cima. No mapa, ela parece maior que o Brasil.
+[serious] Na vida real, o Brasil é quase quatro vezes maior que ela.
+E não é só o Brasil. No mapa, a África parece do mesmo tamanho da Groenlândia. Mas a África é catorze vezes maior.
+[curious] Por que o mapa erra? Porque a Terra é uma bola, e o mapa é uma folha reta. Pra abrir a bola na folha, alguma parte tem que esticar.
+Esse mapa foi desenhado há quase quinhentos anos, por um homem chamado Mercator, para os navegadores. Ele acerta a direção da bússola, mas estica tudo que fica perto dos polos. Quanto mais longe do meio do mapa, maior o país parece.
+[excited] E agora vem a novidade: em setembro deste ano, a ONU votou. Cento e sessenta e quatro países apoiaram trocar esse mapa por um que mostra o tamanho certo de cada país.
+Nesse mapa novo, o Brasil aparece bem maior. E a África aparece enorme.
+[calm] Mas ninguém é obrigado a trocar. É só uma recomendação.
+Então, me responde: a sua escola deveria trocar o mapa? Sim ou não?
+Me segue pra mais curiosidades.
+
+Fontes: BBC Brasil/O Povo (05/09/2026), Fast Company Brasil, NPR (21/08/2025, campanha Correct The Map da União Africana).

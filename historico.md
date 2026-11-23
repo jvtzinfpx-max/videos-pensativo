@@ -209,3 +209,7 @@ Casa com placa solar no telhado, moedas douradas girando no telhado, olho riscad
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Terra vista do espaço (azul + continente verde) com pontinhos marrons e círculo tracejado, cupim (creme + cabeça marrom, patas andando), mandacaru verde, montes de cupim em 3 fileiras em perspectiva, retângulo tracejado de área, pílula dourada de anos, corte do subsolo com túnel marrom e cupins andando, terra voando do buraco e monte crescendo, torre de cupim africana com chaminé e interior azul, ondas de calor laranja, setas de ar quente (laranja) subindo e ar fresco (azul) entrando, prédio com chaminé no topo, lápis dourado, ar-condicionado com X, barras de energia (comum × prédio-cupim), holofote final com cupinzeiro e brilhos dourados.
+
+## 24/11/2026 — rodada diária NÃO PRODUZIU vídeo: ElevenLabs desconectado
+- O conector ElevenLabs estava "precisa reconectar" e o vidIQ tinha só 2 créditos (não deu para assistir ao viral nem usar voz alternativa). Sem voz → sem vídeo.
+- Pesquisa feita: viral "Será que o Peru cabe na Tcheca?" (@destino.das.nacoes, 316 mil views, 497x a mediana, 19/11 — comparação de tamanho em mapa). Nosso ângulo: Mercator encolhe o Brasil (Brasil ~3,9x a Groenlândia, África ~14x) + resolução da ONU de 4/9/2026 (164 a favor) recomendando mapas de área real (Equal Earth). Roteiro pronto em roteiros/2026-11-24_mapa_mercator.txt — próxima rodada pode usar se houver voz (ou o usuário manda o MP3).
