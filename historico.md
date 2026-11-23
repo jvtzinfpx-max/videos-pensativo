@@ -87,3 +87,5 @@ Esquerda × direita: púlpito, faixa presidencial, caneta, cofre, multidão, bif
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Nota de R$100 desenhada, carrinho de supermercado enchendo, cesta básica (e meia), pão francês, etiqueta de preço pendurada, bomba de gasolina com visor, carro antigo, balança de pratos com cartões de salário, lata, maquininha de etiqueta (remarcadora), gráfico explodindo, colchão levantando, TV de tubo, TV de tela plana, telefone fixo, celular, quadro na parede, luminária pendente, janela com sol/lua/skyline, lupa, sacolas de compra, cofrinho de porquinho, prédios da rua com janelas acendendo.
+
+- 23/11 00:32: usuário achou o vídeo da nota de 1994 CONFUSO (cenário de fundo demais). Regra nova: voltar ao nível do vídeo do TESLA (fundo preto limpo, boneco + 1-3 objetos por momento, título digitado, 1-2 pílulas). Cenário só quando a história pede e com poucos traços. Continua valendo: objetos novos a cada vídeo e muito movimento.
