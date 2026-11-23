@@ -1,4 +1,5 @@
 # Histórico de vídeos — TikTok Pensativo
+REGRA DO USUÁRIO (23/11): ao terminar qualquer publicação (vídeo novo ou repostagem), SEMPRE mandar também o MP4 publicado na conversa com SendUserFile.
 PULAR 23/11/2026 18h: o usuário pediu outra versão do tema (o_que_semear.mp4, Gálatas 6:7) e vai aprovar o horário na conversa — a rodada das 18h não produz nem posta nada. (O vídeo regras_todo_mundo.mp4 foi CANCELADO pelo usuário, não postar.)
 
 
