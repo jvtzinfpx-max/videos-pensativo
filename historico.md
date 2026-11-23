@@ -1,4 +1,5 @@
 # Histórico de vídeos — TikTok Pensativo
+EM PRODUÇÃO: 23/11/2026 11:25 BRT (rodada 12h)
 PULAR 23/11/2026 18h: vídeo da gravidade (tema do usuário) já está AGENDADO no vidIQ para 18:00 — a rodada das 18h não produz nem posta nada.
 
 
