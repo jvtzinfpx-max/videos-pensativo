@@ -163,7 +163,7 @@ Bandeira do Brasil line-art, bandeira dos EUA line-art, mastro, boneco deitado l
 - ATENÇÃO/LIÇÃO: o 1º roteiro (sobrevivência hora a hora) gastou 1.389 créditos e foi DESCARTADO depois de assistir ao viral, porque repetia a estrutura e os exemplos dele. LIÇÃO: assistir ao viral (vidiq_watch_shortform_content) ANTES de escrever/gerar a voz.
 - Fontes: Times Brasil e Aos Fatos (boato do dia 17/11), Yahoo/AP e PBS (Espanha 99% restabelecida na manhã seguinte), Atalayar e Morocco World News (ajuda do Marrocos e da França), DOE (hidrelétricas como recurso de black start), Cenário Energia (Tucuruí: teste anual de black start em 28 min 8 s, nov/2026).
 - Legenda: "Se o país inteiro apagasse agora, não existe um botão pra ligar de novo. ⚡ #fyp #viral #apagao #energia #curiosidades"
-- Revisão: 80,5 s, 1080x1080 30 fps, -14,3 LUFS, true peak -1,4 dB. Créditos ElevenLabs após o vídeo: ~1.100 (NÃO dá para o próximo vídeo; renova ~23/12).
+- Revisão: 80,5 s, 1080x1080 30 fps, -14,3 LUFS, true peak -1,4 dB. Créditos ElevenLabs após o vídeo: 24 (praticamente zerado; o 2º take custou ~1.870 caracteres). A rodada das 21h não terá créditos — precisa de recarga ou narração gravada; renova ~23/12.
 - Código: template/lineart/scenes_apagao.js + main_apagao.js. Correção: medidor usa ângulo (ang-180) para 90 = ponteiro em pé.
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
