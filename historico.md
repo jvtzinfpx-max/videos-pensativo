@@ -61,3 +61,5 @@
 | 2026-11-22 | E se você acordasse com o conhecimento do Tesla (visualizar antes de construir, pensar em sistema/corrente alternada, previsão do celular em 1926, morreu endividado em 1943) | tesla_conhecimento.mp4 | 22/11 ~23:00 (imediato) | NOVO ESTILO pedido pelo usuário a partir de um vídeo de referência: quadrado 1080x1080, preto e branco, line-art branco com glow, boneco cápsula sem rosto, título digitado no topo, câmera andando de lado entre cenas, ícones com rótulo, X/✓, contadores. Estrutura "e se você acordasse... A primeira / a segunda / a terceira... a parte que quase ninguém conta... pergunta de opinião". Template em template/lineart/ |
 - Legenda: "E se você acordasse amanhã com a mente do Nikola Tesla? ⚡ #fyp #viral #nikolatesla #curiosidades #historia"
 - Revisão: 75,6 s, -14,3 LUFS, true peak -1,5 dB.
+- 22/11 23h: post publicado — https://www.tiktok.com/@pensante_4/video/7711179929261509895
+- **22/11 23h: usuário definiu o estilo line-art preto e branco (template/lineart/) como PADRÃO dos próximos vídeos**, no lugar dos ícones 3D coloridos.
