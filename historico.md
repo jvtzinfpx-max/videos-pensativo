@@ -54,3 +54,10 @@
 3. Pergunta final de OPINIÃO (sim/não fácil de responder) rende mais comentário do que pergunta de conhecimento. Aplicado: "será que vai entender quem nós somos?".
 - Legenda do post: "Uma nave de 1977 acabou de bater um recorde que nada feito pelo homem tinha batido. 🚀 #fyp #viral #voyager1 #nasa #espaco". Revisão: 71,7 s (fala 70,8 s), 1080x1920 30 fps, -14,2 LUFS, true peak -2,0 dB. Créditos ElevenLabs restantes após este vídeo: ~2.600 (dá para ~2 vídeos).
 - 22/11 noite: usuário achou que tinha whoosh demais no vídeo da Voyager (24, um por troca). Regra nova: whoosh só em 3-4 momentos específicos (viradas, algo passando rápido, revelação); trocas normais só com pop. Padrão do shot no template mudou para só pop.
+
+## 22/11/2026 (23h) — E se você acordasse com o conhecimento do Nikola Tesla?
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-22 | E se você acordasse com o conhecimento do Tesla (visualizar antes de construir, pensar em sistema/corrente alternada, previsão do celular em 1926, morreu endividado em 1943) | tesla_conhecimento.mp4 | 22/11 ~23:00 (imediato) | NOVO ESTILO pedido pelo usuário a partir de um vídeo de referência: quadrado 1080x1080, preto e branco, line-art branco com glow, boneco cápsula sem rosto, título digitado no topo, câmera andando de lado entre cenas, ícones com rótulo, X/✓, contadores. Estrutura "e se você acordasse... A primeira / a segunda / a terceira... a parte que quase ninguém conta... pergunta de opinião". Template em template/lineart/ |
+- Legenda: "E se você acordasse amanhã com a mente do Nikola Tesla? ⚡ #fyp #viral #nikolatesla #curiosidades #historia"
+- Revisão: 75,6 s, -14,3 LUFS, true peak -1,5 dB.
