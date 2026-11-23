@@ -134,7 +134,7 @@ Xícara/caneca com vapor e pires, raio riscado, lençol cobrindo o boneco ("cans
 - Revisão: 74,2 s, 1080x1080, -14,1 LUFS, true peak -1,6 dB. Créditos ElevenLabs após o vídeo: ~5.000.
 - Código: template/lineart/scenes_eua.js + main_eua.js.
 - LIÇÃO: o vidIQ avisa "pacing too_close" quando 2 posts saem com menos de ~1 h; seguir o suggestedPublishAt.
-- PRÓXIMA RODADA AUTOMÁTICA: segue normal (tema em alta pesquisado), mas NÃO repetir economia/política; preferir ciência, mistério ou curiosidade.
+- 23/11 ~07:50: o USUÁRIO APAGOU do TikTok os vídeos do café (06:45) e do Brasil x EUA (07:38) — o do café ficou sem nenhuma view (provável análise/restrição por postar rápido demais). Eles NÃO contam para o intervalo mínimo de 4 h. Os MP4 continuam no repo (cafe_nove_dias.mp4, brasil_modelo_eua.mp4); só repostar se houver linha "PRÓXIMA RODADA: repostar ..." pedida pelo usuário. Ritmo novo: 3 vídeos/dia (12h, 18h, 21h).
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Bandeira do Brasil line-art, bandeira dos EUA line-art, mastro, boneco deitado levantando, placa "SUA CIDADE", livro de regras, bolso de calça com notas, pizza com fatia, pote, nota de $, placa CONTRATA-SE, gravata desenhada, rolo de papel desenrolando, folha única, quadro "RANKING BANCO MUNDIAL", garagem com portão, estrela de ideia, saco de dinheiro, arranha-céu com janelas, pilhas de moedas, cartão SUS, ambulância com sirene, prancheta de conta, grade de pessoinhas, envelope 13º, guarda-sol, gangorra, mochila, setas de troca ⇄.
