@@ -1,7 +1,5 @@
 # Histórico de vídeos — TikTok Pensativo
 
-EM PRODUÇÃO: 23/11/2026 03:22 BRT
-
 | Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
 |---|---|---|---|---|
 | 2026-11-21 | Roubo do Banco Central (Fortaleza 2005 + golpe C&M 2025) | roubo_banco_central.mp4 | 21/11 ~20:08 | Sincronia por palavra (transcrição ElevenLabs) |
@@ -91,3 +89,19 @@ Esquerda × direita: púlpito, faixa presidencial, caneta, cofre, multidão, bif
 Nota de R$100 desenhada, carrinho de supermercado enchendo, cesta básica (e meia), pão francês, etiqueta de preço pendurada, bomba de gasolina com visor, carro antigo, balança de pratos com cartões de salário, lata, maquininha de etiqueta (remarcadora), gráfico explodindo, colchão levantando, TV de tubo, TV de tela plana, telefone fixo, celular, quadro na parede, luminária pendente, janela com sol/lua/skyline, lupa, sacolas de compra, cofrinho de porquinho, prédios da rua com janelas acendendo.
 
 - 23/11 00:32: usuário achou o vídeo da nota de 1994 CONFUSO (cenário de fundo demais). Regra nova: voltar ao nível do vídeo do TESLA (fundo preto limpo, boneco + 1-3 objetos por momento, título digitado, 1-2 pílulas). Cenário só quando a história pede e com poucos traços. Continua valendo: objetos novos a cada vídeo e muito movimento.
+
+
+## 23/11/2026 (~06h40) — E se você acordasse no corpo do tubarão que mora no Amazonas?
+| Data | Tema | Arquivo | Post (BRT) | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Tubarão-cabeça-chata no rio Amazonas: sangue salgado + glândula que joga o sal fora, fígado com menos gordura (vive até ~30 m), sobe >3.000 km até Iquitos (fêmeas grávidas, rio-berçário), pescado em Santarém/Tapajós em 2016; virada: a orca do rio Sena (2022) não sobreviveu 2 meses de água doce | tubarao_amazonas.mp4 | 23/11 ~06:40 (imediato) | 1º vídeo com AMBIENTE DE ÁGUA (linha de superfície ondulando + leito com algas) no lugar do chão; boneco "vira" tubarão (água sobe na transformação); mapa com rio sinuoso e tubarãozinho viajando + contador de km; texto da virada SUBINDO DE DENTRO DA ÁGUA com bolhas; vinheta escura nos trechos sussurrados |
+- Tema em alta: "E se uma orca caísse no rio Amazonas?" (@paulo00238, 371 mil views, 669x a mediana, 15/11) + "E se você fosse um lobo-guará?" (404 mil). Padrão de gancho: animal fora do lugar + hipótese "e se".
+- Nosso ângulo diferente do viral: o viral faz a ORCA enfrentar 6 desafios (pororoca, ariranha, candiru, arraia, Rio Negro, rede). O nosso é sobre o animal que DE FATO vive lá (tubarão-cabeça-chata), em 2ª pessoa ("você é o tubarão"), estrutura primeira/segunda/terceira com adaptações reais + prova (Santarém 2016); a orca entra só como contraste na virada.
+- Fontes: Portal Amazônia (INPA, bióloga Lucia Rapp), Catraca Livre, Euronews e Phys.org (orca do Sena, maio/2022).
+- Legenda: "Existe um tubarão vivendo a mais de 3.000 km do mar, no meio da Amazônia. 🦈 #fyp #viral #tubarao #amazonia #curiosidades"
+- Revisão: 78,8 s, 1080x1080, -14,1 LUFS, true peak -1,6 dB. Créditos ElevenLabs após o vídeo: ~7.600.
+- Código: template/lineart/page_tubarao.html + scenes_tubarao.js (kit: shark(), orca(), wave(), drop(), liver(), canoe(), flag(), tree(), oceanWave(), bubbles()) + main_tubarao.js.
+- LIÇÃO técnica: linha vertical/horizontal pura com filter="url(#tg)" SOME (caixa do filtro com largura 0) — desenhar sem filtro ou dentro de um grupo com outros elementos.
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Superfície da água ondulando, leito do rio com algas, barbatana cortando a água com rastro, tubarão line-art (boca com dentes, barriga grávida tracejada, filhotes), tubarão inchando, gota de sangue com cristais de sal, glândula pulsando soltando sal, fígado com gota de gordura, seta para baixo, régua de profundidade com linha "30 M", mapa com rio sinuoso + onda do mar + bandeira (Iquitos), barreira tracejada "MAR", canoa com 2 pescadores e linha de pesca, respingos, texto subindo da água com bolhas, orca line-art com coroa, rio que afunila (Sena), contador de dias, pele descamando, margem do rio com barbatana circulando, pílulas SIM/NÃO.
