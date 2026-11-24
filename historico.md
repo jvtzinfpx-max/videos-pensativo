@@ -213,3 +213,14 @@ Terra vista do espaço (azul + continente verde) com pontinhos marrons e círcul
 ## 24/11/2026 — rodada diária NÃO PRODUZIU vídeo: ElevenLabs desconectado
 - O conector ElevenLabs estava "precisa reconectar" e o vidIQ tinha só 2 créditos (não deu para assistir ao viral nem usar voz alternativa). Sem voz → sem vídeo.
 - Pesquisa feita: viral "Será que o Peru cabe na Tcheca?" (@destino.das.nacoes, 316 mil views, 497x a mediana, 19/11 — comparação de tamanho em mapa). Nosso ângulo: Mercator encolhe o Brasil (Brasil ~3,9x a Groenlândia, África ~14x) + resolução da ONU de 4/9/2026 (164 a favor) recomendando mapas de área real (Equal Earth). Roteiro pronto em roteiros/2026-11-24_mapa_mercator.txt — próxima rodada pode usar se houver voz (ou o usuário manda o MP3).
+
+## 23/11/2026 (noite) — E se você batesse a cabeça e acordasse sabendo tudo? (TEMA DO USUÁRIO) — NÃO POSTADO, entregue ao usuário
+| Data | Tema | Arquivo | Post | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Hipótese: acordar sabendo tudo (7 mil+ línguas, pilotar avião, cirurgia, qualquer prova); problema: saber ≠ conseguir fazer (dedos nunca treinaram o violão → precisa praticar); caso real: Jason Padgett (2002, pancada num assalto → passou a ver formas de matemática e virou gênio dos desenhos geométricos), síndrome de savant adquirida, raríssima, bater a cabeça quase sempre só machuca, ninguém deve tentar; reflexão: "se pudesse aprender uma coisa só, qual seria? o que te impede de começar hoje?" | saber_tudo.mp4 | não postado | Queda na casca de banana (amarela) com estrelinhas douradas, cabeça acendendo com raios dourados, balões de línguas coloridos, violão cor de madeira com notas tortas (vermelhas), barras CABEÇA 100% × MÃOS 5%→enchendo, formas geométricas douradas em volta do Jason, placa PARE vermelha "NÃO TENTE", livro aberto com luz dourada no final |
+- Fontes: NBC News e Scientific American (Jason Padgett), Brain & Life (savant adquirida), Ethnologue (~7 mil línguas).
+- Revisão: 69,2 s, 1080x1080, -14,1 LUFS, true peak -2,0 dB. Código: template/lineart/scenes_saber.js + main_saber.js.
+- LIÇÃO técnica: com a câmera dando zoom no final (cy 580, zoom 1.05), pílulas em y 380 do mundo sobem até encostar no subtítulo; no final com holofote usar pílulas em y 440/500.
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Casca de banana, boneco escorregando e deitado, estrelinhas de tontura, raios dourados na cabeça, Terra pequena, balões de fala com "OLÁ/HELLO/HOLA/CIAO/HALLO/SALUT", contador de línguas, avião, bisturi, cruz médica verde, prova com nota 10, pílula PROBLEMA, SABER ≠ FAZER, violão, notas musicais tortas, barras CABEÇA × MÃOS, carimbo REAL, pílula 2002, estrela de impacto, polígonos dourados girando, folha com desenho geométrico, médico com estetoscópio, campo de pontos com 1 dourado (raro), boneco com curativo, placa PARE "NÃO TENTE", livro aberto brilhando.
