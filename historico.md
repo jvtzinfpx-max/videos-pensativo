@@ -224,3 +224,14 @@ Terra vista do espaço (azul + continente verde) com pontinhos marrons e círcul
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Casca de banana, boneco escorregando e deitado, estrelinhas de tontura, raios dourados na cabeça, Terra pequena, balões de fala com "OLÁ/HELLO/HOLA/CIAO/HALLO/SALUT", contador de línguas, avião, bisturi, cruz médica verde, prova com nota 10, pílula PROBLEMA, SABER ≠ FAZER, violão, notas musicais tortas, barras CABEÇA × MÃOS, carimbo REAL, pílula 2002, estrela de impacto, polígonos dourados girando, folha com desenho geométrico, médico com estetoscópio, campo de pontos com 1 dourado (raro), boneco com curativo, placa PARE "NÃO TENTE", livro aberto brilhando.
+
+## 23/11/2026 (noite) — Planária: corta ao meio e ganha dois — NÃO POSTADO, entregue ao usuário
+| Data | Tema | Arquivo | Post | Melhorias aplicadas |
+|---|---|---|---|---|
+| 2026-11-23 | Planária: cortada ao meio vira duas; vermezinho achatado, menor que uma unha, vive em rios e lagos (inclusive no Brasil); cabeça e rabo nascem de novo em poucos dias; pedaço de menos de 1% do corpo vira planária inteira (Morgan); segredo: células-tronco que viram olho, boca, cérebro; experimento de memória (Tufts 2013): treinadas a achar comida, cabeça cortada, cabeça nova ainda lembrava o caminho; pesquisadores estudam para o corpo humano se consertar; reflexão "se seu corpo pudesse fazer nascer de novo uma parte, qual escolheria?" | planaria.mp4 | não postado | Planária desenhada como forma paramétrica (corpo achatado cor de pele com aurículas e 2 olhinhos) que pode ser CORTADA em qualquer ponto e REGENERAR (parte cresce de volta), lâmina descendo + flash de corte, contador DIA 1→5, lente dourada no pedaço <1%, pontos verdes (células-tronco) com linhas até olho/boca/cérebro, labirinto com comida dourada e planária percorrendo o caminho antes e depois do corte |
+- Tema em alta: "O Verme mais Apelão que Existe" (@sangue.fri0, 98 mil views, 267x, 17/11). Nosso ângulo: explicar o COMO (células-tronco) + a memória que sobrevive ao corte + por que a ciência estuda.
+- Fontes: Tufts University (2013), NIGMS/NIH, Whitehead Institute/MIT, Exploratorium.
+- Revisão: 68,0 s, 1080x1080, -14,8 LUFS, true peak -1,9 dB (o take saiu com pico alto; usei volume -0,6 dB + alimiter 0.74). Código: template/lineart/scenes_planaria.js + main_planaria.js.
+
+### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
+Planária (corpo cortável/regenerável), lâmina descendo, flash de corte, linhas de água azuis, dedo com unha, plantas aquáticas verdes, pílula BRASIL verde, contador DIA, lente tracejada dourada, pílula "MENOS DE 1%", pontos verdes de células-tronco, olho, boca, cérebro (ícones), labirinto, comida dourada, microscópio, jaleco, brilhos verdes de cura.
