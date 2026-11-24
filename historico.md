@@ -235,3 +235,6 @@ Casca de banana, boneco escorregando e deitado, estrelinhas de tontura, raios do
 
 ### Objetos/ambientes usados neste vídeo (acrescentar à lista JÁ USADOS)
 Planária (corpo cortável/regenerável), lâmina descendo, flash de corte, linhas de água azuis, dedo com unha, plantas aquáticas verdes, pílula BRASIL verde, contador DIA, lente tracejada dourada, pílula "MENOS DE 1%", pontos verdes de células-tronco, olho, boca, cérebro (ícones), labirinto, comida dourada, microscópio, jaleco, brilhos verdes de cura.
+
+## 24/11/2026 (rodada diária) — de novo NÃO PRODUZIU vídeo
+- ElevenLabs continua "precisa reconectar" e o vidIQ segue com 2 créditos (renova 21/12). Sem voz → sem vídeo. Usuário avisado. O roteiro do mapa de Mercator (roteiros/2026-11-24_mapa_mercator.txt) continua pronto para quando houver voz.
