@@ -244,3 +244,6 @@ Planária (corpo cortável/regenerável), lâmina descendo, flash de corte, linh
 
 ## 26/11/2026 (rodada diária) — NÃO PRODUZIU vídeo (4º dia seguido)
 - ElevenLabs continua "precisa reconectar" (conector não carrega na sessão) e o vidIQ segue com 2 créditos (renova 21/12). Sem voz → sem vídeo. Usuário avisado. Roteiro do mapa de Mercator (roteiros/2026-11-24_mapa_mercator.txt) segue pronto.
+
+## 27/11/2026 (rodada diária) — NÃO PRODUZIU vídeo (5º dia seguido)
+- ElevenLabs continua "precisa reconectar" (conector não carrega na sessão) e o vidIQ segue com 2 créditos (renova 21/12). Sem voz → sem vídeo. Usuário avisado. Roteiro do mapa de Mercator (roteiros/2026-11-24_mapa_mercator.txt) segue pronto.
